@@ -1,0 +1,70 @@
+---
+import { siteConfig } from "../data/site.ts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+interface Post {
+  url: string;
+  frontmatter: {
+    title: string;
+    date: string;
+    bskyPostCid?: string;
+    math?: boolean;
+    preview?: boolean;
+    description?: string;
+  };
+}
+
+// Helper function to parse date as local
+const parseLocalDate = (dateString: string) => {
+  console.log(`"${dateString}"`);
+  const [year, month, day] = dateString.split("T")[0].split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
+
+// Get all posts and sort by date (newest first)
+const allPosts = Object.values(
+  import.meta.glob("./posts/*.mdx", { eager: true }),
+) as Post[];
+const sortedPosts = allPosts
+  .filter((post) => (import.meta.env.PROD ? !post.frontmatter.preview : true))
+  .sort(
+    (a, b) =>
+      parseLocalDate(b.frontmatter.date).getTime() -
+      parseLocalDate(a.frontmatter.date).getTime(),
+  );
+---
+
+<BaseLayout title={siteConfig.title} , url={siteConfig.baseUrl}>
+  <h1>{siteConfig.title}</h1>
+
+  <section class="posts-list">
+    <ul class="post-list">
+      {
+        sortedPosts.map((post) => (
+          <li>
+            <article class="post-preview">
+              <h3>
+                <a href={post.url + '/'} class="post-link">
+                  {post.frontmatter.title}
+                </a>
+              </h3>
+              <time class="post-meta" datetime={post.frontmatter.date}>
+                {parseLocalDate(post.frontmatter.date).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  },
+                )}
+              </time>
+              {post.frontmatter.description && (
+                <p class="post-description">{post.frontmatter.description}</p>
+              )}
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

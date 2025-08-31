@@ -1,0 +1,407 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "Exterior Algebra Notation 1: Multi-Indices"
+date: 2025-01-16
+math: true
+toc: true
+bskyPostCid: "3lxgmpcccik2h"
+---
+
+
+
+
+*Part of a series on Exterior Algebra:*
+1. *(This post)*
+2. *<a href="/posts/2025-01-17-exterior-algebra-notation-2/">Star Indices</a>*
+
+#### Table of Contents
+
+
+
+## Wedge Products of Vectors
+This is the first of a few posts on Exterior Algebra. It will explore some ways of doing the index notation succinctly and serve as a reference for later posts.
+
+<br/>
+We start by considering the wedge product of $$k$$ vectors in $$\mathbb{R}^N$$. I will adopt one convention immediately and write this as:
+
+$$
+\mathbf{v}_{\wedge 1 \ldots k} = \mathbf{v}_1 \wedge \mathbf{v}_2 \wedge \ldots 
+\wedge \mathbf{v}_k
+$$
+
+We can use this to write the $$N$$-volume $$\Omega = \mathbf{e}_{\wedge 1 \ldots N}$$ (I prefer the upper case) or the products of columns of a matrix $${A}_{\wedge 1 \ldots N}$$. but obviously this doesn't work for a set of differently-named vectors $$\mathbf{u} \wedge \mathbf{v} \wedge \mathbf{w}$$, say. I'll also write the wedge products of a specific vectors as $$\mathbf{v}_{\wedge 123}$$, say, which is most useful for basis multivectors. For example the 3-vector basis elements in 4D are
+
+$$
+\{\mathbf{e}_{\wedge 123}, \mathbf{e}_{\wedge 124}, \mathbf{e}_{\wedge 234}, \mathbf{e}_{\wedge 134} \}
+$$
+
+We'll do the same for tensor products, and write:
+
+$$
+\mathbf{v}_{\otimes 1 \ldots k} = \mathbf{v}_1 \otimes \mathbf{v}_2 \otimes \ldots 
+\otimes \mathbf{v}_k
+$$
+
+I will be using the "alternating construction" of the wedge product, which means that $$\mathbf{v}_{\wedge 1 \ldots k}$$ is equivalent to the following tensor product:
+
+$$
+\begin{aligned}
+\mathbf{v}_{\wedge 1 \ldots k} &= (\mathbf{v}_1 \otimes \mathbf{v}_2 \otimes \ldots \otimes \mathbf{v}_k) - (\mathbf{v}_2 \otimes \mathbf{v}_1 \otimes \ldots \otimes \mathbf{v}_k) + \ldots
+\\
+&= \sum_{\sigma}	\text{sgn}(\sigma) \mathbf{v}_{\sigma(1)} \otimes \ldots \otimes \mathbf{v}_{\sigma(k)}
+\\
+&= \sum_K \epsilon^K_{1 \ldots k} \mathbf{v}_{\otimes K}\\
+&= \epsilon^K \mathbf{v}_{\otimes K}
+\end{aligned}
+$$
+
+In the first line I've sketched the full alternating sum. The second writes this as a sum over signed permutations, and the third with an antisymmetric Levi-Civita symbol and a *multi-index* $$K$$, which ranges over all orders of the indices $$1\ldots k$$ (which itself is a *specific* multi-index of length $$\vert K \vert = k$$.) The one-index Levi-Civita represents the sign of the permutation of $$K$$ with respect to the ordered sequence $$1\ldots \vert K\vert$$, and is therefore an alias for the two-index symbol $$\epsilon^K_{1 \ldots \vert K\vert}$$. The final line simplifies this expression with Einstein notation, so that the sum over all values of $$K$$ is implied, which I'll do whenever possible.
+
+That example indicates my general preference in notation towards extremely succinct expressions. I will tend to omit explicitly stating the range of sums when it's obvious from the context, and will prefer a Levi-Civita symbol over an explicit sum over permutations. I'll use Einstein notation, but won't distinguish the left/right positions of indices because they won't matter as long as I'm only working with vectors and square (1, 1) matrices. If I want to specify the length of the multi-index in a sum, I will write something like $$\sum_{\vert K\vert = k}$$.
+
+<br/>
+
+## Wedge Products in Index Notation, Three Ways
+
+Let's now consider the component representation of a wedge product like $$\mathbf{v}_{\wedge 1 \ldots k} = \mathbf{v}_1 \wedge \mathbf{v}_2 \wedge \ldots \wedge \mathbf{v}_k$$, given a basis $$\mathbf{e}_i$$ on the underlying vector space $$\mathbb{R}^N$$. I'll specifically consider the example of just two vectors in 2D to demonstrate the notation
+
+$$
+\mathbf{u} \wedge \mathbf{v} = \mathbf{u} \otimes \mathbf{v} - \mathbf{v}\otimes \mathbf{u}
+$$
+
+We can expand this in component in three different ways, which I have given names to, as they can otherwise be hard to distinguish. They are: 
+
+**Tensor Product Basis**. The basis of $$k$$-tensor-products of like $$\mathbf{e}_{\otimes i_1 \ldots i_k}$$, which with a multi-index is $$e_{\otimes I}$$ with $$\vert I\vert = k$$. I'll call this the "tensor product basis". There are $$k^N$$ basis elements in general, but $$\mathbf{v}_{\wedge 1 \ldots k}$$ is antisymmetric, so only those where all of the $$i_1, \ldots, i_k$$ are distinct will survive; there are $$\frac{N!}{(N-k)!}$$ of these, which is the "number of distinct sequences of $$k$$ out of $$N$$ elements." 
+
+The wedge product of two vectors in the tensor product basis looks like
+
+$$
+\begin{aligned}
+\mathbf{u} \wedge \mathbf{v} &=  (u^1 \mathbf{e}_1 + u^2 \mathbf{e}_2) \otimes (v^1 \mathbf{e}_1 + v^2 \mathbf{e}_2) - (v^1 \mathbf{e}_1 + v^2 \mathbf{e}_2)\otimes (u^1 \mathbf{e}_1 + u^2 \mathbf{e}_2) \\
+  &= (u^1 v^2 - v^1 u^2)(e_1 \otimes e_2) + (u^2 v^1 - v^2 u_1)(e_2 \otimes e_1)\\
+\end{aligned}
+$$
+
+**Permutation Basis**. The basis of $$\mathbf{e}_{\wedge I}$$, i.e. as (1) but with wedge products in the place of tensor products. The indices still range over all $$N^k$$ values, but only those without any duplicates survive, for a total of $$\frac{N!}{(N-k)!}$$ components. Such an expression is manifestly antisymmetric as a tensor, although its coefficients are not necessarily antisymmetric in their indices. I'll call this the "permutation basis", because all permutations of each possible *set* of indices are included in it.
+
+There are two variants of this; the second has antisymmetrized coefficients but therefore has to divide by $$\frac{1}{k!}$$ to avoid double-counting:
+
+
+$$
+\begin{aligned}
+\mathbf{u} \wedge \mathbf{v}  &= u^1 v^2 (e_1 \wedge e_2) + u^2 v^1 (e_2 \wedge e_1)\\
+  &= \frac{1}{2}((u^1 v^2 -v^2 u^1) (e_1 \wedge e_2) + (u^2 v^1 -u^1 v^2)(e_2 \wedge e_1))\\
+\end{aligned}
+$$
+
+
+**Combination Basis**, i.e.the basis of distinct $$\mathbf{e}_{\wedge I}$$ with the indices taken only over the $$N\choose k$$ distinct *combinations* of basis elements. This is $$\frac{1}{k!}$$ smaller than the "permutation" basis. Sometimes the indices are chosen such that $$i_1 \lt i_2 \lt \ldots \lt i_k$$, but this isn't necessary as long as all the $$i$$ are chosen distinctly and the sign of the overall basis element is consistent in some sense. I will generally refer to this by writing a sum over the wedge products themselves $$\sum_{\wedge I}$$ rather than $$\sum_I$$, which indicates that only distinct wedge products are to be considered.
+
+Our example can be written in two equivalent ways:
+
+$$
+\begin{aligned}
+\mathbf{u} \wedge \mathbf{v}  &= (u^1 v^2 - u^2 v^1) (e_1 \wedge e_2)\\
+&= (u^2 v^1 - u^1 v^2) (e_2 \wedge e_1)
+\end{aligned}
+$$
+
+
+In total we have three "indexing schemes" to consider: the permutations, the combinations, and the full tensor product. For the case of 2-vectors in 3D the basis elements are:
+
+$$
+\begin{array}
+\\
+\sum_I (...) \mathbf{e}_{\otimes I} 
+&& \sum_{I} (...) \mathbf{e}_{\wedge I}  
+&& \sum_{\wedge I} (...) \mathbf{e}_{\wedge I} 
+\\
+\downarrow && \downarrow  && \downarrow \\
+
+\underbrace{\begin{pmatrix}\otimes 11 && \otimes 12 && \otimes 13\\ \otimes 21 && \otimes 22 && \otimes 23\\\otimes 31 && \otimes 32 && \otimes 33\end{pmatrix}}_{
+N^k \text{ tensor products}} 
+&&
+\underbrace{\begin{pmatrix} && \wedge 12 && \wedge 13\\ \wedge 21 &&  && \wedge 23\\\wedge 31 && \wedge 32 && \end{pmatrix}}_{
+\frac{N!}{(N-k)!}\text{ permutations}} 
+&&
+\underbrace{\begin{pmatrix} && \wedge 12 && \\  &&  && \wedge 23\\\wedge 31 &&  && \end{pmatrix}}_{
+{N \choose k} \text{ combinations}} 
+\end{array}
+$$
+
+In general the "tensor product basis" will easiest to write down, but is not necessarily antisymmetric. The permutation basis is manifestly antisymmetric but either has to avoid overcounting or has to have coefficients which are *not* antisymmetric. The combination basis is the most "natural", but it can be hard to work out what the component representation ought to be—so my aim here is to arrive at the combination basis expressions in particular, as well as to give examples of my preferred notation.
+
+What are the expansions of $$\mathbf{v}_{\wedge 1 \ldots k}$$ in these three bases?
+
+For the tensor product basis, we can either:
+* Expand $$\mathbf{v}_{\wedge 1 \ldots k}$$ in components *first*, then expand the wedge product as tensor products:
+
+$$
+\begin{aligned}
+\mathbf{v}_{\wedge 1 \ldots k} &= (v^{i_1}_1 \mathbf{e}_{i_1}) \wedge (v^{i_2}_2 \mathbf{e}_{i_2}) \wedge \ldots \wedge (v^{i_k}_k \mathbf{e}_{i_k}) \\
+&= v_{1 \ldots k}^{i_1, \ldots, i_k} \mathbf{e}_{\wedge i_1, \ldots, i_k} 
+\\
+ &= v^I_{1 \ldots k} \mathbf{e}_{\wedge I} \\
+&= v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\otimes I}
+\end{aligned}
+$$
+
+- Write $$\mathbf{v}_{\wedge 1 \ldots k}$$ as a tensor product $$\epsilon^K \mathbf{v}_{\otimes K}$$ first, and then expand the tensor product in components: 
+
+$$
+\mathbf{v}_{\wedge 1 \ldots k} = \epsilon^K \mathbf{v}_{\otimes K} = \epsilon^K v_K^I e_{\otimes I}
+$$
+
+
+Here I've adopted another notation: $$v_K^I$$ stands for the *product* of the elements of $$\mathbf{v}$$ with the two indices "zipped" together:
+
+$$
+v_K^I = (v_{k_1}^{i_1}) (v_{k_2}^{i_2}) \ldots (v_{k_k}^{i_k})
+$$
+  
+These two tensor-basis expression are equivalent; we apparently have a choice as to whether we'd rather antisymmetrize the upper or lower index of $$v^I_{1 \ldots k}$$. The lower index is perhaps preferable because it is very easy to write down—it just looks like the "components of $$\mathbf{v}_{\wedge 1 \ldots k}$$", but lets us read $$\wedge 1 \ldots k$$ as the "antisymmetrization of $$\otimes 1 \ldots k$$" as we considered earlier:
+
+$$
+\mathbf{v}_{\wedge 1 \ldots k} = \epsilon^K v_K^I e_{\otimes I} \stackrel{?}{=} v_{\wedge 1 \ldots k}^I \mathbf{e}_{\otimes I}
+$$
+
+
+The permutation basis appeared as an intermediate step to the second form of the tensor product:
+
+$$
+\mathbf{v}_{\wedge 1 \ldots k} = v^I_{1 \ldots k} \mathbf{e}_{\wedge I}
+$$
+
+This expression is the simplest way to represent your typical wedge product. Just write:
+
+$$
+\mathbf{u} \wedge \mathbf{v} \wedge \mathbf{w} = u^i v^j w^k \mathbf{e}_{\wedge ijk}
+$$
+
+This is a sum over _all_ $$I$$, but there is nothing in the coefficient which indicates that this object is antisymmetric. Each of the $$k!$$ sequences with the same set of indices all contribute to the $$e_{\otimes I}$$ term. If wanted to have an antisymmetric coefficient also, we'd be summing two antisymmetric things and would overcount by $$k!$$, so we can get an equivalent expression by antisymmetrizing either index and dividing:
+
+$$
+v^I_{1 \ldots k} \mathbf{e}_{\wedge I} = \frac{1}{k!}\epsilon^K v^I_{K} \mathbf{e}_{\wedge I} = \frac{1}{k!}v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\wedge I}
+$$
+
+These expressions appear a lot in books but I find them unappealing.
+
+For the combination basis, we want to write $$\mathbf{v}_{\wedge 1 \ldots k}$$ as a sum over distinct wedge products. We can get here in two ways:
+* starting from the permutation basis with the antisymmetric coefficient, but only summing over one of the $$k!$$ basis elements, thereby removing the overcounting. We get (with the sum over $$K$$ still implied by the Einstein notation):
+
+$$
+\mathbf{v}_{\wedge 1 \ldots k} = \frac{1}{k!}\epsilon^K v^I_{K} \mathbf{e}_{\wedge I} \to \sum_{\wedge I} \epsilon^K v^I_{K} \mathbf{e}_{\wedge I}
+$$
+
+* or by starting from the tensor basis and gathering up all the terms belonging to the same wedge-basis element $$e_{\wedge J}$$. This merely requires replacing $$\mathbf{e}_{\otimes J} \to \mathbf{e}_{\wedge J}$$, since the coefficients are already antisymmetric: 
+
+$$
+\mathbf{v}_{\wedge 1 \ldots k} = v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\otimes I}  \to \sum_{\wedge I} v_{ 1 \ldots k}^{K}  \epsilon_K^I \mathbf{e}_{\wedge I}
+$$
+
+In all we have the following equivalent notations:
+
+$$
+\begin{aligned}
+ \mathbf{v}_{\wedge 1 \ldots k} &= \epsilon^K \mathbf{v}_{\otimes K} && \text{(tensor product)}\\
+&= v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\otimes I}  = \epsilon^K v_K^I \mathbf{e}_{\otimes I} && \text{(tensor basis)} \\
+&= v^I_{1 \ldots k} \mathbf{e}_{\wedge I} = \frac{1}{k!}v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\wedge I} = \frac{1}{k!}\epsilon^K v^I_{K} \mathbf{e}_{\wedge I} && \text{(permutation basis)} \\
+&= \sum_{\wedge I} v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\wedge I} = \sum_{\wedge I} \epsilon^K v^I_{K} \mathbf{e}_{\wedge I} && \text{(combination basis)} 
+\end{aligned}
+$$
+
+Note that the combination-basis components:
+* are the same as the tensor-basis components, as long as an object is antisymmetric
+* are $$k!$$ times the permutation-basis components
+The first rule is more interesting: it implies that we generally *don't have to think about which basis we're using*. We can in fact write Einstein-notation expressions in the tensor basis and then read them as being in the combination basis, which is what we'll do.
+  
+The 2D examples side-by-side are:
+
+$$
+\begin{aligned}
+\mathbf{u} \wedge \mathbf{v}& = \mathbf{u} \otimes \mathbf{v} - \mathbf{v}\otimes \mathbf{u} && \text{(tensor product)}\\
+  &=  (u^1 \mathbf{e}_1 + u^2 \mathbf{e}_2) \otimes (v^1 \mathbf{e}_1 + v^2 \mathbf{e}_2) - (v^1 \mathbf{e}_1 + v^2 \mathbf{e}_2)\otimes (u^1 \mathbf{e}_1 + u^2 \mathbf{e}_2)\\
+  &= (u^1 v^2 - v^1 u^2)(\mathbf{e}_1 \otimes \mathbf{e}_2) + (u^2 v^1 - v^2 u^1)(\mathbf{e}_2 \otimes \mathbf{e}_1) && \text{(tensor)}\\
+  &= u^1 v^2 (\mathbf{e}_1 \wedge \mathbf{e}_2) + u^2 v^1 (\mathbf{e}_2 \wedge \mathbf{e}_1) && \text{(permutation)}\\
+  &= \frac{1}{2}((u^1 v^2 - v^1 u^2) (\mathbf{e}_1 \wedge \mathbf{e}_2) + (u^2 v^1 - v^2 u^1)(\mathbf{e}_2 \wedge \mathbf{e}_1)) && \text{(anti-symm perm.)}\\
+&= (u^1 v^2 - v^1 u^2) (\mathbf{e}_1 \wedge \mathbf{e}_2) && \text{(combination basis)}\\
+&= (u^2 v^1 - v^2 u^1) (\mathbf{e}_2 \wedge \mathbf{e}_1) && \text{(alt.)}
+\end{aligned}
+$$
+
+I personally find it easiest to *think* in the combination basis because it makes the antisymmetry manifest while avoiding any duplicated basis elements. I would generally like to be able to work *entirely* within it, if not for that that it can be hard to calculate wedge-product formulas without dropping to one of the other bases. The ideal would be able to write antisymmetric tensors in an Einstein notation like:
+
+$$
+\psi = \psi^{\wedge 12} \mathbf{e}_{\wedge 12} + \ldots \to \psi^{\wedge I} \mathbf{e}_{\wedge I}
+$$
+
+This would let us do calculations with $$k$$-volumes like
+
+
+$$
+\begin{aligned}
+\langle \psi, \phi \rangle &= \psi_{\wedge 12} \phi^{\wedge 12} + \ldots = \psi^{\wedge I}\phi_{\wedge I} \\
+\Vert \psi \Vert &= \sqrt{\langle \psi, \psi \rangle} = \sqrt{\psi^{\wedge I} \psi_{\wedge I}}
+\end{aligned}
+$$
+
+Or to write the matrix elements of a wedge power of a matrix as 
+
+$$
+A^{\wedge k} = {(A^{\wedge k})}^{\wedge J}_{\wedge I} (\mathbf{e}^{\wedge I} \otimes \mathbf{e}_{\wedge J})
+$$
+
+
+and
+
+$$
+A^{\wedge k} \psi = {(A^{\wedge k})}^{\wedge J}_{\wedge I} \psi^{\wedge I}
+$$
+
+We'll do all of this, but a question arises: is there any way we can *also* use the $$\wedge I$$ symbol as an _antisymmetrizer on indices_, to perhaps avoid all those annoying Levi-Civitas in the component representations? This is the subject of the next section.
+
+
+<br/>
+
+## The Wedge Symbol as Antisymmetrizer?
+
+The idea of using $$\wedge$$ to antisymmetrize originally came up as a potential way to shorten the tensor basis expression:
+
+$$
+\mathbf{v}_{\wedge 1 \ldots k} = \epsilon^K v_K^I \mathbf{e}_{\otimes I} \stackrel{?}{=} v_{\wedge 1 \ldots k}^I \mathbf{e}_{\otimes I}
+$$
+
+which gives this expression the appearance of being a "matrix element of $$\mathbf{v}_{1 \ldots k}$$ in the $$I$$ basis". But note that this actual stands for the antisymmetrized-sum-of-products-of-elements-of-$$v$$:
+
+$$
+v_{\wedge 1 \ldots k}^I = ((v_1^{i_1}) (v_2^{i_2})  \ldots ( v_k^{i_k})) - ((v_2^{i_2}) ( v_1^{i_1}) \ldots  (v_k^{i_k})) + \ldots
+$$
+
+Does this generalize? The cases to consider are:
+* The two antisymmetrized permutation-basis expressions:
+  * $$\frac{1}{k!}\epsilon^K v^I_{K} \mathbf{e}_{\wedge I} \stackrel{?}{=} \frac{1}{k!}v^I_{\wedge 1 \ldots K} \mathbf{e}_{\wedge I}$$
+  * $$\frac{1}{k!}v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\wedge I} \stackrel{?}{=} \frac{1}{k!}v^{\wedge I}_{1 \ldots k}\mathbf{e}_{\wedge I}$$
+* The two combination-basis expressions
+  * $$\sum_{\wedge I} \epsilon^K v^I_{K} \mathbf{e}_{\wedge I} \stackrel{?}= \sum_{\wedge I} v^I_{\wedge 1 \ldots k} \mathbf{e}_{\wedge I}$$
+  * $$\sum_{\wedge I} v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\wedge I} \stackrel{?}{=} v_{ 1 \ldots k}^{\wedge I}  \mathbf{e}_{\wedge I}$$
+
+In the first of each pairthe $$\wedge$$ index doesn't add much. The second two appears to support an Einstein notation with $$\wedge I$$ in the superscript doing double duty both as an index-we-sum-over and as an antisymmetrizer. But we can't support both at once! We'd get the wrong answer for the permutation-basis sum if we read it as a combination-basis expression and v.v. 
+
+So we could make it work if it *only* represented a combination-basis sum with antisymmetrization. But I'm still skeptical, because we would not want the same rule to apply—I don't think—to either the matrix basis elements or the general antisymmetric tensor in
+
+$$
+A^{\wedge k} \psi = {(A^{\wedge k})}^{\wedge J}_{\wedge I} \psi^{\wedge I}
+$$
+
+Such a matrix element ought to only have *one* index antisymmetrized, which can be seen in the case of $$A^{\wedge N} \mathbf{e}_{\wedge 1 \ldots N}= (\det A)\mathbf{e}_{\wedge 1 \ldots N}$$, for which the coefficient $$A^{\wedge 1 \ldots N}_{\wedge 1 \ldots N}$$ is exactly the wedge product of the $$N$$ columns $$A_1 \wedge \ldots \wedge A_N$$:
+
+$$
+\begin{aligned}
+A_1 \wedge \ldots \wedge A_N &= \sum_{\vert I\vert = N} A^I_{1 \ldots k} \mathbf{e}_{\wedge I} \\
+&=  (A^I_{1 \ldots k} \epsilon_I) \mathbf{e}_{\wedge 1 \ldots N} \\
+A^{\wedge 1 \ldots N}_{\wedge 1 \ldots N} \mathbf{e}_{\wedge 1 \ldots N}&\stackrel{?}{=} (A^{\wedge 1 \ldots k}_{1 \ldots k})\mathbf{e}_{\wedge 1 \ldots N}
+\end{aligned}
+$$
+
+This is the determinant, which is usually seen with a permutation 
+
+$$
+\sum_\sigma \text{sgn}(\sigma) (A_1^{\sigma(1)} ) (A_N^{\sigma(N)} ) \ldots ( A_N^{\sigma(N)})
+$$
+
+Only *one* index is antisymmetrized. So the $$\wedge I$$ "antisymmetrizer" is out. 
+
+Instead I'll continue to use $$A^{I}_{1 \ldots N} \epsilon_I$$ for an antisymmetrizer, or perhaps $$A^{[I]}_{1 \ldots N}$$. We *will* use $$\wedge I$$ with Einstein notation, but only in the sense of "components in the combination basis". Therefore the determinant in the "combination basis" is the matrix element $$(A^{\wedge N})^{\wedge 1 \ldots N}_{\wedge 1 \ldots N}$$, whose value is:
+
+$$
+\det{A} = (A^{\wedge N})^{\wedge 1 \ldots N}_{\wedge 1 \ldots N} = A^{J}_{1 \ldots N} \epsilon_J^{1 \ldots N} = A^{J}_{1 \ldots N} \epsilon_J
+$$
+
+Sometimes you see this expression with both indices antisymmetrized, which overcounts: $$\frac{1}{N!} A^J_I \epsilon_J \epsilon^I$$. This can be seen as the *tensor*-basis matrix element of $$A^{\otimes N}$$ on the $$N$$-volume $$\Omega = \epsilon^I \mathbf{e}_{\otimes I}$$ and its dual $$\Omega^* = \frac{1}{N!} \epsilon_J \mathbf{e}^{\otimes J}$$. Of course, as established earlier, the tensor- and combination-basis matrix elements turn out to be identical; we could use the same expression in the combination basis if we were willing to tolerate a combinatorial factor.
+
+I am hoping to be able to use wedge-indices as components in this way while still using them to represent explicit wedge-products of vectors and unit vectors: $$\mathbf{e}_{\wedge 12}, \mathbf{v}_{\wedge 1 \ldots k}, {A}_{\wedge 1 \ldots N}$$. I don't *think* this will run into contradictions, but I'm getting a headache at this point and it's hard to tell.
+
+
+<br/>
+
+## Wedge Products in General
+
+
+Now we'll consider the wedge product of two antisymmetric multivectors $$\psi \wedge \phi$$ with grades $$\vert \psi\vert = k, \vert\phi\vert =l$$. 
+
+Trying to calculate the components of $$\psi \wedge \phi$$ in the tensor basis is a bit confusing, because you first would write down $$(\psi^K \mathbf{e}_{\otimes K}) \wedge (\phi^L \mathbf{e}_{\otimes L})$$ and if you then factor out the basis elements you get $$\mathbf{e}_{\otimes K} \wedge \mathbf{e}_{\otimes L}$$—which means what exactly? It is easiest to take wedges of wedges. But for antisymmetric objects we have $$\psi^K\mathbf{e}_{\otimes K} = \frac{1}{k!} \psi^K \mathbf{e}_{\wedge K}$$, so we get
+
+$$
+\begin{aligned}
+(\psi^K \mathbf{e}_{\otimes K}) \wedge (\phi^L \mathbf{e}_{\otimes L}) &= \frac{1}{k!l!}(\psi^K \mathbf{e}_{\wedge K}) \wedge (\phi^L \mathbf{e}_{\wedge L})\\
+&= \frac{1}{k!l!}\psi^K \phi^L (\mathbf{e}_{\wedge K} \wedge \mathbf{e}_{\wedge L}) \\
+&= \left(\frac{1}{k!l!}\psi^K \phi^L \epsilon_{KL}^I\right) \mathbf{e}_{\otimes I}
+\end{aligned}
+$$
+
+where in the last line we've switched to a sum over all basis elements $$\mathbf{e}_{\wedge I}$$ and factored out the antisymmetry into a Levi-Civita symbol. The Einstein-notation expression is therefore
+
+$$
+\frac{1}{k!l!}\psi^K \phi^L \epsilon_{KL}^I
+$$
+
+This is short enough, but the combinatorial factors are ugly.
+
+The permutation basis would have the same components but divided by $$\frac{1}{(k+l)!}$$, which is not particularly useful.
+
+The combination-basis components are as usual the same as the tensor-basis, but we can also try to calculate them directly. The initial expression is simple:
+
+$$
+\left(\psi^{\wedge K} \mathbf{e}_{\wedge K}\right) \wedge \left(\phi^{\wedge L} \mathbf{e}_{\wedge L}\right) 
+= \sum_{\wedge K, \wedge L} \psi^{\wedge K} \phi^{\wedge L} \mathbf{e}_{\wedge K} \wedge \mathbf{e}_{\wedge L} 
+= (\psi^{\wedge K} \phi^{\wedge L}) (\mathbf{e}_{\wedge K} \wedge \mathbf{e}_{\wedge L})
+$$
+
+Note the use of $$\wedge K$$ indices and Einstein notation, which implies that the sum is in the combination basis. This would be the answer except that it's *no longer* in the combination basis: $$e_{\wedge K} \wedge e_{\wedge L}$$ are not a distinct basis elements. Instead we need sum over distinct basis elements $$e_{\wedge I}$$ and then, for each, include one set of indices $$K, L$$ which comprise it, with an appropriate sign. We get 
+
+$$
+\left(\psi^{\wedge K} \mathbf{e}_{\wedge K}\right) \wedge \left(\phi^{\wedge L} \mathbf{e}_{\wedge L}\right) 
+= (\psi^{\wedge  K} \phi^{\wedge  L} \epsilon^{\wedge I}_{\wedge K \wedge L}) \mathbf{e}_{\wedge I }
+$$
+
+which has *three* combination-basis sums. The equivalent Einstein-notation expression would just be:
+
+$$
+\psi^{\wedge  K} \phi^{\wedge  L} \epsilon^{\wedge I}_{\wedge K \wedge L}
+$$
+
+I could see getting used to this, but if that's a lot we can revert the $$K, L$$ sums to be over tensor indices instead of only the combinations, which duplicates the whole result by $$k! \times l!$$, and accounting for this restores the combinatorial factors to give the same result as in the tensor basis:
+
+$$
+\left(\psi^{\wedge K} \mathbf{e}_{\wedge K}\right) \wedge \left(\phi^{\wedge L} \mathbf{e}_{\wedge L}\right) 
+= \frac{\psi^{ K} \phi^{ L} \epsilon^{\wedge I}_{KL}}{k!l!} \mathbf{e}_{\wedge I } 
+$$
+
+This is now equivalent to the tensor-basis coefficient, though we're calling $$I \to \wedge I$$. But the mixed use of tensor and wedge indices might be disturbing.
+
+As an example, suppose $$\psi = \psi^{12} \mathbf{e}_{\wedge 12} = \psi^{12} (\mathbf{e}_1 \otimes \mathbf{e}_2 - \mathbf{e}_2 \otimes \mathbf{e}_1)$$ and $$\phi = \phi^3 \mathbf{e}_3$$. Then:
+
+$$
+\begin{aligned}
+\psi \wedge \phi &= \frac{1}{2}[(\epsilon^{123}_{123} \psi^{12}\phi^3 + \epsilon^{123}_{213} \psi^{21}\phi^3) \mathbf{e}_{\otimes 123} + (\cdots) \mathbf{e}_{\otimes 213} +  (\cdots) \mathbf{e}_{\otimes 132} \ldots] \\
+&= \frac{1}{2}[(\psi^{12}\phi^3 - \psi^{21}\phi^3) \mathbf{e}_{\otimes 123} + (\psi^{21}\phi^3 - \psi^{12}\phi^3) \mathbf{e}_{\otimes 213}  + (-\psi^{12}\phi^3 + \psi^{21}\phi^3) \mathbf{e}_{\otimes 132} \ldots ]
+ \\
+&= \psi^{12}\phi^3 \mathbf{e}_{\wedge 123}
+\end{aligned}
+$$
+
+The first line gives the full tensor-basis expression, which sums over each $$\mathbf{e}_{\otimes I}$$ and then over all combinations of the indices from $$\psi, \phi$$ that produce the index $$I$$ in any order. In this case only 2 choices survive: $$\psi^{12} \phi^3$$ and $$\psi^{21} \phi^3$$. Then we simplify, and on the last line the expression we get the (very succinct) combination-basis expression, with no combinatorial factors in sight! No signs appear in this expression because there's only one way to make the indices 123 out of the two input tensors.
+
+Note that while Einstein-notation sums will use $$\wedge I$$ indices, I don't intend to write these for explicit components like $$\psi^{12}$$ unless an actual wedge product is implied.
+
+The general case of a 2-vector times a vector will demonstrate the need to deduplicate comb.-basis elements. Take $$\psi = \psi^{12} \mathbf{e}_{\wedge 12} + \psi^{23} \mathbf{e}_{\wedge 23} + \psi^{31} \mathbf{e}_{\wedge 31}$$ and $$\phi = \phi^1 \mathbf{e}_1 + \phi^2 \mathbf{e}_2 + \phi^3 \mathbf{e}_3$$. The wedge product is simple:
+
+$$
+\begin{aligned}
+\psi \wedge \phi &= (\psi^{12} \mathbf{e}_{\wedge 12} + \psi^{23} \mathbf{e}_{\wedge 23} + \psi^{31} \mathbf{e}_{\wedge 31})\wedge   (\phi^1 \mathbf{e}_1 + \phi^2 \mathbf{e}_2 + \phi^3 \mathbf{e}_3)\\
+&= \psi^{12}\phi^3 \mathbf{e}_{\wedge 123} + \psi^{23}\phi^1 \mathbf{e}_{\wedge 231} + \psi^{31}\phi^2 \mathbf{e}_{\wedge 312}\\
+&= (\psi^{12}\phi^3 + \psi^{23}\phi^1 + \psi^{31}\phi^2) \mathbf{e}_{\wedge 123}
+\end{aligned}
+$$
+
+But if we wanted to write the last line as $$\psi^{ij} \phi^k \epsilon_{ijk}^{123} \mathbf{e}_{\wedge 123}$$ we would overcount by a factor of 2, unless we restricted the sum to *distinct* sets of $$ij$$. The combination-basis expression $$(\psi^{\wedge  K} \phi^{\wedge  L} \epsilon^{\wedge I}_{\wedge K \wedge L}) \mathbf{e}_{\wedge I }$$ avoids this.

@@ -1,0 +1,29 @@
+---
+
+import { siteConfig } from '../data/site.ts'
+import IconGithub from '../components/IconGithub.astro'
+import IconTwitter from '../components/IconTwitter.astro'
+import IconBluesky from '../components/IconBluesky.astro'
+---
+
+<footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading"></h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1 copyright">
+        © {siteConfig.title}
+      </div>
+
+      <div class="footer-col footer-col-2 contact">
+        <IconGithub username={siteConfig.githubUsername}/>
+        <IconTwitter username={siteConfig.twitterUsername}/>
+        <IconBluesky username={siteConfig.blueskyUsername}/>
+      </div>
+    </div>
+
+  </div>
+
+</footer>

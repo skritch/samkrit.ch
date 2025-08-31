@@ -1,0 +1,25 @@
+---
+
+import { siteConfig } from '../data/site.ts'
+import IconGithub from '../components/IconGithub.astro'
+import IconTwitter from '../components/IconTwitter.astro'
+import IconBluesky from '../components/IconBluesky.astro'
+---
+
+
+<header class="site-header">
+  <div class="wrapper">
+    <div class="header-col-wrapper">
+      <div class="header-col header-col-1 nav-links">
+        <a class="page-link" href="/">home</a>
+        <a class="page-link" href="/about">about</a>
+      </div>
+
+      <div class="header-col header-col-2 contact">
+        <IconGithub username={siteConfig.githubUsername}/>
+        <IconTwitter username={siteConfig.twitterUsername}/>
+        <IconBluesky username={siteConfig.blueskyUsername}/>
+      </div>
+    </div>
+  </div>
+</header>

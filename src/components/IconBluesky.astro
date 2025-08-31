@@ -1,0 +1,38 @@
+---
+
+export interface Props {
+ username: string;
+ size?: number;
+}
+
+const { username, size = 16 } = Astro.props;
+---
+
+
+<a href={`https://bsky.app/profile/${username}`} class="bluesky-link" aria-label={`Bluesky profile of ${username}`}>
+ <svg width={size} height={size} viewBox="0 0 48 48" fill="currentColor" style={`width: ${size}px; height: ${size}px;`}>
+<path d="M10.405 5.432C15.908 9.602 21.827 18.06 24 22.598c2.173-4.538 8.092-12.995 13.595-17.166C41.565 2.422 48 .094 48 7.503c0 1.48-.84 12.431-1.333 14.21-1.714 6.18-7.957 7.757-13.511 6.803 9.707 1.668 12.177 7.193 6.844 12.718-12 12.43-16-6.65-16-6.65s-4 19.08-16 6.65c-5.334-5.525-2.864-11.05 6.844-12.718-5.554.954-11.797-.623-13.511-6.804C.84 19.934-.001 8.982-.001 7.503c0-7.41 6.434-5.08 10.405-2.071z"/> </svg>
+</a>
+
+<style>
+ .bluesky-link {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   color: inherit;
+   text-decoration: none;
+ }
+
+ .bluesky-link svg {
+   flex-shrink: 0;
+   background: transparent;
+ }
+ 
+ .bluesky-link:hover {
+   color: #333;
+ }
+ 
+ .username {
+   font-size: 0.9rem;
+ }
+</style>

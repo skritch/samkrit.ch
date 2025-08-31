@@ -1,0 +1,137 @@
+/* from https://forum.obsidian.md/t/custom-css-for-tables-5-new-styles-ready-to-use-in-your-notes/17084 */
+
+/* --------------------------------------------   */
+/* Custom fonts. Comment or change as required    */
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+/* --------------------------------------------   */
+
+
+/* Obsidian default theme uses centered headers? */
+/* I rather not */
+table thead tr th {
+	text-align: left;
+}
+
+/*
+=========================
+=======Customizers=======
+=========================
+These are custom "hacks" that can be applied to any
+table (with/without custom table visual css).
+If you're already using other classes in your note,
+remember you can stack these in the cssclass 
+parameter, like:
+
+cssclass: tableClass1, hackClass2, userClass3, etc
+
+
+
+/* --------------------------------------------   */
+/* Make tables width same as default note width   */
+/* --------------------------------------------   */
+// .wideTable 
+table {
+	min-width: 100%;
+}
+/* --------------------------------------------   */
+
+
+/* --------------------------------------------   */
+/* Left align mandatory                           */
+/* --------------------------------------------   */
+// .leftAlign th,
+// .leftAlign 
+td, td {
+	text-align: left !important;  
+}
+/* --------------------------------------------   */
+
+
+/* --------------------------------------------   */
+/* Prevent wrapping of formulas in table cells   */
+/* --------------------------------------------   */
+td {
+	white-space: nowrap;
+}
+/* --------------------------------------------   */
+
+/* --------------------------------------------   */
+/* If you wanna change table margin, do it here   */
+/* --------------------------------------------   */
+.customMargin table {
+	margin: 25px 0;
+}
+/* --------------------------------------------   */
+    
+
+/*
+=========================
+======Table styles=======
+=========================
+Almost all table themes here are either 
+frankenstein monsters of their originals
+or related to it. These were found
+on the www inside codepens, stackoverflow 
+threads and forums. Any credit belongs to 
+the creators and this is a free/open tribute
+for these contributions. 
+
+Usage:
+Select any table style to use in your cssclass.
+
+Eg. cssclass: purpleRed
+
+Remember that you can stack hacks!
+
+Eg. cssclass: purpleRed, wideTable
+
+*/
+
+
+
+
+/* --------------------------------------------   */
+/* Latex table-layout:                            */
+/* --------------------------------------------   */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: auto;
+	min-width: max-content;
+	border-top: 2.27px solid black;
+	border-bottom: 2.27px solid black;
+	// box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.table-container {
+	overflow-x: auto;
+	width: 100%;
+	margin: 1rem 0;
+}
+td, td {
+	border: 0 none;
+	padding: 0.51rem;
+	line-height: 1.1;
+}
+table > tbody > tr:first-child > td,
+table > tbody > tr:first-child > th {
+	border-top: 1.36px solid black;
+}
+table > tbody > tr:last-child > td,
+table > tbody > tr:last-child > th {
+	border-bottom: 1.36px solid black;
+}
+thead th {
+    background-color: white !important;
+    font-weight: 700;    
+    padding: 8px 9px 5px 9px;
+}
+tr:nth-child(even) {
+    background-color: #ebecf1 ;
+}
+// tbody tr:hover td {
+// 	background-color: #f5f1da;
+// }
+// /* --------------------------------------------   */
+

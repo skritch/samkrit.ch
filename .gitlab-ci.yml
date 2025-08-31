@@ -1,0 +1,33 @@
+image: node:18
+
+variables:
+  NODE_ENV: production
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - npm ci
+
+test:
+  stage: test
+  script:
+  - npm run build
+  artifacts:
+    paths:
+    - dist
+  except:
+  - master
+
+pages:
+  stage: deploy
+  script:
+  - npm run build
+  - cp -r dist/* public/
+  artifacts:
+    paths:
+    - dist
+  only:
+  - master
+  pages: true

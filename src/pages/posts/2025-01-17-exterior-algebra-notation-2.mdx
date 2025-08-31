@@ -1,0 +1,363 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "Exterior Algebra Notation 2: Star Indices"
+date: 2025-01-17
+math: true
+toc: true
+bskyPostCid: "3lxgmqhe3sk2h"
+---
+
+*Part of a series on Exterior Algebra*:
+1. *<a href="/posts/2025-01-16-exterior-algebra-notation-1/">Multi-indices</a>*
+2. *(This post)*
+
+<br/>
+
+
+#### Table of Contents
+
+## Laplace Expansion for the Determinant
+
+With the basic of wedge-products adequately notated in the previous post, we'll now turn our attention to the "Laplace Expansion" of the determinant of a matrix. This is not so interesting on its own, but will be a stepping stone to the full matrix inverse.
+
+I mentioned already that the determinant could be written as the action of $$A^{\wedge N}$$ on each vector in the $$N$$-volume $$\Omega$$, which becomes a wedge product of the columns of $$A$$:
+
+$$
+\begin{aligned}
+(A\mathbf{e}_1) \wedge (A\mathbf{e}_2) \wedge \ldots \wedge (A\mathbf{e}_N) &= A_1 \wedge \ldots \wedge A_N \\
+&= (A_1^{i_1} \mathbf{e}_{i_1}) \wedge \ldots \wedge (A_N^{i_N} \mathbf{e}_{i_N})\\
+&= A^I_{1 \ldots k} \mathbf{e}_{\wedge I} \\
+&= A^I_{1 \ldots k} \epsilon_I \mathbf{e}_{\wedge 1 \ldots N} \\
+(\det{A}) \Omega &= (A^I_{1 \ldots k} \epsilon_I) \Omega
+\end{aligned}
+$$
+
+This expression is clearly linear in the components of each column (that is, with respect to any of the $A\mathbf{e}_i$); we should therefore be able to write it as some kind of scalar product with that column alone. 
+
+Here we'll bring in a new notation: the **star basis element** $$\mathbf{e}_{\star i} = \star \mathbf{e}_i$$, where $$\star$$ is the Hodge star. The specific set of indices entailed by $$\star i$$ is "any ordering of all of the indices except for $$i$$ such that $$\mathbf{e}_i \wedge \mathbf{e}_{\star i} = \Omega$$". So $$\mathbf{e}_{\star 1}$$ could be $$\mathbf{e}_{\wedge 2 \ldots N}$$, but any other sequence with the same overall sign works too. When working in the "combination basis" of multivectors (see the previous post in this series) we don't care which set of indices is used to refer to an equivalent multivector.
+
+These expressions are easy to use, because the Hodge star operator acts predictably on their indices:
+
+$$
+\begin{aligned}
+\star(\mathbf{v}) &= \star(v^i \mathbf{e}_i) =  v^i \mathbf{e}_{\star i} \\
+\star(\psi) &= \star(\psi^{\wedge I} \mathbf{e}_{\wedge I}) =  \psi^{\wedge I} \mathbf{e}_{\star I} \\
+\star^{-1}(\psi^{\wedge I} \mathbf{e}_{\star I}) &= \star(\psi^{\wedge I} \mathbf{e}_{\wedge I})
+\end{aligned}
+$$
+
+I'm currently thinking of $$\star i$$ itself standing for specific multi-index like $$2 ... N$$, but we won't write the explicit wedge product in $$\mathbf{e}_{\wedge \star i}$$. A star index is always wedged, since the Hodge star is defined in terms of wedge products anyway. This will mess up the $$\wedge I$$ Einstein notation notation though; we will have to think of $$\star I$$ as pairing with $$\wedge I$$. Most of the time we'll be pairing an $$i$$ with a $$\wedge i$$, which will be better behaved.
+
+
+When I want to refer to star-basis matrix elements of wedge powers of $$A$$, I will write the wedge power explicitly[^1] as $${(A^{\wedge (N-1)})}^{\star j}_{\star i}$$.
+
+[^1]: This is probably more verbose than is necessary. In our existing notation, it is already unambiguous for a single star index to stand for a wedge product of $N-1$ columns, like $A_{\star 1} = A_{\wedge\star 1} = A\mathbf{e}_{\star 1_i} \wedge A\mathbf{e}_{\star 1_2} \ldots $.
+It would be a reasonable extension for a double star index $A^{\star j}_{\star i}$ to stand for a scalar component thereof. But this would probably be pushing it.
+
+Using the star-basis the above becomes:
+
+$$
+A^{\wedge N} \mathbf{e}_{\wedge 1 \ldots N} = (A\mathbf{e}_i) \wedge (A^{\wedge (N-1)} \mathbf{e}_{\star i}) = (A_i) \wedge (A_{\star i})
+$$
+
+Here the $$\star i$$ subscript on the matrix stands for a wedge product of $$(N-1)$$ of columns. Note that this expression is *not* Einstein-summed over $$i$$; $$i$$ is the index of the column we are expanding with-respect-to.
+
+The previous expression can be then expanded in the tensor basis (or you could use the combination basis from the previous post to jump straight to the answer):
+
+$$
+\begin{aligned}
+(A_i) \wedge (A_{\star i}) &=  (A_i^j \mathbf{e}_j) \wedge (A_{(\star i)_1}^{k_1} \mathbf{e}_{k_1}) \wedge (A_{(\star i)_2}^{k_2} \mathbf{e}_{k_2})  \ldots \\
+&= (A_i^j \mathbf{e}_j) \wedge (A^K_{\star i} \mathbf{e}_{\wedge K}) \\
+&= A_i^j A^K_{\star i} (\mathbf{e}_j \wedge \mathbf{e}_{\wedge K})
+\end{aligned}
+$$
+
+The basis element $$\mathbf{e}_{\wedge K}$$ will contain every index except some $$k$$, and will be related to the "canonical" order $$\star k$$ by a sign which can be represented by the Levi-Civita symbol $$\epsilon_K^{\star k}$$:
+
+$$
+A_i^j A^K_{\star i} (\mathbf{e}_j \wedge \mathbf{e}_{\wedge K}) = A_i^j A^K_{\star i} \epsilon^{\star k}_K (\mathbf{e}_j \wedge \mathbf{e}_{\wedge {\star k}})
+$$
+
+
+The $$\star k$$ acts like a sum over $$k$$ in Einstein notation. The Levi-Civita $$\epsilon_K^{\star k}$$ could also be written as $$\epsilon_{k' K} \delta^{k' k}$$ or $${\epsilon^k}_{K}$$.
+
+Note that while $$A_{\star i}^{K}$$ stands for a product of matrix elements $$(A_{(\star i)_1}^{k_1})(A_{(\star i)_2}^{k_2})\ldots$$, the indices in $$\star i$$ should not be thought of as coming in any particular order out of all the positively-signed possibilities. This expression is still valid, though, because the opposite index is antisymmetrized; all the possible orderings are summed together anyway.
+
+
+We can then use $$\mathbf{e}_j \wedge \mathbf{e}_{\wedge {\star k}} = \delta_{jk} \Omega$$ to get:
+
+$$
+\begin{aligned}
+A_i^j A^K_{\star i} \epsilon^{\star k}_K (\mathbf{e}_j \wedge \mathbf{e}_{\wedge {\star k}}) &= (A_i^j A^K_{\star i} \epsilon^{\star k}_K \delta_{jk})\Omega\\
+&= (A_i^j A^K_{\star i} \epsilon_{jK})\Omega\\
+&= (\det A)\Omega
+\end{aligned}
+$$
+
+This therefore gives us the determinant as the inner product with a vector whose components are $$C_i^j = A^K_{\star i} {\epsilon^j}_{K}$$:
+
+$$
+\langle A_i, C_i \rangle = A_i^j \delta_{jk} C_i^{k} = A_i^j \ C_{ji} = A_i^j( A^K_{\star i} \epsilon_{jK})
+$$
+
+This is the "Laplace Expansion" for the determinant in terms of the column $$A_i$$, with $$C_i^j$$ as the "cofactor" of $$A_i^j$$. 
+
+If we use $$[\ldots ]$$ to antisymmetrize indices we can make this very succinct, but with some questionable indexing:
+
+$$
+A_i^j A^K_{\star i} \epsilon_{jK} \to A_i^j A_{[\star j]\star i} 
+$$
+
+The "Laplace expansion in rows" would be $$A_i^j A^{\star j[\star i]}$$, by analogy.
+
+Normally one sees some extra minus-signs in the cofactor $$C_i^j$$, because the normal expression is given in terms of matrix minors. These are equivalent to: $$A^{\wedge (N-1)} (\mathbf{e}_{1} \wedge \ldots \wedge \mathbf{e}_{i-1} \wedge \mathbf{e}_{i+1}\wedge \ldots \wedge \mathbf{e}_{N})$$This differs from the $$\star$$-index in that the vector $$\mathbf{e}_i$$ has been removed "in place" rather than first being transposed to the front of ths list. We'll can represent this with another special multi-index $$\enclose{horizontalstrike}{i}$$, called "strike-$$i$$". The two differ by a sign, since it takes $$i-1$$ transposition to move $$i$$ from the front of the list to its normal position:
+
+$$
+(-1)^{i-1} \mathbf{e}_i \wedge \mathbf{e}_{\enclose{horizontalstrike} i} = \Omega  =\mathbf{e}_i \wedge \mathbf{e}_{\star i} 
+$$
+
+Therefore:
+
+$$
+(-1)^{i-1} \mathbf{e}_{\enclose{horizontalstrike} i} = \mathbf{e}_{\star i} 
+$$
+
+The cofactor $$C_i^j$$ can be seen as the matrix element $${(A^{\wedge (N-1)})}_{\star i}^{\star j}$$, the $$\star j$$ component of the action of $$A$$ on the specific $$N-1$$ volume $$\star i$$. We can find the sign of the appropriate strike-basis matrix element by:
+
+$$
+\begin{aligned}
+\mathbf{e}^{\star j} A^{\wedge (N-1)} \mathbf{e}_{\star i} &= {(-1)^{j-1}} \mathbf{e}^{\enclose{horizontalstrike} j} A^{\wedge (N-1)} \mathbf{e}_{\enclose{horizontalstrike} i}  {(-1)^{i-1}}\\
+ &= {(-1)^{i+j - 2}} {(A^{\wedge (N-1)} )}^{\enclose{horizontalstrike} j}_{\enclose{horizontalstrike} i} \\
+ &= {(-1)^{i+j}} {(A^{\wedge (N-1)} )}^{\enclose{horizontalstrike} j}_{\enclose{horizontalstrike} i} \\
+ &= {(A^{\wedge (N-1)} )}^{\star j}_{\star  i}
+\end{aligned}
+$$
+
+In a typical notation $${(A^{\wedge (N-1)})}_{\enclose{horizontalstrike} i}^{\enclose{horizontalstrike} j}$$ would be thought of as the "determinant of a minor" and might be written $$m^j_i$$, in which case we have:
+
+$$
+C_i^j = {(-1)}^{i+j}{(A^{\wedge (N-1)})}_{\enclose{horizontalstrike} i}^{\enclose{horizontalstrike} j} = {(-1)}^{i+j} m^j_i
+$$
+
+which is the typical formula for the cofactor.
+
+We could have also arrived here via the Hodge star identity
+
+$$
+\alpha \wedge \star \beta = \langle \alpha, \beta\rangle \Omega
+$$
+
+This would give 
+
+$$
+\begin{aligned}
+A_i \wedge (A^{\wedge (N-1)} \mathbf{e}_{\star i}) &= A_i \wedge ((A^{\wedge (N-1)} \circ \star )\mathbf{e}_{ i}) \\
+&= \langle A_i, (\star^{-1} \circ A^{\wedge (N-1)} \circ \star) \mathbf{e}_i \rangle \Omega
+\end{aligned}
+$$
+
+which tells us that the cofactor matrix $$C_i^j$$ is equivalent to:
+
+$$
+C_i^j = (\star^{-1} \circ A^{\wedge (N-1)} \circ \star)_i^j = {(A^{\wedge (N-1)} )}^{\star j}_{\star i}
+$$
+
+<br/>
+
+## The Matrix Inverse via Cofactors
+
+The Laplace Expansion just shown is very nearly the matrix inverse already. We had 
+
+$$
+A_i^j A^K_{\star i} \epsilon_{jK} = \langle A_i, C_i \rangle = \det{A}
+$$
+
+and also that this expression was equal to 
+
+$$(A_i) \wedge (A_{\star i}) = \langle A_i, \star^{-1} (A_{\star i}) \rangle \Omega = (\det A)\Omega$$
+
+Together these imply that 
+
+$$
+\langle A_i, C_i \rangle \Omega = (A_i) \wedge (A_{\star i})
+$$
+
+Therefore the scalar product of $$C_i$$ with any _other_ column $$A_j$$ is zero, since all the other columns are already represented in $$A_{\star i}$$. Thus these obey
+
+$$
+\frac{\langle A_i, C_j \rangle}{\det A} = \delta_{ij}
+$$
+
+which makes $$\frac{C_j}{\det A}$$ the dual basis vector to $$A_i$$, and therefore a _row_ of the inverse matrix:
+
+$$
+
+\begin{pmatrix}& & \\ A_1 & A_2 & \cdots \\& &\end{pmatrix} \begin{pmatrix}&C_1&\\ &C_2& \\ &\vdots & \end{pmatrix}
+= \begin{pmatrix}{\det A} & & \\ & {\det A} & \\ & & \ddots\end{pmatrix}
+$$
+
+This gives the adjugate matrix as the transpose of $$C$$:
+
+$$
+\text{adj}(A)^i_j = C^j_i = A^K_{\star i} {\epsilon^j}_{K}
+$$
+
+where, again, $$A^K_{\star i}$$ is a _product_ of elements of the original matrix $$A$$. (Strictly speaking I should be using positional indices and $$\delta_{ii'}$$ factors to swap these indices, but I won't bother / don't completely understand this.)
+
+And the inverse matrix itself is just:
+
+$$
+{(A^{-1})}^i_j = \frac{C^j_i}{\det A} =  \frac{A^K_{\star i} {\epsilon^j}_{K}}{\det A} = \frac{ { {(\star^{-1} \circ A^{\wedge (N-1)} \circ \star)}^j_i}
+}{\det A}
+$$
+
+I'm including these derivations mainly to demonstrate the index notation, and as a reference. As such I won't consider, in this post, the complicated cases of non-square matrices. Still I find the $$\star$$-basis derivations to be substantially more satisfying than whatever I learned in school: everything follows straightforwardly from the properties of $$\wedge$$.
+
+<br/>
+
+## The Matrix Inverse via Cramer's Rule
+
+Now for another matrix inverse. This time we start with the equation
+
+$$
+A \mathbf{x} = \mathbf{b}
+$$
+
+This amounts to the statement that $$\mathbf{x} = (x_1, x_2, \ldots)^T$$ gives the coordinates of $$\mathbf{b}$$ in the basis of the columns of $$A$$. We can therefore write this coordinate expression:
+
+$$
+\mathbf{b} = x^1 A_1 + x^2 A_2 + \ldots
+$$
+
+Now, wedge both sides of this with the product of any $$N-1$$ columns, omitting column $$A_i$$, in $$\star i$$ order:
+
+$$
+\begin{aligned}
+\mathbf{b} \wedge A_{\star i}&= x^1 A_1 \wedge A_{\star i} + x^2 A_2 \wedge A_{\star i} + \ldots\\
+ &= x^i (A_i \wedge A_{\star i})\\
+ &= x^i (\det A) \Omega
+\end{aligned}
+$$
+
+Every term except $$x_i$$ drops out, and the remaining component is:
+
+$$
+x^i = \frac{\mathbf{b}  \wedge A_{\star i}}{(\det A) \Omega}
+$$
+
+We can rewrite the numerator using $$\alpha \wedge \star \beta = \langle \alpha, \beta\rangle \Omega$$ to cancel the $$\Omega$$s:
+
+$$
+x^i = \frac{ \langle \mathbf{b}, \star^{-1} A_{\star i}\rangle \Omega}{(\det A) \Omega} = \frac{ \langle \mathbf{b}, \star^{-1} A_{\star i}\rangle }{\det A}
+$$
+
+And, undoing $$A_{\star i} \to A^{\wedge (N-1)} \mathbf{e}_{\star i} \to A^{\wedge (N-1)} \star \mathbf{e}_{i}$$, we once again we get the $$i$$th row of the matrix inverse as the transpose of this thing:
+
+$$
+{(A^{-1})}^i_j = \frac{ {(\star^{-1} \circ A^{\wedge (N-1)} \circ \star)}^j_i
+}{\det A}
+$$
+
+and
+
+$$
+x^i= \frac{1}{\det A} {(\star^{-1} \circ A^{\wedge (N-1)} \circ \star)}^{j'}_{i'}\delta_{jj'}\delta^{ii'}b^j
+$$
+
+(I think I have to use $$\delta$$s like that to get the index positions to work.)
+
+Going back to the expression
+
+$$
+x^i = \frac{\mathbf{b}  \wedge A_{\star i}}{(\det A) \Omega}
+$$
+
+Here I've used the $$\star$$-basis to simplify the derivation. The usual Cramer formula thinks of transposing $$\mathbf{b}$$ into the position original occupied by $$\mathbf{A}_i$$. But this is the exact sequence of transpositions that would give $$\Omega$$ if $$\mathbf{A}_i$$ were in the first position—so no extra signs are needed.
+
+The usual Cramer formula then interprets the numerator of this expression as the "determinant of the matrix with the $$i$$th column replaced by $$\mathbf{b}$$". In this formulation, there's no need.
+
+
+<br/>
+
+## The Matrix Inverse via a Homogenous Matrix
+
+A third method. We write the matrix equation as an $$N \times (N+1)$$-dimensional "homogenous matrix":
+
+$$
+By = \begin{pmatrix}A & -\mathbf{b}\end{pmatrix}\begin{pmatrix}\mathbf{x} \\ 1\end{pmatrix} = 0
+$$
+
+Then the plan will be: first we take the $$N$$th wedge power of this thing, which will map from the space $$N+1$$-dimensional space $$\bigwedge ^N \mathbb{R}^{N+1}$$ to the 1-dimensional space $$\bigwedge^N \mathbb{R}^N$$. The $$N+1$$ components of this mapping on the input space represent a single grade-$$N$$ multivector $$\psi$$ which describes an $$N$$-dimensional subspace of $$\mathbb{R}^{N+1}$$: the subspace spanned by the $$N$$ rows of $$B$$. The vector $$\mathbf{y} = (\mathbf{x}, 1)^T$$ is _not in this subspace_, since $$By = 0$$, and so it must be proportional to the complement of this space $$\star \psi$$, and because one component is known, we can solve for the constant of proportionality.
+
+To be explicit, I'll use bases $$\mathbf{e}$$ on $$\mathbb{R}^N$$ (though we'll only need $$\mathbf{e}_{\wedge 1 \ldots N} = \Omega$$) and $$\mathbf{f}$$ on the $$\mathbb{R}^{N+1}$$ space.  Then we can $$B^{\wedge N}$$ as a tensor product:
+
+$$
+B^{\wedge N} = {(B^{\wedge N})}_{\star j}^{\Omega} (\Omega \otimes f^{\star j})
+$$
+
+The components of $$B^{\wedge N}$$ can each be found by taking wedge products of $$N$$ columns of $$B$$. The term for $$j=N+1$$ will be the  product of the first $$N$$ columns, which are simply the matrix $$A$$ and will give $$(\det{A}) \Omega$$. The other $$N$$ values of $$j$$ will have terms consisting of $$N-1$$ columns of $$A$$ wedges with $$-\mathbf{b}$$. Working it out:
+
+$$
+\begin{aligned}
+B^{\wedge N} &= {(B^{\wedge N})}_{\star j}^\Omega  (\Omega \otimes f^{\star j}) \\
+
+&= \left(\sum_{j=1}^N (A_{\star j} \wedge (-\mathbf{b})) \otimes f^{\star j}\right) + (A_{\wedge 1 \ldots N} \otimes f^{\wedge 1 \ldots N}) \\
+
+&= - \left(\sum_{j \in 1\ldots N} (A^{I}_{\star j}\epsilon_{iI}) (\mathbf{e}_{\star i} \wedge \mathbf{b}) \otimes  f^{\star j}\right) + (\det{A}) (\Omega \otimes f^{\wedge 1 \ldots N})  \\
+
+\end{aligned}
+$$
+
+There are a couple of signs we need to get right. 
+* $$\mathbf{e}_{\star i} \wedge \mathbf{b}$$ is a wedge in $$N$$-space. We'd like to extract the coefficient $$b^i$$ from this, but to get the signs right we have to transpose $$\mathbf{b}$$ to the left $$N-1$$ times to put it in the the front of the wedge product, which lets us write $$\mathbf{e}_{\star i} \wedge \mathbf{b} = { {-1}^{(N-1)} b^i \mathbf{e}_i \wedge \mathbf{e}_{\star i}} = ({-1}^{(N-1)} b^i) \Omega$$.
+* It will be helpful to replace the expression $$f^{\wedge 1 \ldots N}$$ with $$f^{\star (N+1)}$$. Since this is $$(N+1)$$-space, it will take $$N$$ transpositions to move $$f^{N+1}$$ to its normal spot at the end of the line. So we need to include a sign $$f^{\wedge 1 \ldots N} \to {-1}^N f^{\star (N+1)}$$.
+
+With those we can move $$\Omega$$ and all of the minus signs to the front:
+
+$$
+\begin{aligned}
+
+\ldots &= {(-1)}^N \Omega \otimes \left( \left(\sum_{i, j \in 1 \ldots N} A^{I}_{\star j}\epsilon_{iI} b^i \right)f^{\star j} + (\det{A}) f^{\star (N+1)}\right)
+\end{aligned}
+$$
+
+It's not too pretty, but that object on the right represents the "span of the rows of $$B^{\wedge N}$$ in $$\mathbb{R}^{N+1}$$". 
+
+We can now drop the tensor product and signs from this whole expression. To get the complement we simply un-star the basis (dual) vectors, and let's assume we can lower all covector indices, although I don't completely understand what this means here. Then we must have 
+
+$$
+\begin{pmatrix}x^1 \\ \vdots \\x^N \\ 1\end{pmatrix} \propto 
+\begin{pmatrix}
+A^{I}_{\star 1}\epsilon_{iI}b^i  \\ 
+\vdots \\
+ A^{I}_{\star N}\epsilon_{iI}b^i  \\
+\det A
+\end{pmatrix} 
+= \begin{pmatrix}\text{adj}(A)^1 \cdot \mathbf{b}
+\\ \vdots \\
+\text{adj}(A)^N \cdot \mathbf{b} \\
+\det{A}
+\end{pmatrix}
+$$
+
+And we find:
+
+$$
+\mathbf{x} = \frac{\text{adj}(A)}{\det{A}}  \cdot \mathbf{b} = A^{-1} \mathbf{b}
+$$
+
+This argument would be shorter if we didn't bother with all of the covectors. I needed to write those to see what was happening, but the final result is actually a very simple operation on the columns of $$B = (A, -\mathbf{b})$$, equivalent of course to Cramer's Rule.
+
+It is as if we simply had the two dimensional vector equation:
+
+$$
+B\cdot y = (a, -b) \cdot \begin{pmatrix}x \\ 1\end{pmatrix} = 0
+$$
+
+and then we wanted to invert this. We'd get:
+
+$$
+y = B^{-1}(0) + (\perp B)
+$$
+
+$$(\perp B)$$ would be a 90-degree rotation of vector $$(a, -b)$$, i.e. $$y \propto (b, a)$$ and fixing one component to 1 would give our solution: $$y = (b/a, 1)$$ and $$x = b/a$$. It's remarkable that the N-dimensional case ends up look similar.

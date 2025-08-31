@@ -1,0 +1,45 @@
+---
+import type { MarkdownLayoutProps } from 'astro';
+import { siteConfig } from '../data/site.ts'
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlueskyComments from '../components/comments/Comments.tsx';
+
+// https://docs.astro.build/en/basics/layouts/#markdown-layout-props
+type Props = MarkdownLayoutProps<{
+  // Define frontmatter props here
+  title: string;
+  author?: string;
+  date?: string;
+  math?: boolean
+  bskyPostCid: string
+  
+}>;
+
+const { frontmatter } = Astro.props;
+const date = frontmatter.date ? new Date(frontmatter.date).toLocaleDateString() : undefined
+---
+
+<BaseLayout title={frontmatter.title}, url={frontmatter.url} math={frontmatter.math}>
+  
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">{frontmatter.title}</h1>
+    {date && 
+      <p class="post-meta" itemprop="datePublished">{date}</p>
+    }
+  </header>
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="post-content"  itemprop="articleBody">
+      <slot /> <!-- your content is injected here -->
+    </div>
+  </article>
+  {frontmatter.bskyPostCid && (
+    <h2>Comments</h2>
+    <p>(via <a href={"https://bsky.app/profile/skri.bsky.social/post/" + frontmatter.bskyPostCid}>Bluesky</a>)</p>
+    <BlueskyComments
+      did={siteConfig.bskyDid}
+      postCid={frontmatter.bskyPostCid}
+      skipFirst={true}
+      client:load
+    />
+  )}
+</BaseLayout>

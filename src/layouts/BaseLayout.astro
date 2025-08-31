@@ -1,0 +1,31 @@
+---
+import Head from "../components/Head.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+import '../styles/main.scss';
+
+interface Props {
+  title: string
+  url?: string
+  math?: boolean
+}
+
+const { title, url, math } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <Head title={title} math={math} url={url}/>
+    
+  </head>
+  <body>
+    <Header />
+    <div class="page-content">
+      <div class="wrapper">
+        <slot />
+      </div>
+    </div>
+    <Footer />
+  </body>
+</html>
