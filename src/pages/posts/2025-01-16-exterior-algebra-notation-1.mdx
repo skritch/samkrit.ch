@@ -95,7 +95,7 @@ $$
 $$
 
 
-**Combination Basis**, i.e.the basis of distinct $$\mathbf{e}_{\wedge I}$$ with the indices taken only over the $$N\choose k$$ distinct *combinations* of basis elements. This is $$\frac{1}{k!}$$ smaller than the "permutation" basis. Sometimes the indices are chosen such that $$i_1 \lt i_2 \lt \ldots \lt i_k$$, but this isn't necessary as long as all the $$i$$ are chosen distinctly and the sign of the overall basis element is consistent in some sense. I will generally refer to this by writing a sum over the wedge products themselves $$\sum_{\wedge I}$$ rather than $$\sum_I$$, which indicates that only distinct wedge products are to be considered.
+**Combination Basis**, i.e. the basis of distinct $$\mathbf{e}_{\wedge I}$$ with the indices taken only over the $$N\choose k$$ distinct *combinations* of basis elements. This is $$\frac{1}{k!}$$ smaller than the "permutation" basis. Sometimes the indices are chosen such that $$i_1 \lt i_2 \lt \ldots \lt i_k$$, but this isn't necessary as long as all the $$i$$ are chosen distinctly and the sign of the overall basis element is consistent in some sense. I will generally refer to this by writing a sum over the wedge products themselves $$\sum_{\wedge I}$$ rather than $$\sum_I$$, which indicates that only distinct wedge products are to be considered.
 
 Our example can be written in two equivalent ways:
 
@@ -129,7 +129,7 @@ N^k \text{ tensor products}}
 \end{array}
 $$
 
-In general the "tensor product basis" will easiest to write down, but is not necessarily antisymmetric. The permutation basis is manifestly antisymmetric but either has to avoid overcounting or has to have coefficients which are *not* antisymmetric. The combination basis is the most "natural", but it can be hard to work out what the component representation ought to be—so my aim here is to arrive at the combination basis expressions in particular, as well as to give examples of my preferred notation.
+In general the "tensor product basis" will be easiest to write down, but is not necessarily antisymmetric. The permutation basis is manifestly antisymmetric but either has to avoid overcounting or has to have coefficients which are *not* antisymmetric. The combination basis is the most "natural", but it can be hard to work out what the component representation ought to be—so my aim here is to arrive at the combination basis expressions in particular, as well as to give examples of my preferred notation.
 
 What are the expansions of $$\mathbf{v}_{\wedge 1 \ldots k}$$ in these three bases?
 
@@ -178,7 +178,7 @@ $$
 \mathbf{u} \wedge \mathbf{v} \wedge \mathbf{w} = u^i v^j w^k \mathbf{e}_{\wedge ijk}
 $$
 
-This is a sum over _all_ $$I$$, but there is nothing in the coefficient which indicates that this object is antisymmetric. Each of the $$k!$$ sequences with the same set of indices all contribute to the $$e_{\otimes I}$$ term. If wanted to have an antisymmetric coefficient also, we'd be summing two antisymmetric things and would overcount by $$k!$$, so we can get an equivalent expression by antisymmetrizing either index and dividing:
+This is a sum over _all_ $$I$$, but there is nothing in the coefficient which indicates that this object is antisymmetric. Each of the $$k!$$ sequences with the same set of indices all contribute to the $$e_{\otimes I}$$ term. If we wanted to have an antisymmetric coefficient also, we'd be summing two antisymmetric things and would overcount by $$k!$$, so we can get an equivalent expression by antisymmetrizing either index and dividing:
 
 $$
 v^I_{1 \ldots k} \mathbf{e}_{\wedge I} = \frac{1}{k!}\epsilon^K v^I_{K} \mathbf{e}_{\wedge I} = \frac{1}{k!}v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\wedge I}
@@ -229,7 +229,7 @@ $$
 \end{aligned}
 $$
 
-I personally find it easiest to *think* in the combination basis because it makes the antisymmetry manifest while avoiding any duplicated basis elements. I would generally like to be able to work *entirely* within it, if not for that that it can be hard to calculate wedge-product formulas without dropping to one of the other bases. The ideal would be able to write antisymmetric tensors in an Einstein notation like:
+I personally find it easiest to *think* in the combination basis because it makes the antisymmetry manifest while avoiding any duplicated basis elements. I would generally like to be able to work *entirely* within it, if not for the fact that it can be hard to calculate wedge-product formulas without dropping to one of the other bases. The ideal would be able to write antisymmetric tensors in an Einstein notation like:
 
 $$
 \psi = \psi^{\wedge 12} \mathbf{e}_{\wedge 12} + \ldots \to \psi^{\wedge I} \mathbf{e}_{\wedge I}
@@ -285,7 +285,7 @@ Does this generalize? The cases to consider are:
   * $$\sum_{\wedge I} \epsilon^K v^I_{K} \mathbf{e}_{\wedge I} \stackrel{?}= \sum_{\wedge I} v^I_{\wedge 1 \ldots k} \mathbf{e}_{\wedge I}$$
   * $$\sum_{\wedge I} v^K_{1 \ldots k} \epsilon_K^I \mathbf{e}_{\wedge I} \stackrel{?}{=} v_{ 1 \ldots k}^{\wedge I}  \mathbf{e}_{\wedge I}$$
 
-In the first of each pairthe $$\wedge$$ index doesn't add much. The second two appears to support an Einstein notation with $$\wedge I$$ in the superscript doing double duty both as an index-we-sum-over and as an antisymmetrizer. But we can't support both at once! We'd get the wrong answer for the permutation-basis sum if we read it as a combination-basis expression and v.v. 
+In the first equation of each pair the $$\wedge$$ index doesn't add much. The second equations from each pair appear to support an Einstein notation, with $$\wedge I$$ in the superscript doing double duty both as an index-we-sum-over and as an antisymmetrizer. But we can't support both at once! We'd get the wrong answer for the permutation-basis sum if we read it as a combination-basis expression and v.v. 
 
 So we could make it work if it *only* represented a combination-basis sum with antisymmetrization. But I'm still skeptical, because we would not want the same rule to apply—I don't think—to either the matrix basis elements or the general antisymmetric tensor in
 
@@ -357,7 +357,7 @@ $$
 = (\psi^{\wedge K} \phi^{\wedge L}) (\mathbf{e}_{\wedge K} \wedge \mathbf{e}_{\wedge L})
 $$
 
-Note the use of $$\wedge K$$ indices and Einstein notation, which implies that the sum is in the combination basis. This would be the answer except that it's *no longer* in the combination basis: $$e_{\wedge K} \wedge e_{\wedge L}$$ are not a distinct basis elements. Instead we need sum over distinct basis elements $$e_{\wedge I}$$ and then, for each, include one set of indices $$K, L$$ which comprise it, with an appropriate sign. We get 
+Note the use of $$\wedge K$$ indices and Einstein notation, which implies that the sum is in the combination basis. This would be the answer except that it's *no longer* in the combination basis: $$e_{\wedge K} \wedge e_{\wedge L}$$ are not a distinct basis elements. Instead we need to sum over distinct basis elements $$e_{\wedge I}$$ and then, for each, include one set of indices $$K, L$$ which comprise it, with an appropriate sign. We get 
 
 $$
 \left(\psi^{\wedge K} \mathbf{e}_{\wedge K}\right) \wedge \left(\phi^{\wedge L} \mathbf{e}_{\wedge L}\right) 
@@ -390,7 +390,7 @@ $$
 \end{aligned}
 $$
 
-The first line gives the full tensor-basis expression, which sums over each $$\mathbf{e}_{\otimes I}$$ and then over all combinations of the indices from $$\psi, \phi$$ that produce the index $$I$$ in any order. In this case only 2 choices survive: $$\psi^{12} \phi^3$$ and $$\psi^{21} \phi^3$$. Then we simplify, and on the last line the expression we get the (very succinct) combination-basis expression, with no combinatorial factors in sight! No signs appear in this expression because there's only one way to make the indices 123 out of the two input tensors.
+The first line gives the full tensor-basis expression, which sums over each $$\mathbf{e}_{\otimes I}$$ and then over all combinations of the indices from $$\psi, \phi$$ that produce the index $$I$$ in any order. In this case only 2 choices survive: $$\psi^{12} \phi^3$$ and $$\psi^{21} \phi^3$$. Then we simplify, and on the last line we get the (very succinct) combination-basis expression, with no combinatorial factors in sight! No signs appear in this expression because there's only one way to make the indices 123 out of the two input tensors.
 
 Note that while Einstein-notation sums will use $$\wedge I$$ indices, I don't intend to write these for explicit components like $$\psi^{12}$$ unless an actual wedge product is implied.
 

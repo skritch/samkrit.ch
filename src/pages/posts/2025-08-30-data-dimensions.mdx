@@ -4,7 +4,7 @@ title: "Drawing Dimensions 2: Data Engineering"
 date: 2025-08-30
 math: true
 toc: true
-bskyPostCid: "3lxgmvmh2ik2h"
+bskyPostCid: "3lxpu442des2q"
 ---
 import { Image } from 'astro:assets';
 import manydims from '../../images/datadims/many_dims.png';
@@ -14,7 +14,7 @@ Here I'll try to apply the visualization methods from my <a href="/posts/2024-09
 
 #### Table of Contents
 
-## 1. Time Dimensions
+## 1. Time
 
 Behold the axis of time:
 <br/>
@@ -30,7 +30,7 @@ We can therefore draw a distinction between two different time axes:
 
 [^1]: I find the word "logical" here to be unsuggestive of its meaning. The sense here is from the perspective of software, where the realtime is the time that matters for the business logic, as opposed to the time when the data is being processed.
 
-Obviously the former must be precede the latter; the difference is the latency:
+Obviously the former must precede the latter; the difference is the latency:
 ![latency](../../images/datadims/latency.png)
 
 If we plot the two against each other, half of the space is inaccessible:
@@ -63,13 +63,13 @@ In this schematic representation of time, we're indifferent to how often these p
 - polling infrequently and processing in batches (e.g. all records arriving in the last day)
 - ad-hoc / manual processes
 
-Even an Excel spreadsheet counts, even if only be updated at 10 a.m. when someone or another gets into the office.
+Even an Excel spreadsheet counts: getting updates at 10 a.m. when someone or another gets into the office is still *a* schedule.
 
 Except for truly realtime streaming, all our dimensions are actually discrete; of course, any continuous dimension can be reduced to a discrete one by "binning" or "batching" its values, for example, to partition into a directory structure like `YYYY/MM/DD/`. If we want to mark a dimension as discrete, we'll add tick marks to the axis:
 
 ![a binned time dimension](../../images/datadims/binned.png)
 
-If no accumulating state is needed to calculate the next value from the previous one, the individual batches can be treated as distinct datasets—"partitions" of the full data. Ideally data is partitioned on its real, i.e. logical, time; this being the time dimension you most often want to query by. But realtime data can usually have arbitrarily-late arrival times (due to upstream errors and the like), and one must either accept incomplete data, or partition and process  by arrival time. If you want a clean dataset that's partitioned on logical time you have to merge the partitions later and allow that a newly-arriving partition can carry updates to many logical-time partitions at once. Databases can handle this; cloud storage not so much, not without specialized tools.
+If no accumulating state is needed to calculate the next value from the previous one, the individual batches can be treated as distinct datasets—"partitions" of the full data. Ideally data is partitioned on its real, i.e. logical, time; this being the time dimension you most often want to query by. But realtime data can usually have arbitrarily-late arrival times, due to upstream errors and the like. One must either accept incomplete data, or settle for partitioning by arrival times. If you want a clean dataset that's partitioned on logical time you have to merge the partitions later and allow that a newly-arriving partition can carry updates to many logical-time partitions at once. Databases can handle this; cloud storage not so much, not without specialized tools.
 
 We also are not distinguishing between "push" and "pull", i.e. whether the call-stack starts upstream or downstream. "Push" doesn't necessarily mean low-latency: processing can be slow, or we might wait for a complete batch to arrive before pushing it downstream.
 
@@ -79,7 +79,7 @@ In all, a piece of data has the following "coordinates" along these time dimensi
 - update time
 - processing time (sometimes)
 
-## 2. The DAG Dimension
+## 2. The DAG
 
 If we have a number of datasets wired up in order, each dataset's "update time" will act as the upstream "arrival time" for the next in line. Each time dimension will be offset from previous:
 
@@ -137,7 +137,7 @@ But wait: doesn't data flow from the "back of house" of the business into the cu
 
 But these "reverse" edges must always point *forward* in time—you can't send data into the past, after all. The true "DAG" situates the future as a downstream of the past. 
 
-It's a tremendous conceptual simplification, though, to be able to think of a DAG has having no backwards edges. We aim for this whenever possible. The easiest sorts of DAG edges to reason about are pure functions: either the new rows are a pure function of the old rows (as in a stateless stream), or, at least, the new datasets are functions of the old datasets (like a reactive spreadsheet). And in fact, the whole point of the "materialized views of world" which is our data is to implement some "pure function of the world state" in order to understand it.
+It's a tremendous conceptual simplification, though, to be able to think of a DAG as having no backwards edges. We aim for this whenever possible. The easiest sorts of DAG edges to reason about are pure functions: either the new rows are a pure function of the old rows (as in a stateless stream), or, at least, the new datasets are functions of the old datasets (like a reactive spreadsheet). And in fact, the whole point of the "materialized views of world" which is our data is to implement some "pure function of the world state" in order to understand it.
 
 We can take inventory of the edges in a DAG in order of increasing complexity:
 1. (simplest): downstream data depends only on upstream state (a reactive pure function, like a spreadsheet)
@@ -152,7 +152,7 @@ It's worth it to isolate parts of the overall DAG of a business which can be rea
 
 ![unfolding dag into pipeline/job/run](../../images/datadims/dag_unfolding.png)
 
-## 3. Technology Dimensions
+## 3. Technology
 
 Where does the data live? How is it updated?
 
@@ -178,11 +178,11 @@ As a business grows its DAG will grow in complexity, as ever-more tools and plat
 ![a business with a prod stack, data stack, DWH, etc](../../images/datadims/data_stack.png)
 
 
-## 4. Version Dimensions
+## 4. Versions
 
 What about the fact that the implementations of our data pipelines themselves will vary with time? 
 
-Here find another class of dimensions, representing another complicatoin: versioning. 
+Here find another class of dimensions, representing another complication: versioning. 
 
 The basic version dimension is a Git commit hash; effectively, a coordinate along the `main` branch:
 
@@ -205,14 +205,14 @@ Also in this category can be placed a number of AI and ML-specific dimensions. M
 
 ![version dimension for ML](../../images/datadims/version_ml.png)
 
-Furthermore the *outputs* of our modern AI models are stochastic. Anything downstream of an AI model have depend on a dimension representing the output it actually consumed, though this is likely redundant with the "run id" of the AI task and perhaps also with the exact filename.
+Furthermore the *outputs* of our modern AI models are stochastic. Anything downstream of those AI models may be said to acquire another quais-dimension, representing the actual output it consumed.
 
 Contemplating the variety of version dimensions leads one to the perspective that, for data-engineering purposes, there is no real distinction to be made between input datasets, code files, ML model versions, or software packages. It's all just data, which can be brought together to create new data.[^3]
 
 [^3]: Sometimes I'll see DE tools wrapping up all these different kinds of assets together in ways that strike my organized SWE-brain as heretical: deploying Python scripts by writing them onto S3, or zipping scripts up alongside datasets, or versioning datasets in Git. But I suppose I've just made a case for these kinds of heresies.
 
 
-## 5. Institutional Dimensions
+## 5. Institutional
 
 Finally and briefly we have the human factors. Any piece of data has:
 - owners: maintainers, internal and external stakeholders...

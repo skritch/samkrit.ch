@@ -18,7 +18,7 @@ bskyPostCid: "3lxgmqhe3sk2h"
 
 ## Laplace Expansion for the Determinant
 
-With the basic of wedge-products adequately notated in the previous post, we'll now turn our attention to the "Laplace Expansion" of the determinant of a matrix. This is not so interesting on its own, but will be a stepping stone to the full matrix inverse.
+With basics of wedge-products adequately notated in the previous post, we'll now turn our attention to the "Laplace Expansion" of the determinant of a matrix. This is not so interesting on its own, but will be a stepping stone to the full matrix inverse.
 
 I mentioned already that the determinant could be written as the action of $$A^{\wedge N}$$ on each vector in the $$N$$-volume $$\Omega$$, which becomes a wedge product of the columns of $$A$$:
 
@@ -46,7 +46,7 @@ $$
 \end{aligned}
 $$
 
-I'm currently thinking of $$\star i$$ itself standing for specific multi-index like $$2 ... N$$, but we won't write the explicit wedge product in $$\mathbf{e}_{\wedge \star i}$$. A star index is always wedged, since the Hodge star is defined in terms of wedge products anyway. This will mess up the $$\wedge I$$ Einstein notation notation though; we will have to think of $$\star I$$ as pairing with $$\wedge I$$. Most of the time we'll be pairing an $$i$$ with a $$\wedge i$$, which will be better behaved.
+I'm currently thinking of $$\star i$$ itself standing for specific multi-index like $$2 ... N$$, but we won't write the explicit wedge product in $$\mathbf{e}_{\wedge \star i}$$. A star index is always wedged, since the Hodge star is defined in terms of wedge products anyway. This will mess up the $$\wedge I$$ Einstein notation though; we will have to think of $$\star I$$ as pairing with $$\wedge I$$. Most of the time we'll be pairing an $$i$$ with a $$\wedge i$$, which will be better behaved.
 
 
 When I want to refer to star-basis matrix elements of wedge powers of $$A$$, I will write the wedge power explicitly[^1] as $${(A^{\wedge (N-1)})}^{\star j}_{\star i}$$.
@@ -110,7 +110,7 @@ $$
 
 The "Laplace expansion in rows" would be $$A_i^j A^{\star j[\star i]}$$, by analogy.
 
-Normally one sees some extra minus-signs in the cofactor $$C_i^j$$, because the normal expression is given in terms of matrix minors. These are equivalent to: $$A^{\wedge (N-1)} (\mathbf{e}_{1} \wedge \ldots \wedge \mathbf{e}_{i-1} \wedge \mathbf{e}_{i+1}\wedge \ldots \wedge \mathbf{e}_{N})$$This differs from the $$\star$$-index in that the vector $$\mathbf{e}_i$$ has been removed "in place" rather than first being transposed to the front of ths list. We'll can represent this with another special multi-index $$\enclose{horizontalstrike}{i}$$, called "strike-$$i$$". The two differ by a sign, since it takes $$i-1$$ transposition to move $$i$$ from the front of the list to its normal position:
+Normally one sees some extra minus-signs in the cofactor $$C_i^j$$, because the normal expression is given in terms of matrix minors. These are equivalent to: $$A^{\wedge (N-1)} (\mathbf{e}_{1} \wedge \ldots \wedge \mathbf{e}_{i-1} \wedge \mathbf{e}_{i+1}\wedge \ldots \wedge \mathbf{e}_{N})$$This differs from the $$\star$$-index in that the vector $$\mathbf{e}_i$$ has been removed "in place" rather than first being transposed to the front of ths list. We can represent this with another special multi-index $$\enclose{horizontalstrike}{i}$$, called "strike-$$i$$". The two differ by a sign, since it takes $$i-1$$ transposition to move $$i$$ from the front of the list to its normal position:
 
 $$
 (-1)^{i-1} \mathbf{e}_i \wedge \mathbf{e}_{\enclose{horizontalstrike} i} = \Omega  =\mathbf{e}_i \wedge \mathbf{e}_{\star i} 
@@ -272,7 +272,7 @@ $$
 x^i = \frac{\mathbf{b}  \wedge A_{\star i}}{(\det A) \Omega}
 $$
 
-Here I've used the $$\star$$-basis to simplify the derivation. The usual Cramer formula thinks of transposing $$\mathbf{b}$$ into the position original occupied by $$\mathbf{A}_i$$. But this is the exact sequence of transpositions that would give $$\Omega$$ if $$\mathbf{A}_i$$ were in the first position—so no extra signs are needed.
+Here I've used the $$\star$$-basis to simplify the derivation. The usual Cramer formula thinks of transposing $$\mathbf{b}$$ into the position originally occupied by $$\mathbf{A}_i$$. But this is the exact sequence of transpositions that would give $$\Omega$$ if $$\mathbf{A}_i$$ were in the first position—so no extra signs are needed.
 
 The usual Cramer formula then interprets the numerator of this expression as the "determinant of the matrix with the $$i$$th column replaced by $$\mathbf{b}$$". In this formulation, there's no need.
 
@@ -360,4 +360,4 @@ $$
 y = B^{-1}(0) + (\perp B)
 $$
 
-$$(\perp B)$$ would be a 90-degree rotation of vector $$(a, -b)$$, i.e. $$y \propto (b, a)$$ and fixing one component to 1 would give our solution: $$y = (b/a, 1)$$ and $$x = b/a$$. It's remarkable that the N-dimensional case ends up look similar.
+$$(\perp B)$$ would be a 90-degree rotation of vector $$(a, -b)$$, i.e. $$y \propto (b, a)$$ and fixing one component to 1 would give our solution: $$y = (b/a, 1)$$ and $$x = b/a$$. It's remarkable that the N-dimensional case ends up looking similar.

@@ -57,10 +57,10 @@ a. as a *set* of solutions $${(\mathbf{a} \cdot ~)}^{-1}(\mathbf{b}) \{ \mathbf{
 b. or as a "standard" solution $$\frac{\mathbf{a}}{\vert a\vert^2}b$$ plus any single element from the orthogonal subspace $$\{ \mathbf{\lambda} \mid \mathbf{a}\cdot \mathbf{\lambda} = 0 \}$$
 c. or as a function giving a solution given a choice of vector in the orthogonal subspace: $$\lambda \mapsto \mathbf{x}(\lambda)$$
 
-Of these, (a) is most commonently seen, but in this post I'll prefer (c).
+Of these, (a) is most commonly seen, but in this post I'll prefer (c).
 
 My preferred notation will be as follows: the full inverse be represented by $${(\mathbf{a} \cdot ~)}^{-1}$$, and depending on the context can have any of the above three interpretations as a set, a standard part + a member of a set, or a function to a single value.
-A "fraction" or "division" notation $$\frac{b}{\mathbf{a}}$$ will always stand for the "standard" or "best" part of the inverse. We then used $$\mathbf{\lambda}_{\perp \mathbf{a}}$$ for the "orthogonal" or "complement" term:
+A "fraction" or "division" notation $$\frac{b}{\mathbf{a}}$$ will always stand for the "standard" or "best" part of the inverse. We then use $$\mathbf{\lambda}_{\perp \mathbf{a}}$$ for the "orthogonal" or "complement" term:
 
 $$
 \begin{aligned}
@@ -315,7 +315,7 @@ The first term is obviously the projection analogous to $$\mathbf{b}\cdot{\mathb
 
 
 In more than two dimensions, any matrix which rotates $$\mathbf{a}$$ into $$\mathbf{b}$$ would suffice as a solution, so the generalized inverse $$X = \mathbf{a}^{-1}(\mathbf{b})$$ would also have free parameters, as in the scalar-over-vector case. The full space of $$N \times N$$ matrices
-is more parameters than we need: for any pair of $$\mathbf{a}, \mathbf{b}$$, we can solve $$X\mathbf{a} = \mathbf{b}$$ by applying an appropriate combination of the identity $$I$$ and rotatoin $$R$$ within the plane spanned by the two vectors, while taking parameters on the rest of the space, which themselves could represent any combination of scalings and rotations we like. 
+is more parameters than we need: for any pair of $$\mathbf{a}, \mathbf{b}$$, we can solve $$X\mathbf{a} = \mathbf{b}$$ by applying an appropriate combination of the identity $$I$$ and rotation $$R$$ within the plane spanned by the two vectors, while taking parameters on the rest of the space, which themselves could represent any combination of scalings and rotations we like. 
 That is, in a basis of $$\{\hat{\mathbf{a}}, \hat{\mathbf{b}}_{\perp a}, \mathbf{e}_3, ..\mathbf{e}_N \}$$, a general solution $$X$$ is
 
 $$
@@ -437,7 +437,7 @@ $$
 \frac{\mathbf{b}}{A} = \frac{A^T \mathbf{b}}{A^TA}
 $$
 
-Thus we have $$\frac{1}{A} = \frac{A^T}{A^T A}$$, which is (the simplest form of) the "Moore-Penrose pseudoinverse", normally witten $$A^+$$. I much prefer the division notation, and I find the symmetry between these the matrix and vector notations to be quite clarifying.
+Thus we have $$\frac{1}{A} = \frac{A^T}{A^T A}$$, which is (the simplest form of) the "Moore-Penrose pseudoinverse", normally written $$A^+$$. I much prefer the division notation, and I find the symmetry between these the matrix and vector notations to be quite clarifying.
 
 Before we move on to non-orthogonal columns, let's look at how the cases of (2) "division by zero" and (3) "zero-over-zero" arise for matrices.
 
@@ -464,7 +464,7 @@ $$
 0{x}^i = {b}^i
 $$
 
-which can't be solved in general, unless the $${b}^i$$ happen also to also be zero.
+which can't be solved in general, unless the $${b}^i$$ happen to also be zero.
 
 (This is also the general case: any matrix can be transformed into this form via a "singular value decomposition", although the vectors $$\mathbf{x}, \mathbf{b}$$ will be rotated and will appear with different components.)
 
@@ -503,7 +503,7 @@ $$
 \mathbf{b} = \mathbf{b}_{\parallel A} + \mathbf{b}_{\perp A} =  A\left(\frac{\mathbf{b}}{A} + \mathbf{\lambda}_{A \perp} \right) + \mathbf{b}_{\perp A}
 $$
 
-I've used two different symbols $${A \perp}$$ and $${\perp A}$$, since, while we didn't have to distinguish for one-dimensional vectors, for matrix $$A: \mathbb{R}^M \to \mathbb{R}^N$$ the vectors $$\mathbf{\lambda}_{A\perp}$$ and $$\mathbf{b}_{\perp A}$$ will live in different spaces.  The first is the "kernel" or "null space" of vectors which go to zero under $$A$$, while the latter is the "cokernel" of vectors which are not in the image of $$A$$ (and are therefore the kernel of $$1/A$$.) So we could also the "free parameter" and "remainder" by the names "kernel term" and "cokernel term", for some symmetry.
+I've used two different symbols $${A \perp}$$ and $${\perp A}$$, since, while we didn't have to distinguish for one-dimensional vectors, for matrix $$A: \mathbb{R}^M \to \mathbb{R}^N$$ the vectors $$\mathbf{\lambda}_{A\perp}$$ and $$\mathbf{b}_{\perp A}$$ will live in different spaces.  The first is the "kernel" or "null space" of vectors which go to zero under $$A$$, while the latter is the "cokernel" of vectors which are not in the image of $$A$$ (and are therefore the kernel of $$1/A$$.) So we could also call the "free parameter" and "remainder" by the names "kernel term" and "cokernel term", for some symmetry.
 
 The following diagram sketches the full picture: $$A$$ maps its row-space to its column-space invertibly, maps its kernel to zero, and maps nothing to its cokernel. The double lines stand for "a one-or-more-dimensional subspace perpendicular to all the rest", so the row-space is the complement of the kernel and column-space is the complement of the cokernel.
 
@@ -558,7 +558,7 @@ $$
  ~=~ \begin{pmatrix}{b}^1 \\ \vdots \\ {b}^M \\ 0\\ \vdots \\\end{pmatrix}
 $$
 
-It will be easier to writing these in block notation, so the above is equivalent to:
+It will be easier to write these in block notation, so the above is equivalent to:
 
 $$
 \begin{pmatrix}A_{1..M} \\ & 0\end{pmatrix}
@@ -641,7 +641,7 @@ $$
 x^i = \frac{\mathbf{b} \wedge \mathbf{A}_{\star i}}{\mathbf{A}_i \wedge \mathbf{A}_{\star i}}
 $$
 
-This is "Cramer's rule" in a slightly esoteric notation. The denominator is equal to the determinant of $$A$$ times the $$N$$-volume $$(\det{A})(\mathbf{e}_{\wedge 1..N})$$. The overall sign won't change if both $$\mathbf{b}$$ and $$\mathbf{A}_i$$ are transposed into the position original occupied by $$i$$, which means we can interpret the numerator as "the determinant of $$A$$ if column $$i$$ is replaced by $$\mathbf{b}$$", which gives the usual Cramer argument.
+This is "Cramer's rule" in a slightly esoteric notation. The denominator is equal to the determinant of $$A$$ times the $$N$$-volume $$(\det{A})(\mathbf{e}_{\wedge 1..N})$$. The overall sign won't change if both $$\mathbf{b}$$ and $$\mathbf{A}_i$$ are transposed into the position originally occupied by $$i$$, which means we can interpret the numerator as "the determinant of $$A$$ if column $$i$$ is replaced by $$\mathbf{b}$$", which gives the usual Cramer argument.
 
 The above expression can be interpreted for now as a ratio of two scalar *areas*, but is in fact a "standard part" of a division of two $$N$$-dimensional volumes, which we'll do more with in the next post in this series. A more-technically-correct equation in scalars can be found by applying the wedge-product identity $$\beta \wedge (\star \alpha)  = (\beta \cdot \alpha)\mathbf{e}_{\wedge 1 \ldots N}$$:
 
@@ -818,8 +818,8 @@ I suppose the "diagonal" representation I've been using (which as noted can be s
 
 ## Closing Remarks
 
-In total we have toured the following instances of division:
-- $$ax = b$$ gave scalar-over-scalar division: $$b = x/a$$
+In total we have toured the following things which look like "division".
+- $$ax = b$$ gave us scalar-over-scalar division: $$b = x/a$$
 - $$\mathbf{a} \cdot \mathbf{x} = b$$ required a generalized inverse, which we could write as a scalar-over-vector division and a "free parameter":  $$\mathbf{x} = \frac{b}{\mathbf{a}} + \mathbf{\lambda}_{\perp a}$$, 
 - $$\mathbf{a} x = \mathbf{b}$$ led to vector-over-vector-division as a notation for the projection $$x = \frac{\mathbf{b}}{\mathbf{a}}$$, and also required a "remainder" $$\mathbf{b}_{\perp a}$$
 - $$A\mathbf{x} = \mathbf{b}$$ led to vector-over-matrix division $$\frac{\mathbf{b}}{A}$$ which could be identified with the "pseudoinverse", and which required both "free parameters" and "remainders" in general. And we also saw how this could be expressed in terms of wedge powers as a Cramer type formula, in general written as $$\frac{\star^{-1} \circ A^{\wedge (N-1)}\circ \star}{A^{\wedge N}}$$.
@@ -828,7 +828,7 @@ Six "cases" came up:
 1. An exact solution
 2. Division by zero, which had no solution
 3. Zero-divided-by-zero, which permits any solution
-4. The free parameter, which was required when (2) or (3) occured along some dimensions of the problem
+4. The free parameter, which was required when (2) or (3) red along some dimensions of the problem
 5. The remainder, which was required when (2) occurred along some dimensions of the problem
 6. And "moving to a larger space of solutions", which we touched briefly when solving vector-over-vector division with rotations.
 

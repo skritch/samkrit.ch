@@ -24,7 +24,7 @@ My own interests are in:
 
 ## Reaction Networks
 
-A "reaction network" is a graph whose edges represents "reactions" (or "processes" or "transitions") betwen different "complexes" (or "combinations" or "tuples") of "species", each with an associated "rate constant". For example:
+A "reaction network" is a graph whose edges represents "reactions" (or "processes" or "transitions") between different "complexes" (or "combinations" or "tuples") of "species", each with an associated "rate constant". For example:
 
 $$
 \begin{aligned}
@@ -52,7 +52,7 @@ I want to emphasize at the outset that a reaction network merely describes a set
    
    Examples: in quantum mechanics: the classical limit as an expectation, or in another sense, stationary wave functions. Various models one encounters in diff-eq class, like the predator-prey model and various models of viral spread.
    
-2. *Stochastic Dynamics*. At this much-lower level of abstraction, we can describe the system as a probability distribution over states with exact numbers of each species. Then we can translate our reaction network into a differential equation for the evolution of this probability distribution, giving a "stochastic dynamical system". This level gives a better picture of the underlying behavior, but is mch higher-dimensional and correspondingly is much harder to solve. Nonetheless, under some conditions we can characterize equilibrium solutions at this level of analysis, and can lift these solutions to the Rate-Equation level.
+2. *Stochastic Dynamics*. At this much-lower level of abstraction, we can describe the system as a probability distribution over states with exact numbers of each species. Then we can translate our reaction network into a differential equation for the evolution of this probability distribution, giving a "stochastic dynamical system". This level gives a better picture of the underlying behavior, but is much higher-dimensional and correspondingly is much harder to solve. Nonetheless, under some conditions we can characterize equilibrium solutions at this level of analysis, and can lift these solutions to the Rate-Equation level.
    
    Examples: the Shrodinger equation, especially when viewed as a path integral of a propagator.
    
@@ -72,7 +72,7 @@ I spell all of this out because, first, I think it will be a good way to organiz
 
 ### Anatomy of a Rate Equation
 
-A reaction network is most simply seen as encoding of differential equation called the "Rate Equation" of the network. 
+A reaction network is most simply seen as encoding a differential equation called the "Rate Equation" of the network. 
 
 Here is the example from above again:
 
@@ -145,11 +145,11 @@ due to reaction r}}
   \times \underbrace{r \prod_i X_j^{k_{r, j}}}_\text{rate of reaction r}
 $$
  
-This is not too bad, but all those species indices are not so easy to read. Some of the literature chooses to clean this up by omitting the species index entirely, asking us to remember which terms refer to species (which obey special ruels_) and which do not. I want to take a different approach and represent all indexing-over-species as an overbar $$\bar{k}_r, \bar{k}_r'$$, which will always represent a tuple over _species_. So $$\bar{k}_\alpha = (1, 2, 0)$$ in the example above. You can still index into a barred quantity like $$k_{\alpha, 2} = 2$$.
+This is not too bad, but all those species indices are not so easy to read. Some of the literature chooses to clean this up by omitting the species index entirely, asking us to remember which terms refer to species (which obey special rules_) and which do not. I want to take a different approach and represent all indexing-over-species as an overbar $$\bar{k}_r, \bar{k}_r'$$, which will always represent a tuple over _species_. So $$\bar{k}_\alpha = (1, 2, 0)$$ in the example above. You can still index into a barred quantity like $$k_{\alpha, 2} = 2$$.
 
 A tuple over species $$\bar{k}$$ will act like a vector as $$\vec{x}$$, but we won't assume it has any "vectorial" properties besides those we explicitly define mention here.
 
-Tuples can be added or subtracted, and it will occassionally be useful to take a dot-product:
+Tuples can be added or subtracted, and it will occasionally be useful to take a dot-product:
 
 $$
 \begin{aligned}
@@ -184,7 +184,7 @@ $$
 
 The last line indicates that the falling power could be related to a multinomial coefficient with _both_ arguments tupled, but this seems a little too wacky, so we won't use it. 
 
-Note that $$N^{k\downarrow}$$ is a product of $$k$$ terms with all but one being slightly less than $$N$$. So it's reasonable to read it as representing a number "somewhat smaller than $$N^k$$".
+Note that $$N^{k\downarrow}$$ is a product of $$k$$ terms where all but one being are slightly less than $$N$$. So it's reasonable to read it as representing a number "somewhat smaller than $$N^k$$".
 
 Next we have the scalar product of more-than-2 tuples, which we write as a chain of dot-products:
 
@@ -575,7 +575,7 @@ $$
 
 I prefer the operator version. There's one fewer $$\sum$$ to think about, and it's easier to read the operator equation as a "process" linking $$\bar{n}$$ to $$\bar{n}'$$. And in some cases we'll be able to sum the target g.f. series into a nice function of $$\bar{x}$$, which will make the derivatives in $$H$$ very easy to use.
 
-Finally, in either representation, we can implement time-evolution by exponentiating this thing and acting on a arbitrary state:
+Finally, in either representation, we can implement time-evolution by exponentiating this thing and acting on an arbitrary state:
 
 $$
 \begin{aligned}
@@ -622,4 +622,4 @@ Observe that in each case one of the "1" particles passes through untouched, bei
 
 These are something like Feynman diagrams. They're mostly a conceptual aid at this level, but they could be useful when analyzing small-$$\bar{n}$$ systems. If you want to determine the probability of, say, beginning in a state of $${(x_1)}^1$$ and ending in the same state, you could formulate a combinatorial series of diagrams representing all the sequences of reactions which meet this constraint: (no change) + (one reaction and the reverse) + (higher order terms). The exact series would depend on the available set of reactions. It would be instructive to come up with exact Feynman rules for some model reaction network. 
 
-Once again the most interesting result might be the light this can shed on quantum-mechanics through the analogy. It has always felt to me that QM was a tangled mess of concepts which, individually, are not all that complicated. Once you have an elementary example of each, the theory full theory ought to "factor", with the particulars of _quantum_ physics entering at clearly-delineated points. This could at least be an aid to pedagogy; of course any improvement to pedagogy can also improves the _reach_ of pedagogy. If we dare hope for more, we might aim to better "compress" the body of physics knowledge better in the minds even of experts, letting all see further and more-easily grasp subtleties than in the current presentation. If!
+Once again the most interesting result might be the light this can shed on quantum-mechanics through the analogy. It has always felt to me that QM was a tangled mess of concepts which, individually, are not all that complicated. Once you have an elementary example of each, the full theory ought to "factor", with the particulars of _quantum_ physics entering at clearly-delineated points. This could at least be an aid to pedagogy; of course any improvement to pedagogy can also improve the _reach_ of pedagogy. If we dare hope for more, we might aim to better "compress" the body of physics knowledge better in the minds even of experts, letting all see further and more-easily grasp subtleties than in the current presentation. If!

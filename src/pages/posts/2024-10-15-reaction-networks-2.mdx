@@ -42,7 +42,7 @@ As a starting point, we can ask if the former—the coarser description—can be
 
 The obvious guess is to postulate that $$\bar{X} \stackrel{?}{=} \langle \bar{N} \rangle$$, and look at how expectations of the particle numbers evolve. This will be a function of time through the time-dependence of the underlying distribution $$\psi(t)$$, so we're looking for something like an [Ehrenfest Theorem](https://en.wikipedia.org/wiki/Ehrenfest_theorem) from quantum mechanics. Our expectation is analogous to a Q.M. expectation $$\langle \psi N \psi \rangle$$, but we will omit explicit mention of $$\psi$$ in the manner of a probabilistic expectation. If we need it, we'll write $$\langle \cdot \rangle_\psi$$ or $$\langle \cdot \rangle_{\psi(t)}$$.
 
-We can test this guess by plugging $$\langle \bar{N} \rangle$$ into the Master equation and seeing what we get. We'll work in the g.f. representation where $$\psi = \sum_\bar{n} \psi_\bar{n} \bar{x}^\bar{n}$$, wnere expectations like $$\langle f \rangle = \sum_\bar{n} f(\bar{n}) \psi_\bar{n}$$ are calculated by setting $$\bar{x} = 1$$. Then we have:
+We can test this guess by plugging $$\langle \bar{N} \rangle$$ into the Master equation and seeing what we get. We'll work in the g.f. representation where $$\psi = \sum_\bar{n} \psi_\bar{n} \bar{x}^\bar{n}$$, where expectations like $$\langle f \rangle = \sum_\bar{n} f(\bar{n}) \psi_\bar{n}$$ are calculated by setting $$\bar{x} = 1$$. Then we have:
 
 $$
 \begin{aligned}
@@ -81,7 +81,7 @@ Not too bad—we _almost_ have a Rate Equation, except that the r.h.s. expectati
 * It's a falling power $$\bar{N}^{\bar{k}_r\downarrow}$$
 * The power is inside the expectation $$\langle \bar{N}^{\bar{k}_r\downarrow} \rangle$$ rather than outside of it.
 
-The first discrepancy is the kind of thing that arise from the discreteness of $$\bar{n}$$ and would disappear in an $$N\to\infty$$ limit; we'll almost always have $$\bar{N} \gg \bar{k}$$, so the differences between $$\bar{n}^\bar{k}$$ and $$\bar{n}^{\bar{k}\downarrow}$$ ought will be minimal. 
+The first discrepancy is the kind of thing that arises from the discreteness of $$\bar{n}$$ and would disappear in an $$N\to\infty$$ limit; we'll almost always have $$\bar{N} \gg \bar{k}$$, so the differences between $$\bar{n}^\bar{k}$$ and $$\bar{n}^{\bar{k}\downarrow}$$ ought will be minimal. 
 
 We could maybe work around the second discrepancy by thinking of the Rate Equation as an operator equation for the number operator, though this sounds like it would require a "Heisenberg picture", and I can't think of what that would mean right now.
 
@@ -110,7 +110,7 @@ $$
 = \sum_\bar{n} \frac{f(\bar{n})}{(\bar{n}-\bar{k})!}
 $$
 
-This now has the same denominator as state $$\psi_{\bar{n}-\bar{k}}$$ will under the same ansatz. If additionally $$f(\bar{n})$$ is taken to be some specific tuple $$\bar{\lambda}$$ to the power $$\bar{n}$$, then we get even closer—we get a constant multiple of the exact state $$\psi_{\bar{n}-\bar{k}}$$:
+This now has the same denominator as the state $$\psi_{\bar{n}-\bar{k}}$$ will have under the same ansatz. If additionally $$f(\bar{n})$$ is taken to be some specific tuple $$\bar{\lambda}$$ to the power $$\bar{n}$$, then we get even closer—we get a constant multiple of the exact state $$\psi_{\bar{n}-\bar{k}}$$:
 
 $$ 
 \begin{aligned}
@@ -170,7 +170,7 @@ But look—the expression in the last line $$\left(\frac{ {\lambda_i}^{n_i}}{n_i
 
 $$n_i \sim \text{Poisson}(\lambda_i)$$
 
-So our full distribition is a product of independent Poissons with means: $$\bar{\lambda} = \langle \bar{N} \rangle$$; of course I knew this when I called them $$\lambda$$. In tuple notation we can write this whole combination as $$\bar{n} \sim \text{Poisson}(\bar{\lambda})$$. 
+So our full distribution is a product of independent Poissons with means: $$\bar{\lambda} = \langle \bar{N} \rangle$$; of course I knew this when I called them $$\lambda$$. In tuple notation we can write this whole combination as $$\bar{n} \sim \text{Poisson}(\bar{\lambda})$$. 
 
 We could also call these product-of-Poisson distributions "coherent states", borrowing from quantum mechanics, where the same distribution appears and acts in a similar way. I will call them "Poisson states", however, to avoid introducing too much jargon.
 
@@ -183,7 +183,7 @@ This result has two limitations:
 * Even if a Poisson state arises, there's no guarantee it will actually remain "coherent" over time under stochastic time-evolution.
 
 Still, it's a starting point—we've learned _something_ about the relationship between the two levels of abstraction. From here we can ask:
-* Can we go the other way—does any solution to the Rate Equation $$\bar{X}(t)$$ always produce a Poisson state $$e^{\bar{X} \cdot \bar{x} - \bar{X}}$$ which is an equilibria of the Master Equation?
+* Can we go the other way—does any solution to the Rate Equation $$\bar{X}(t)$$ always produce a Poisson state $$e^{\bar{X} \cdot \bar{x} - \bar{X}}$$ which is an equilibrium of the Master Equation?
 * Under what conditions does a Poisson state remain "coherent" state over time? As a step towards this, could we characterize the first-order "divergence-from-coherence" under time evolution with $$e^{tH}$$?
 
 We'll take on the first question next, filing the second away for later.
@@ -215,7 +215,7 @@ H \psi(\bar{x}, t; \bar{X}) = H e^{\bar{X} \cdot \bar{x} -\bar{X}}
 \end{aligned}
 $$
 
-Well, there is is our condition: the term in parentheses must vanish. The obvious way for this to happen is for each $$\bar{k}_r' = \bar{k}_r$$, but that would not be very interesting; it would mean all of our reactions do nothing.
+Well, there is our condition: the term in parentheses must vanish. The obvious way for this to happen is for each $$\bar{k}_r' = \bar{k}_r$$, but that would not be very interesting; it would mean all of our reactions do nothing.
 
 Instead we can try to write this in another way. Recall that $$\bar{k}_r'$$ and $$\bar{k}_r$$ were the output and input *complexes* of reaction $$r$$; a complex was just an integer combination of species, like $$X_1 + 2X_2$$. Then the above sum can be written as a double sum, first over _all complexes_, which I'll call $$\bar{\kappa}$$ to distinguish from the known values. Then we write two separate sums over reactions, one for those where $$\bar{\kappa}$$ is equal to the input of that reaction, and one where it's the output.
 
@@ -238,7 +238,7 @@ $$
 
 Now if the term in the brackets $$[ \cdots]$$ is identically zero, then $$H\psi = 0$$. This is a more interesting condition! It is a condition on a _solution_ rather than on the whole network. Physically, this means that our chosen Rate Equation solution $$\bar{X}(t)$$ has to produce exactly-cancelling inflows and outflows of each _complex_, rather than each _species_. This is a weak form of equilibrium where we are effectively reducing our network to only its complexes, without any regard for how these complexes are composed of the underlying species.
 
-This condition is called "complex-balance". This is the "Anderson-Craciun-Kurtz" or "ACK" theorem, and are given in this Q.M.-derived notation in [this paper](https://arxiv.org/pdf/1305.4988) of Baez. (The proof in the paper seems needlessly complicated, though—or mine is in error!)
+This condition is called "complex-balance". This is the "Anderson-Craciun-Kurtz" or "ACK" theorem, which can found in full, in this Q.M.-derived notation, in [this paper](https://arxiv.org/pdf/1305.4988) of Baez. (The proof in the paper seems needlessly complicated, though—that or mine is in error!)
 
 Notice that it is a condition on the _rate equation solution_ $$\bar{X}(t)$$, and we can rewrite the Rate Equation in the same way:
 
@@ -257,7 +257,7 @@ In the last line I've defined $$d\bar{X}_\bar{\kappa}/dt$$ to be the contributio
 
 From the above form of the Rate Equation we see that the "complex-balance" condition on $$\bar{X}(t)$$ automatically solves the Rate Equation as well, even if we hadn't assumed that. If the complexes are balanced, the species must be too—this is rather obvious; the weaker condition follows from the stronger one.
 
-To say this another way—we have encountered three kind of Rate-Equation solutions:
+To say this another way—we have encountered s of Rate-Equation solutions:
 1. (Trivial) All $$\bar{k}_r' = \bar{k}_r$$; this is a network that does nothing.
 2. (Complex-balance) All complexes have zero time-derivative, $$d\bar{X}_{\bar{\kappa}}/dt = 0$$. 
 3. (Detailed-balance?) All species have zero time-derivative, $$d\bar{X}/dt = 0$$
@@ -311,7 +311,7 @@ $$
 
 Note that both equations can be factored into somewhat simpler forms, because the network consists of only two reactions between the same two species.
 
-Note also that the Rate Equation will be satisfied for any $$\bar{X}$$ wth $$\beta {(X_A)}^2 = \alpha X_B$$. At any such concentrations the rates of the two reactions are equal and the net change in concentration in zero. 
+Note also that the Rate Equation will be satisfied for any $$\bar{X}$$i wth $$\beta {(X_A)}^2 = \alpha X_B$$. At any such concentrations the rates of the two reactions are equal and the net change in concentration is zero. 
 
 Now we observe that time-evolution by the Master equation can never alter the quantity $$n_A + 2n_B$$ from its initial value; hence the following operator can be said to be a "symmetry" or "conserved quantity" of the system:
 
@@ -366,7 +366,7 @@ If there were two independent symmetries $$Z_1, Z_2$$, they would carve out two 
 
 We can see this as describing the "coordinates" of a term $$\bar{n}$$:
 * first pick a value for each independent symmetry $$z_1, z_2, \cdots$$ 
-* then, the choose any coordinate in the remaining subspace $$\{ \bar{n} \mid z_1, z_2 \}$$. In the present case, once $$z_\bar{n} = \bar{n} \cdot \bar{n}_z = n_A + 2 n_B$$ is known, either $$n_A$$ or $$n_B$$ suffices to determine the exact state. Of course, all of this applies only to "pure" monomial states—a general $$\psi$$ will be composed of components along many $$z$$. This decomposition is:
+* then, choose any coordinate in the remaining subspace $$\{ \bar{n} \mid z_1, z_2 \}$$. In the present case, once $$z_\bar{n} = \bar{n} \cdot \bar{n}_z = n_A + 2 n_B$$ is known, either $$n_A$$ or $$n_B$$ suffices to determine the exact state. Of course, all of this applies only to "pure" monomial states—a general $$\psi$$ will be composed of components along many $$z$$. This decomposition is:
 
 $$
 \begin{aligned}
@@ -419,7 +419,7 @@ H &= \left({(a_A^+)}^2 - a_B^+\right)\left(\alpha a_B^- - \beta {(a_A^-)}^2\righ
 \end{aligned}
 $$
 
-What is the action of this on a general state? Even the action of this $$H$$ on simple monomial will be a fairly large expression; to keep it under control we write it with tuple $$\bar{\Delta}_\alpha = (2, -1)$$, representing the change in species induced by reaction $$\alpha$$. For this network $$\bar{\Delta}_\beta = -\bar{\Delta}_\alpha$$, so we only need the one; I'll write it simply as $$\bar{\Delta}$$. Note this is orthogonal to the conserved tuple $$\bar{n}_z$$: 
+What is the action of this on a general state? Even the action of this $$H$$ on a simple monomial will be a fairly large expression; to keep it under control we write it with tuple $$\bar{\Delta}_\alpha = (2, -1)$$, representing the change in species induced by reaction $$\alpha$$. For this network $$\bar{\Delta}_\beta = -\bar{\Delta}_\alpha$$, so we only need the one; I'll write it simply as $$\bar{\Delta}$$. Note this is orthogonal to the conserved tuple $$\bar{n}_z$$: 
 
 $$\bar{\Delta} \cdot \bar{n}_z = (2, -1) \cdot (1, 2) = 0$$.
 
@@ -507,10 +507,10 @@ $$
 0 = (c_-)\psi_{z, n-1} - (c) \psi_{z, n} + (c_+) \psi_{z, n+1}
 $$
 
-Our three $$c$$ coefficients, however, are complicated functions of $$n$$ and $$z$$, so it is very unlikely this would expression would be the discrete form of any reasonable continuous equation.
+Our three $$c$$ coefficients, however, are complicated functions of $$n$$ and $$z$$, so it is very unlikely this expression would be the discrete form of any reasonable continuous equation.
 
 I wonder at this point:
-* Can we say anything about the relationship between the unique equilbria of neighboring $$z$$ values?
+* Can we say anything about the relationship between the unique equilibria of neighboring $$z$$ values?
 
 But we'll put this aside for now, along with the question of stability posed above.
 
@@ -522,7 +522,7 @@ We can summarize the results of the previous section in a more general way.
 
 We have seen, for the Master Equation:
 * If $$H$$ can't change the value of an operator $$Z$$ on a single state, then time-evolution with $$H$$ can't take us out of the subspace of constant $$z$$.
-* Furthermore, time-evolution will operately separately on components of distinct $$z$$, and any equilibria will be a linear combination of independent equilibria on each component.
+* Furthermore, time-evolution will operate separately on components of distinct $$z$$, and any equilibria will be a linear combination of independent equilibria on each component.
 
 These facts amount to [Noether's Theorem](https://en.wikipedia.org/wiki/Noether%27s_theorem) for reaction networks. The intuitive form of this theorem is:
 * if, for some operator $$Z$$, every "transition" $$\bar{n} \to \bar{n}'$$ defined by the operator $$H$$ links states with the same eigenvalue $$z$$ of $$Z$$
@@ -563,12 +563,12 @@ $$
 \langle ZH \rangle = \langle [Z, H] \rangle
 $$
 
-Beyond these observations I won't prove these statements—they are follow straightforwardly from the definitions. For more see Baez' [Noether paper](https://arxiv.org/pdf/1203.2035) and the [book]([Noether paper](https://arxiv.org/pdf/1203.2035)). 
+Beyond these observations I won't prove these statements—they follow straightforwardly from the definitions. For more see Baez' [Noether paper](https://arxiv.org/pdf/1203.2035) and [book](https://math.ucr.edu/home/baez/stoch_stable.pdf). 
 
 
 We will use the first form $$[Z, H] = 0$$ when we want to say "operator $$Z$$ is a symmetry of $$H$$".
 
-This Noether theorem is fairly trivial: $$Z$$ is constant on connected components? Big deal. It is most interesting as an elementary example for reference when considering more complicated cases—of how symmetries operators of time-evolution lead to conserved quantities, and, more interestingly to me, how the eigenvalues of symmetry operators supply us with _coordinates_ by which we identify states, and dynamics interact with these coordinates—a given dynamical law's effect on the state can only be to either:
+This Noether theorem is fairly trivial: $$Z$$ is constant on connected components? Big deal. It is most interesting as an elementary example for reference when considering more complicated cases—of how symmetry operators of time-evolution lead to conserved quantities, and, more interestingly to me, how the eigenvalues of symmetry operators supply us with _coordinates_ by which we identify states, and dynamics interact with these coordinates—a given dynamical law's effect on the state can only be to either:
 * move "along" coordinates of a symmetry (if $$[Z, H] = 0$$)
 * move "between" coordinates of a symmetry (like an $$a^-$$ operator—what is the general rule here?)
 * or to "mix" the coordinate of a symmetry (the general case)
@@ -582,7 +582,7 @@ Now we'll move on to the second question from above. This was:
 
 Any Rate-Equation equilibrium solution for our example network will have $$\beta X_A^2 = \alpha X_B$$. 
 
-Then the ACK theorem implies that the following Poisson state is an equilibrium solutiom to the Master equation:
+Then the ACK theorem implies that the following Poisson state is an equilibrium solution to the Master equation:
 
 $$
 \psi(\bar{x}) = e^{\bar{x} \cdot \bar{X} - \bar{X}}
@@ -633,7 +633,7 @@ Gross, but it works. In the last line we used $$\alpha X_B - \beta X_A^2 = 0$$, 
 
 $$Z$$'s action is to only skew all the $$z_i$$ subspaces by $$z_i$$, so it can't take us out of equilibrium. This means we can create many equilibria from our original Poisson equilibria by applying different powers of the $$Z$$ operator. _Any_ linear combination of single-$$z$$ equilibria would work, but these won't be Poisson states in general.
 
-We might now take some inspiration from the form of the time-evolution operator $$e^{tH}$$, and ask what it means to write a one-dimensional "shift by $$Z$$ operator":
+We might now take some inspiration from the form of the time-evolution operator $$e^{tH}$$, and ask what it means to write a one-dimensional "shift-by-$$Z$$ operator":
 
 $$
 S_Z(s) = e^{sZ}
@@ -656,7 +656,7 @@ S_Z(s) \psi(\bar{x}) &= \exp{\left[s\frac{\partial }{\partial \log x_A}+ 2s x_B 
 \end{aligned}
 $$
 
-So our "shift by $$s$$" operator is actually a _scale by $$e^{s \bar{n_z}}$$_ operator. (This might have been obvious if you recognize $$x\frac{\partial }{\partial x}$$ as a generator of scale transformations, but I didn't remember this. See [wiki](https://en.wikipedia.org/wiki/Shift_operator).)
+So our "shift-by-$$s$$" operator is actually a _scale by $$e^{s \bar{n_z}}$$_ operator. (This might have been obvious if you recognize $$x\frac{\partial }{\partial x}$$ as a generator of scale transformations, but I didn't remember this. See [wiki](https://en.wikipedia.org/wiki/Shift_operator).)
 
 Therefore the action of this operator on a coherent state is (switching to $$\log s$$ now):
 

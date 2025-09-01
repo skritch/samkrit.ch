@@ -16,7 +16,6 @@ interface Post {
 
 // Helper function to parse date as local
 const parseLocalDate = (dateString: string) => {
-  console.log(`"${dateString}"`);
   const [year, month, day] = dateString.split("T")[0].split("-").map(Number);
   return new Date(year, month - 1, day);
 };

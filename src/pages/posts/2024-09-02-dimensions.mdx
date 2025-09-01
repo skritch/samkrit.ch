@@ -66,7 +66,7 @@ $$
 \mathbf{b} = \mathbf{b}_{\parallel (a_\perp)} + \mathbf{b}_{\perp (a_\perp)} = \mathbf{b}_{\perp a} + \mathbf{b}_{\parallel a}
 $$
 
-So whatever $$\mathbf{a}_\perp$$ means, it ought to able to play the role of "projection" and "rejection" equally well.
+So whatever $$\mathbf{a}_\perp$$ means, it ought to be able to play the role of "projection" and "rejection" equally well.
 
 The right diagram above depicted a vector in terms of its two components $$(b_{\parallel a}, b_{\perp a})$$. The latter component could be taken to stand for $$N-1$$ components at once, or could represent a "reduction" to a single scalar as discussed earlier. With this convention we could "draw" an $$N$$-dimensional vector in a plane, and at least preserve the apparent "orthogonality" of the components parallel to and perpendicular to $$\bf{a}$$. 
 
@@ -76,9 +76,7 @@ Let's now throw out the rule that "right angles represent orthogonal dimensions"
 
 The obvious definition of an expression like $$a_{3,4}$$ is as the norm of that component, $$a_{3,4} = \vert \mathbf{a}_{3,4} \vert$$, but I am hoping to keep open the option of using different "reductions" rather than only using
 
-Is the polygon anything? I'm not sure. There's no way to draw the "vector itself" with any kind of arrow; we can only depict its components as a kind of polygon. And the diagram is defined only up to the signs of the components and up to the choice "projection" on any multi-dimensions (the $$3,4$$ dimension here.) In another basis, the sum of squared components would be unchanged, and of course there is any basis with a basis vector parallel to $$\mathbf{a}$$ itself will have only a single component and no "polygon" associated with it at all. But I do wonder if anything can be said about this polygon that *is* invariant under basis changes and the arbitrary orientations of the axes in  the diagram.
-
-This kind of diagram might be more sensible for depicting probabilities, which can't be negative anyway. 
+Is the polygon anything? Probably not. It's quite underdetermined: it's only defined only up to the signs of the components and up to the choice "projection" on any multi-dimensions (the $$3,4$$ dimension here.) This kind of diagram might be more sensible for depicting probabilities, which can't be negative anyway. 
 
 
 ## II. Matrices
@@ -107,7 +105,7 @@ This can be visualized as follows:
 
 This could be read as a vector along the lines of the previous section, but I don't think that interpretation would be very meaningful. Instead this should now be thought of as a simply standing for the diagonal representation of the matrix itself.
 
-The first two eigenvalues are the biggest, so we could approximate this matrix by only its first two "principle components", i.e. by zeroing all but the first two eigenvectors, defining a new matrix $$A'$$:
+The first two eigenvalues are the biggest, so we could approximate this matrix by only its first two "principal components", i.e. by zeroing all but the first two eigenvectors, defining a new matrix $$A'$$:
 
 ![PCA of a 10D matrix](../../images/dims/eig10D-pca.png)
 
@@ -121,7 +119,7 @@ A' = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-This is something like a "principle component analysis". The action of $$A'$$ on a given input vector $$\mathbf{x}$$ will deviate from that of the original $$A$$ in some way that depends on $$\mathbf{x}$$'s components along the zeroed dimensions:
+This is something like a "principal component analysis". The action of $$A'$$ on a given input vector $$\mathbf{x}$$ will deviate from that of the original $$A$$ in some way that depends on $$\mathbf{x}$$'s components along the zeroed dimensions:
 
 $$
 (A - A')
@@ -140,9 +138,9 @@ x^2 \\
 \end{pmatrix}
 $$
 
-where the last expressoin is to be understood as a standard inner product.
+where the last expression is to be understood as a standard inner product.
 
-We can equivalently think of this PCA-like-reduction as a reduction of the _vector space_ to three-dimensions, where the first two dimensions are chosen as principle eigendimensions. Under this reduction $$A$$ transforms into a reduced $$\tilde{A}$$:
+We can equivalently think of this PCA-like-reduction as a reduction of the _vector space_ to three-dimensions, where the first two dimensions are chosen as principal eigendimensions. Under this reduction $$A$$ transforms into a reduced $$\tilde{A}$$:
 
 $$
 \tilde{A} = \begin{pmatrix}
@@ -334,5 +332,5 @@ Hence $$Ldt$$ is what we get when we "fold" a trajectory down to a single one-di
 
 If we decide to expand our system in terms of any other parameters, $$Ldt$$'s functional dependence on those parameters will encode a lot of information about the system; hence we can expand $$Ldt$$ in terms of $$d\mathbf{x}$$. But $$L$$ itself must be indifferent to the specific coordinate system we use. 
 
-This is just like how our determinant $$\det \mathbf{A}$$ contains much of information about $$\mathbf{A}$$ itself. But it's expansion in terms of eigenvalues only knows about the set of eigenvalues, not their order, nor the vectors they correspond to. Getting information *out* of the folded objects $$\det \mathbf{A}$$ or $$L$$ requires adding parameters and indicating how they relate to each other: $$\det \mathbf{A}(\lambda_n)$$ tells us more than the value of $$\det\mathbf{A}$$ alone; same for $$L(\mathbf{x}, \mathbf{v})$$. 
+This is just like how our determinant $$\det \mathbf{A}$$ contains much of the information about $$\mathbf{A}$$ itself. But its expansion in terms of eigenvalues only knows about the set of eigenvalues, not their order, nor the vectors they correspond to. Getting information *out* of the folded objects $$\det \mathbf{A}$$ or $$L$$ requires adding parameters and indicating how they relate to each other: $$\det \mathbf{A}(\lambda_n)$$ tells us more than the value of $$\det\mathbf{A}$$ alone; same for $$L(\mathbf{x}, \mathbf{v})$$. 
 

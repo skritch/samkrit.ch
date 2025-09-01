@@ -11,7 +11,7 @@ bskyPostCid: "3lxgmk5uvb22h"
 
 ## Introduction
 
-The Action—as in "The Principle of Least Action"—has been washing around in my mind ever since undergraduate mechanics class, only partially-digested. I want to talk about this thing:
+The Action—as in "The Principle of Least Action"—has been washing around in my mind only partially digeste ever since undergraduate physics classes. This thing:
 
 $$
 \begin{aligned}
@@ -19,7 +19,7 @@ S = \int L(q, \dot{q}, t)\:dt
 \end{aligned}
 $$
 
-It's not that it doesn't make sense. I've seen the arguments, I know how to use it, it works well. The problem is harder to put a finger on; it's something like: the "mode of argument" or "standard for proof" of a physics education switches partway through mechanics class: until then the mode relied on *physical intuition* first, never stepping far out of sight of the *physically-interpretable*, and having as its ideal a derivation of physical law *from* reality, rather than a fitting of mathematics to reality. Then one encounters the Lagrangian $$L = T-V$$, and the Euler-Lagrange equations $$\frac{d }{d t}\frac{\partial L}{\partial \dot{q}} = \frac{\partial L}{\partial q}$$ which is argued on the grounds that it works well—but what *is* it? What is $$L$$, physically? Then we zoom out again to introduce $$S$$, and justify the E-L equations from $$\frac{\delta S}{\delta q} = 0$$—again not by a derivation but by simply saying "do this, it works", and without restoring contact with physical intuition. By then you've lost me. That's two sketchy steps on top of each other, which was one too many for me. I thought I'd get over it, but I never did. 
+It's not that it doesn't make sense. I've seen the arguments, I know how to use it, it works well. The problem is harder to put a finger on; it's something like: the "mode of argument" or "standard for proof" of a physics education switches partway through mechanics class: until then the mode relied on *physical intuition* first, never stepping far out of sight of the *physically-interpretable*, and having as its ideal a derivation of physical law *from* reality, rather than a fitting of mathematics to reality. Then one encounters the Lagrangian $$L = T-V$$, and the Euler-Lagrange equations $$\frac{d }{d t}\frac{\partial L}{\partial \dot{q}} = \frac{\partial L}{\partial q}$$, which is justified on the grounds that it works well—but what *is* it? What is $$L$$, physically? Then we zoom out again to introduce $$S$$, and justify the E-L equations from $$\frac{\delta S}{\delta q} = 0$$—again not by a derivation but by simply saying "do this, it works", and without restoring contact with physical intuition. By then you've lost me. That's two sketchy steps on top of each other, which is one too many for me. I thought I'd get over it, but I never did. 
 
 Here's a map of where we're headed:
 
@@ -37,7 +37,7 @@ The following argument is from a 1972 paper "Geometric Nature of Lagrange's Equa
 
 We start with some mass $$m$$ and a motion described by $$\mathbf{r} = (x, y, z)$$, obeying Newton's laws, in particular N2 $$m \ddot{\mathbf{r}} = \sum \mathbf{F}$$. In short, with elementary physics. 
 
-Then we ask: what does this same motion look like in *any* other coordinate system $$\mathbf{q} = (q_1, q_2, q_3)$$? This could be motivated in various way: maybe these are spherical coordindates, or they could be chosen to factor a problem into uncoupled subproblems, like the radial and angular components of planetary motion. Or for some particular problem, the $$q_i$$ could be defined so that motion along one or more of the $$q_i$$ is prohibited by a constraint—the radial direction for a bead constrained to a hoop, in that example. Why we want re-parameterize doesn't matter for the argument. 
+Then we ask: what does this same motion look like in *any* other coordinate system $$\mathbf{q} = (q_1, q_2, q_3)$$? This could be motivated in various way: maybe these are spherical coordinates, or they could be chosen to factor a problem into uncoupled subproblems, like the radial and angular components of planetary motion. Or for some particular problem, the $$q_i$$ could be defined so that motion along one or more of the $$q_i$$ is prohibited by a constraint—the radial direction for a bead constrained to a hoop, in that example. Why we want to re-parameterize doesn't matter for the argument. 
 
 We write the original coordinates as a function of the new ones $$\mathbf{r}(\mathbf{q})$$, whose derivative is:
 
@@ -61,7 +61,7 @@ m \ddot{\mathbf{r}} \cdot \frac{\partial \mathbf{r}}{\partial \mathbf{q}} &= \su
 \end{aligned}
 $$
 
-Note the l.h.s. is not $$\ddot{\mathbf{q}}$$; instead we are projecting $$\ddot{\mathbf{r}}$$ onto the local frame induced by variation of the $$\mathbf{q}$$ coords. This is a rather arbitrary thing to do at this point. We could do this whole argument by projecting $$\ddot{\mathbf{r}} \cdot \frac{\partial \mathbf{r}}{\partial \mathbf{r}}$$, but this would seem even more arbitrary. 
+Note the l.h.s. is not $$\ddot{\mathbf{q}}$$; instead we are projecting $$\ddot{\mathbf{r}}$$ onto the local frame induced by variation of the $$\mathbf{q}$$ coordinates. This is a rather arbitrary thing to do at this point. We could do this whole argument by projecting $$\ddot{\mathbf{r}} \cdot \frac{\partial \mathbf{r}}{\partial \mathbf{r}}$$, but this would seem even more arbitrary. 
 
 It will be easier to follow the rest of the argument if we work on just one of the components $$\frac{\partial \mathbf{r}}{\partial q_i}$$, which relate $$\mathbf{r}$$ to _one_ of the new coordinates $$q_i$$, one at a time:
 
@@ -103,7 +103,7 @@ $$
  = -\frac{\partial U}{\partial q_i}
 $$
 
-Let us also treat, for generality, a constraint on motion of the form $$f(\mathbf{r}) = 0$$. We separate out the corresponding constraint force $$\mathbf{F}^c$$ from our list of forces. The constraint force is only ever in the direction of the gradient $$\frac{\partial f}{\partial \mathbf{r}}$$ of the constraint, and takes a value proportional to some unspecified function $$\lambda$$ equalling whatever it needs to to enforce the constraint, whose actual units depend on the units of the constraint. Then a projection of this $$\mathbf{F}^c$$ onto $$\frac{d \mathbf{r}}{d q_i}$$ becomes a coordinate transformation in the same way as $$U$$: 
+Let us also treat, for generality, a constraint on motion of the form $$f(\mathbf{r}) = 0$$. We separate out the corresponding constraint force $$\mathbf{F}^c$$ from our list of forces. The constraint force is only ever in the direction of the gradient $$\frac{\partial f}{\partial \mathbf{r}}$$ of the constraint, and takes a value proportional to some unspecified function $$\lambda$$ equaling whatever it needs to to enforce the constraint, whose actual units depend on the units of the constraint. Then a projection of this $$\mathbf{F}^c$$ onto $$\frac{d \mathbf{r}}{d q_i}$$ becomes a coordinate transformation in the same way as $$U$$: 
 
 $$
 \begin{aligned}
@@ -194,9 +194,9 @@ $$
 \end{aligned}
 $$
 
-We have knowingly given $$p\dot{q} - L$$ the name $$E$$, for enegy. (I will use $$E$$ rather than $$H$$ for Hamiltonian, unless considering $$H$$ as an explicit function of $$p$$.) 
+We have knowingly given $$p\dot{q} - L$$ the name $$E$$ for energy. (I will use $$E$$ rather than $$H$$ for Hamiltonian, unless considering $$H$$ as an explicit function of $$p$$.) 
 
-We used the previous result $$\frac{\partial S}{\partial q} = p$$ and also assume that final velocity $$\dot{q}(t_1)$$ of the path is unaffected by the variation in the endpoint, which I admit is a little suspicious.
+We used the previous result $$\frac{\partial S}{\partial q} = p$$ and also assume that the final velocity $$\dot{q}(t_1)$$ of the path is unaffected by the variation in the endpoint, which I admit is a little suspicious.
 
 In all, our differential $$dS$$ with respect to the two coordinates $$x, t$$ of the endpoints of a physical path $$q(t)$$, is therefore:
 
@@ -292,7 +292,7 @@ $$
 
 All of these amount to the statement that $$S(x, t)$$ is a smooth scalar function of its endpoint coordinates, and there are no degrees-of-freedom in the choice of path. 
 
-When we think about conservative forces, we typically view "conservative" as a condition on the _force_ which leads to path-dependent line integrals. Here we are instead viewing the E-L equations as a constraint on the _path_ induced by the form of $$L$$. Of course, any force would be conservative if you restricted it to paths where $$\nabla \times \mathbf{F} = 0$$! 
+When we think about conservative forces, we typically view "conservative" as a condition on the _force_ which leads to path-independent line integrals. Here we are instead viewing the E-L equations as a constraint on the _path_ induced by the form of $$L$$. Of course, any force would be conservative if you restricted it to paths where $$\nabla \times \mathbf{F} = 0$$! 
 
 We could also view the stationary-action-problem as a boundary-value-problem, with the endpoints of the path as given information. Then, of course, any solution to the BVP on the interior will still be a function of the information given at the endpoints.
 
@@ -300,7 +300,7 @@ I am searching for a justification for E-L in the vicinity of "$$S$$ must be a s
 
 But it still feels like some lynchpin is still missing. How, without bringing in "geodesic motion" or "stationary action", do we justify the assertion that $$S$$ on physical paths ought to be a smooth function, and that $$\nabla \times \nabla S = 0$$ suffices to characterize the path? My instinct is that the answer has a character of "composability"—that paths can be concatenated or cleaved apart without changing the physics, just as actions can be composed like $$S = S_1 + S_2$$ for noninteracting systems. But I can't see it clearly.
 
-At this point I also wonder how much of the classical theory follows *just* from the fact that the path is determined if the endpoints is known, without stipulating the property that's actually determining the path. But that's far enough in this direction.
+At this point I also wonder how much of the classical theory follows *just* from the fact that the path is determined if the endpoints are known, without stipulating the property that's actually determining the path. But that's far enough in this direction.
 
 <br/>
 
@@ -379,7 +379,7 @@ In the left diagram the values are given in units of action; on the right they a
 
 In other words: if we start with $$S = -mc^2 \int d \tau$$, we see that the rest energy $$mc^2$$ represents the "action per unit time" in the rest frame. In any other frame, the "action per unit time" is $$L = \frac{d S}{d t}$$, which we can decompose into a contribution from time (in that frame) itself proportional to $$E$$ in that frame, and one from the motion of the object proportional to $$p$$.
 
-The E-L equations, which are mostly simply seen as a $$\nabla \times \nabla S = 0$$ or $$\frac{\partial \mathbf{p}}{\partial t} +\frac{\partial E}{\partial \mathbf{x}} = 0$$, representing how a particle which is facing a spatial region of greater action-per-time (energy $$E$$)—due to some interaction which couples it to the $$S$$-per-time of other systems—will necessarily trade away some velocity, changing its Loretnz frame, so as to reduce its action-per-space (momentum $$\mathbf{p}$$) to maintain the E-L condition.
+The E-L equations, which are mostly simply seen as a $$\nabla \times \nabla S = 0$$ or $$\frac{\partial \mathbf{p}}{\partial t} +\frac{\partial E}{\partial \mathbf{x}} = 0$$, representing how a particle which is facing a spatial region of greater action-per-time (energy $$E$$)—due to some interaction which couples it to the $$S$$-per-time of other systems—will necessarily trade away some velocity, changing its Lorentz frame, so as to reduce its action-per-space (momentum $$\mathbf{p}$$) to maintain the E-L condition.
 
 Furthermore the proper time is just related to the _arc length_ of the path: $$ds = c d\tau$$. So $$S$$ is, almost equivalently, measuring the arc-lengths of world-lines. Compare to a normal non-Minkowski arc-length:
 
@@ -389,9 +389,9 @@ s[q] = \int\limits_{q(t)} {\sqrt{1 - {\dot{x}^2}/{c^2}} ~cdt} && s[y] = \int\lim
 \end{aligned}
 $$
 
-These observations—when I found them, piqued by a stray comment from a professor—was the physical interpretation of $$S$$ I had been looking for. Circa 2011 this was nowhere to be found on Wikipedia, and never came up in any undergraduate courses, which probably seeded the frustration that has led to my writing all this down over a decade later. Well, I should have learned more G.R.
+These observations—when I found them, piqued by a stray comment from a professor—were the physical interpretations of $$S$$ I had been looking for. Circa 2011 this was nowhere to be found on Wikipedia, and never came up in any undergraduate courses, which probably seeded the frustration that has led to my writing all this down over a decade later. Well, I should have learned more G.R.
 
-In this post I've start from Newton and then reached the "arc length" interpretation through a few derivations and a dose of special relativity. The better pedagogical derivation may be to assert the "arc length of a world line" as the underlying truth. I imagine that starting with special relativity and then deriving classical mechanics from there might be more satisfactory.
+In this post I've started from Newton and then reached the "arc length" interpretation through a few derivations and a dose of special relativity. The better pedagogical derivation may be to assert the "arc length of a world line" as the underlying truth. I imagine that starting with special relativity and then deriving classical mechanics from there might be more satisfactory.
 
 <br/>
 
@@ -444,7 +444,7 @@ Visually:
 
 Note that a $$+\delta \dot{q}$$ variation alters $$S$$ in the opposite direction of time-evolution. Since $$S = -mc^2 \int d\tau$$ and $$dS = p dx - Edt$$, this amounts to an _increase_ in the value of $$S$$, whereas pure time-evolution would make $$S$$ more negative.
 
-Applying this variation $$\delta \dot{q}$$ then produces affects the state update which would occur over the interval $$\Delta t$$. We use $$\Delta$$ for un-varied effect of time-evolution, and $$\delta$$ for everything resulting from this new variation in $$\delta q$$. We assume the velocity remains constant at the new value $$\dot{q} + \delta \dot{q}$$ to first order. Then we have:
+Applying this variation $$\delta \dot{q}$$ then affects the state update occuring over the interval $$\Delta t$$. We use $$\Delta$$ for un-varied effect of time-evolution, and $$\delta$$ for everything resulting from this new variation in $$\delta q$$. We assume the velocity remains constant at the new value $$\dot{q} + \delta \dot{q}$$ to first order. Then we have:
 
 $$
 \begin{aligned}
@@ -471,7 +471,7 @@ $$
 \end{aligned}
 $$
 
-The final line for $$\delta S(t_1)$$ was the the goal of this calculation. We find one variation due to the immediate change to $$\delta L(t_0)$$ which applies immediately, and is proportional to the initial momentum, and a second-order term which we approximate by its value at the midpoint.
+The final line for $$\delta S(t_1)$$ was the goal of this calculation. We find one variation due to the immediate change to $$\delta L(t_0)$$ which applies immediately, and is proportional to the initial momentum, and a second-order term which we approximate by its value at the midpoint.
 
 Now that we've applied or $$\delta \dot{q}$$, we ask: what condition on $$L$$ makes this vanish? Apparently $$p(t_0) + \overline{\frac{\partial L}{\partial q}} \Delta t = 0$$, but there's an extra $$\Delta t$$, and those two derivatives aren't evaluated in the same place. We can fix both of these by replacing 
 
@@ -519,10 +519,10 @@ H(q, p, t) = \bigg[p \dot{q} - L(q, \dot{q}, t)\bigg]_{\dot{q} = {(\frac{\partia
 \end{aligned}
 $$
 
-The explicit meaning of the Legendre transform is to invert the first derivative w.r.t. a single variable; hence $$H$$ expresses $$L$$ reparameterized by the value $$\frac{\partial L}{\partial \dot{q}}$$ and $$L$$ expresses $$H$$ but reparameterzied by $$\dot{q} = \frac{\partial H}{\partial p}$$. But the Legendre transform is not quite _equal_ to the function with derivative is inverted; instead there is an extra $$p\dot{q} - \cdots$$ which has the effect of making the transformation its own inverse, and of making it equivalent to integration by parts:
+The explicit meaning of the Legendre transform is to invert the first derivative w.r.t. a single variable; hence $$H$$ expresses $$L$$ reparameterized by the value $$\frac{\partial L}{\partial \dot{q}}$$ and $$L$$ expresses $$H$$ but reparameterized by $$\dot{q} = \frac{\partial H}{\partial p}$$. But the Legendre transform is not quite _equal_ to the function with derivative is inverted; instead there is an extra $$p\dot{q} - \cdots$$ which has the effect of making the transformation its own inverse, and of making it equivalent to integration by parts:
 
 $$
- frac{\partial L}{\partial \dot{q}}d\dot{q} = d(p\dot{q}) - \frac{\partial H}{\partial p} dp
+\frac{\partial L}{\partial \dot{q}}d\dot{q} = d(p\dot{q}) - \frac{\partial H}{\partial p} dp
 $$
 
 Or:
@@ -646,13 +646,13 @@ So we've seen:
 * V: How to derive the $$E-L$$ equations by requiring that $$\delta S = pdx$$ over an infinitesimal interval rather than "looking into the future"
 * VI: How to arrive at the Hamiltonian $$H$$, and the "Hamiltonian action", by a straightforward reparameterization of $$S$$.
 
-III and VI are admittedly sketchy: the right _physical_ condition that would lead to the curl-free condition eludes me, and VI don't really seem to say anything. But they are, I think, stabs in the right direction—reducing the arbitrary operations we learn in mechanics class to be implementations of familiar operations.
+III and VI are admittedly sketchy: the right _physical_ condition that would lead to the curl-free condition eludes me, and VI doesn't really seem to say anything. But they are, I think, stabs in the right direction—reducing the arbitrary operations we learn in mechanics class to be implementations of familiar operations.
 
 The line marked $$\lambda$$, by the way, stands for "Legendre transform". I have taken to privately calling this the "$$\lambda$$-transform" in light of the connection to Lagrange multipliers.
 
 
-These, then, were the "missing derivations" from mechanics class—the arguments I which would have satisfied my discontent, way back when. I'm not even in the field anymore, but I've had these questions bookmarked in my brain for years now, eating up some amount of working memory. Hopefully they can be of some help to someone else. 
+These, then, were the "missing derivations" from mechanics class—the arguments which would have satisfied my discontent, way back when. I'm not even in the field anymore, but I've had these questions bookmarked in my brain for years now, eating up some amount of working memory. Hopefully they can be of some help to someone else. 
 
-Were I ever to write a textbook on this material, I probably would *not* use my argument I or II. But I *would* cover special-relativity first, and then use relativity, IV, to justify a fully-fleshed-out version of III, the curl-free condition. The stationary-ness of the path could be mentioned only in passing—that can wait for some advanced quantum course.
+Were I ever to write a textbook on this material, I probably would *not* use my argument I or II. But I *would* cover special-relativity first, and then use relativity, IV, to justify a fully-fleshed-out version of III, the curl-free condition. The stationariness of the path could be mentioned only in passing—that can wait for some advanced quantum course.
 
 The greatest advantage of a reorganization of material is that it may let you leave whole concepts and names in the dustbin. "Lagrangian" and "Hamiltonian" probably aren't going anywhere, but perhaps we could do without variational derivatives and even without "Legendre". The other major advantage is that it may let you teach the same material at a lower level of sophistication. The action $$S$$ is extremely important—it is emphasized throughout pop-sci books like Feynman's Q.E.D., for example!—and yet it is relegated to the shelf of obscure machinery rather than being recognized as simply the length of a worldline. To dispel the obscurity around "action" makes the whole field more accessible, and will help to compress the body of knowledge of physics even for its practitioners—worthy goals, surely.

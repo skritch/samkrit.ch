@@ -13,7 +13,7 @@ bskyPostCid: "3lxgmfvnm6s2h"
 
 Consider the binomial generating function $${(x+y)}^N$$:
 * We can read this literally as "$$N$$ copies of a two-state system", where the states $$x$$ and $$y$$ are indistinguishable between the $$N$$ systems.
-* Plug in in $$x = y =1$$ and you count the total number of states of $$N$$ 1-bit systems, $$2^N$$.
+* Plug in $$x = y =1$$ and you count the total number of states of $$N$$ 1-bit systems, $$2^N$$.
 * Expanding this gives a binomial series: $$\sum_k {N \choose k} x^k y^{N-k}$$, representing the number of ways to make the states "0 of $$x$$ or 1 of $$x$$ or... $$k$$ of $$x$$"
 * Plug in $$x=p, y=1-p$$ and you get a $$\mathrm{binomial}[p]$$ distribution, representing the chances of getting $$k$$ heads in $$N$$ flips. Across all $$k$$ these sum to 1: $${(p + (1-p))}^N = 1^N = 1$$. 
 
@@ -40,7 +40,7 @@ $$
 H[p_i] = \frac{H[Z p_i]}{Z} + \ln Z
 $$
 
-So we get for the the normalized distribution, with $$p_x = p$$ and $$p_y = 1-p$$: 
+So we get for the normalized distribution, with $$p_x = p$$ and $$p_y = 1-p$$: 
 
 $$H\left[p_k = {N \choose k}p^k {(1-p)}^{N-k}\right] = \frac{H\left[p_k = {N \choose k}x^k y^{N-k}\right]}{ {(x+y)}^N} + N \ln {(x+y)}$$
 
@@ -142,8 +142,8 @@ $$
 
 That's enough musing. I'll summarize the progress I've made on untangling my confusions:
 * We cannot simply take $$\log$$ of a g.f. at $$x=y=1$$ to get its "information"; this is _a_ measure of information but it is not the "entropy of the series encoded by the g.f.". 
-* We can define a Shannon entropy on a g.f. as a certain functional, where the choice of "which terms we are defining the entropy with-respect-to" is baked into the form of the entropy functional itself, though there might be some "natural" choice for simple g.f.s. This correctly makes the entropy decrease as we set variables equal to each other like $$x_i = x$$. We find that the entropy of some g.f. ranges from a maximum of $$\ln g(1)$$, which is like the sum of all its coefficients, down to $$0$$ if all states are identified with each other. 
-* In general the entropy of a g.f. is only defined w.r.t. some choice of terms, and you could always plug in more fine-grained terms like $$x = (1+a)$$ and then take an entropy w.r.t. $$a$$, which would even larger.
+* We can define a Shannon entropy on a g.f. as a certain functional, where the choice of "which terms we are defining the entropy with-respect-to" is baked into the form of the entropy functional itself, though there might be some "natural" choice for simple g.f.s. This correctly makes the entropy decrease as we set variables equal to each other, like $$x_i = x$$. We find that the entropy of some g.f. ranges from a maximum of $$\ln g(1)$$, which is like the sum of all its coefficients, down to $$0$$ if all states are identified with each other. 
+* In general the entropy of a g.f. is only defined w.r.t. some choice of terms, and you could always plug in more fine-grained terms like $$x = (1+a)$$ and then take an entropy w.r.t. $$a$$, which would be even larger.
 
 
 And regarding the composition laws of entropies:

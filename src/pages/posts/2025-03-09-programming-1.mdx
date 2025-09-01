@@ -14,7 +14,7 @@ bskyPostCid: "3lxgmvmh2ik2h"
 
 # Part 1: Type System Ergonomics
 
-After months away I have once again picked up the tools of programming, and have once again been assailed by a torrent of frustrations: nothing is *clean*, I cannot express my *intention*, all my idea are mired in *implementation details*, everything is documented *badly*, if at all... surely we can do better...
+After months away I have once again picked up the tools of programming, and have once again been assailed by a torrent of frustrations: nothing is *clean*, I cannot express my *intention*, all my ideas are mired in *implementation details*, everything is documented *badly*, if at all... surely we can do better...
 
 
 Starting small. Data types are, on one hand, required for languages and their compilers to operate *sanely*: to allocate memory efficiently and safely, say.
@@ -25,7 +25,7 @@ The type "systems" (if they can be called that) added to Python and Javascript i
 
 But the type systems so far added to high-level dynamic languages seem to be rooted in the concept of "types" as it appears at the low-level and compiler-focused end of the spectrum, working "upward" from there to add a few ergonomic features, rather than starting from the "user ergonomics" end and working "downward" to add static guarantees. The resulting state of things is quite inadequate to the needs of actual programmers. Perhaps two systems are needed which meet in the middle: one rigorous and verified, one imperfect and only checked as well as feasible; people don't seem to get too bothered by imperfect type systems anyway. 
 
-Here then are some things I think any sane language ought to have (there are no sane languages, as far as I know). I've never written a programming-language, and as such am only lightly familiar with technical terminology. Consider this to be a *user*'s feature-asks, to be treated as you would the requests of any user.
+Here then are some things I think any sane language ought to have (there are no sane languages, as far as I know). I've never written a programming language, and as such am only lightly familiar with technical terminology. Consider this to be a *user*'s feature-asks, to be treated as you would the requests of any user.
 
 ## Constraints
 First up: **constraints**. (This is my catch-all name for "refinement types", "contracts", and "dependent types".)
@@ -67,7 +67,7 @@ x: [int, _ > 0]
 
 These syntaxes read as if `_ > 0` is a "statement", with the existence of such an `x` implying that any statements in its definition are true. I then imagine giving `int` the same semantics, though this would conflict with conventional meaning of `int(x)` as a cast or constructor.
 
-I'll use `{ ... }` for the rest of the post, but I suspect I will eventually prefer the square brackets `[ ... ]`, viewing the type declataion as a list of "constraints" or "facts" about the variable which are asserted to hold. We'll see.
+I'll use `{ ... }` for the rest of the post, but I suspect I will eventually prefer the square brackets `[ ... ]`, viewing the type declaration as a list of "constraints" or "facts" about the variable which are asserted to hold. We'll see.
 
 By all means give a type a name:
 
@@ -94,7 +94,7 @@ Email = Type {
 }
 ```
 
-This has the advantage of letting us interpret `Email` itself as an onject; one could elsewhere refer to `Email.regex` to make use of the same regex object.
+This has the advantage of letting us interpret `Email` itself as an object; one could elsewhere refer to `Email.regex` to make use of the same regex object.
 
 One ergonomic win for such type constraints is to not have to declare a bunch of information about your arguments in both the docstrings for a function and its body, or in many different functions. This is verbose:
 
@@ -133,9 +133,9 @@ e: Str = "a@b.c"
 send_email(msg, e)
 ```
 
-In that example a full doc-string could be programmatically generated, and those format-strings like `{e}` would be filled in with something like the type information rather than the value of `e` itself. Auto-doc tools can use the constraint logic as at every point of application.
+In that example a full docstring could be programmatically generated, and those format-strings like `{e}` would be filled in with something like the type information rather than the value of `e` itself. Auto-doc tools can use the constraint logic as at every point of application.
 
-If, in that example, you passed a string to the email field, it would have to be checked against the constarints right then at the point of conversion. If instead you passed a pre-validated `Email`, the validation would be skipped—which of course is what you would want for performance. 
+If, in that example, you passed a string to the email field, it would have to be checked against the constraints right then at the point of conversion. If instead you passed a pre-validated `Email`, the validation would be skipped—which of course is what you would want for performance. 
 
 The philosophy—to reiterate—is that all values should be validated only once when they first enter the program "boundary", and from then on are trusted throughout the rest of execution. 
 
@@ -167,9 +167,9 @@ def mergeSort[T](xs: list[T]) = {
 }
 ```
 
-I imagine doing this incrementally: a compiler checks as much as it can based on its ability to understand the algorithm; the programmer asserts whatever is left to close the gap to the constraint desired; perhaps the compiler can specifically request any assertions needed to complete its proof. Over time the compiler can be improved further and the gaps closed. I'm sure refinement-type languages already do this, but, features not yet in mainstream language effectively don't exist.
+I imagine doing this incrementally: a compiler checks as much as it can based on its ability to understand the algorithm; the programmer asserts whatever is left to close the gap to the constraint desired; perhaps the compiler can specifically request any assertions needed to complete its proof. Over time the compiler can be improved further and the gaps closed. I'm sure refinement type languages already do this, but, features not yet in mainstream language effectively don't exist.
 
-Pushing this compile-time-checking further starts to be suggestive of an entirely different program architecture, which I'll develop further in a later post. 
+Pushing this compile-time checking further starts to be suggestive of an entirely different program architecture, which I'll develop further in a later post. 
 
 Take the earlier example of a `Email`. The `Email.regex` object ideally would be "statically defined" such that the entire `Email` object is, from the perspective of your editor, a single type which can be used to validate string literals like `e = "a@b.c"` as above. We don't expect this because we're accustomed to "types" and "data validation" occurring as separate steps in the program lifecycle, but in principle there is no reason for this to be true; it is merely a limitation of conventional architectures. It should *also* be possible to validate that the given string is a valid *regex* at compile-time, and even to instantiate it and introspect into it in ways hitherto undreamed of: for example, to auto-generate a "minimal passing string" which illustrates the regex's behavior and serves as a test case, or to convert to an equivalent [literate regex](https://github.com/mtrencseni/rxe). 
 
@@ -180,9 +180,9 @@ s: Str = "2025-01-01"
 d = DateTime.parse(s, "%Y-%m-%d")
 ```
 
-the type of the format string `"%Y-%m-%d"` is really "`DateFormat`", and these are very often given as string literals. It ought to be possible to type-check a string as a `DateFormat` at "compile-time" (a term which ceases to have a clear meaning in this context), and then furthermore use the specified `d` to "validate" a string-literal. All the information you need to do this is right there in the code—only the architecture of typical languages prevents it.
+the type of the format string `"%Y-%m-%d"` is really "`DateFormat`", and these are very often given as string literals. It ought to be possible to type check a string as a `DateFormat` at "compile-time" (a term which ceases to have a clear meaning in this context), and then furthermore use the specified `d` to "validate" a string literal. All the information you need to do this is right there in the code—only the architecture of typical languages prevents it.
 
-In these two examples we saw a couple of "stages" of constraint-checking, which elide the distinction between compile- and run-time. We can take this further. Consider the case of data analysis in Python, where one might write:
+In these two examples we saw a couple of "stages" of constraint-checking, which elide the distinction between compile- and run time. We can take this further. Consider the case of data analysis in Python, where one might write:
 
 ```
 import pandas as pd
@@ -193,15 +193,15 @@ df['datetime'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
 
 First: if you actually write this in an editor, the declared type of the `format` argument is `str`, and then the docstring for `pd.to_datetime` refers you to to the docstring for `datetime.strftime`. That type could easily be a `DateFormat`, there's no need to send the user chasing documentation pointers to figure out how those work, and our string literal could be validated at "compile time". (In Python of course there is no "compile time", only "run time", so "types" have been shimmed on in a way that is introspectable by tools.)
 
-Furthermore, probably half of all data-analysis loads a single file statically as in the example above. You would _like_ to be able to treat a `DataFrame` as a typed object of its columns and even its dimensions throughout the rest of the analysis; i.e. you would like to proceed with a "typed `DataFrame`" like:
+Furthermore, probably half of all data analysis loads a single file statically as in the example above. You would _like_ to be able to treat a `DataFrame` as a typed object of its columns and even its dimensions throughout the rest of the analysis; i.e. you would like to proceed with a "typed `DataFrame`" like:
 
 ```
 df: pd.DataFrame[1000, {date: str, trip_id: int, length: float}]
 ```
 
-But you can't because that imperative `read_csv` step has to happen at "runtime". Instead, libraries like `pandas` wind up implementing a whole second "type-system" (roughly) to describe data, with none of the ergonomic which compile-time types provide for modern editors. *You* know what you have, and `pandas` knows what you have, but your editor just sees a generic `DataFrame`. Of course you could declare the type by hand, but: once the file has been loaded once, your system knows what type it is! Or if the file is Parquet, say, you don't even have to load it. 
+But you can't because that imperative `read_csv` step has to happen at "runtime". Instead, libraries like `pandas` wind up implementing a whole second "type system" (roughly) to describe data, with none of the ergonomic which compile-time types provide for modern editors. *You* know what you have, and `pandas` knows what you have, but your editor just sees a generic `DataFrame`. Of course you could declare the type by hand, but: once the file has been loaded once, your system knows what type it is! Or if the file is Parquet, say, you don't even have to load it. 
 
-All of this is the product of a limited imagination. Data-analysis libraries would like to (in the sense of, are drawn towards the "attractor state" of) elide completely the distinction between "compile" and "run-time", and instead "compile" almost every single line of user code as its encountered, and then use the results as a static background for the next line. Instead of Python's "every thing is run time", go the other direction and make every step a "compile time" by loosening the sense of what "compile" actually entails.
+All of this is the product of a limited imagination. Data analysis libraries would like to (in the sense of, are drawn towards the "attractor state" of) elide completely the distinction between "compile" and "run-time", and instead "compile" almost every single line of user code as its encountered, and then use the results as a static background for the next line. Instead of Python's "every thing is run time", go the other direction and make every step a "compile time" by loosening the sense of what "compile" actually entails.
 
 
 ```
@@ -268,7 +268,7 @@ Some other particularly useful "anonymous types" would be:
 
 ## General Metadata
 
-For the programmer, the primary function of "types" is convey "metadata" information through the program structure, as labels on the "pipes" containing the data. This helps save brain-space by offloading some of the state to one's tools—which is what tools are for. 
+For the programmer, the primary function of "types" is convey "metadata" information through the program structure, as labels on the "pipes" containing the data. This helps save brain space by offloading some of the state to one's tools—which is what tools are for. 
 
 But in this respect there's no reason to distinguish "types" from other kinds of information, and "constraints" are just one example of additional information that closely resembles "types" themselves.
 
@@ -276,15 +276,15 @@ Then we can ask: what other sorts of metadata do we find ourselves wanting to co
 
 Type constraints make me think of a SQL table definition: the basic constraints above are like column constraints, while a constraint between different fields can be seen as a "row constraint" or "check",  and a constraint like `SortedList` acts like a "table constraint". Then the other standard features of SQL tables make good examples of additional metadata:
 - documentation: why not attach a docstring to a type rather than documenting it everywhere it appears, especially in function arguments? I find myself wanting this constantly.
-- default_values: let a type have a built-in default to be supplied when a value is not given.
+- default values: let a type have a built-in default to be supplied when a value is not given.
 - serialization metadata, e.g. to JSON, protobuf, or SQL, which is often annotated with language magic or macros. 
 - a "unique" constraint, which says that only each instance in scope or perhaps in memory must be distinct. This seems intuitive-enough to me, but I'm sure it would be complicated in practice.
 
 ### Opaque Type Aliases
 
-One also ought to be able distinguish, say, a `user_id` from an `event_id` at a language level, even if both are of type "nonnegative `int`". Scala, for one, has features like this under the strange names "value classes" or "opaque type aliases" or "tagged types"; the "tagging" concept makes the most sense to me, but the particular syntax in Scala lives in a library and makes use of some obscure macros, and I can't recommend it. I certainly think this should be the norm, rather than passing around `user_id: Int` everywhere, and the type-checker needs to be designed such that it understands this and can work with it efficiently. The right idea might be to always "tag" subtypes, but not "opaquely": a `UserId` is still a subtype of `Int` even though it is also definitely a `UserId`. In some instances it might make sense for a cast of `Int` to `UserId` would require validation, but the condition "is a `UserId`" is un-validatable, so it has to be asserted with the "`x as UserId`" sort of construction from before. In any case this should be a first-class language construct, and the default rather than an exception to the rule; Scala's feature always felt like an afterthought to me. 
+One also ought to be able distinguish, say, a `user_id` from an `event_id` at a language level, even if both are of type "nonnegative `int`". Scala, for one, has features like this under the strange names "value classes" or "opaque type aliases" or "tagged types"; the "tagging" concept makes the most sense to me, but the particular syntax in Scala lives in a library and makes use of some obscure macros, and I can't recommend it. I certainly think this should be the norm, rather than passing around `user_id: Int` everywhere, and the type checker needs to be designed such that it understands this and can work with it efficiently. The right idea might be to always "tag" subtypes, but not "opaquely": a `UserId` is still a subtype of `Int` even though it is also definitely a `UserId`. In some instances it might make sense for a cast of `Int` to `UserId` would require validation, but the condition "is a `UserId`" is un-validatable, so it has to be asserted with the "`x as UserId`" sort of construction from before. In any case this should be a first-class language construct, and the default rather than an exception to the rule; Scala's feature always felt like an afterthought to me. 
 
-For memory-efficiency, I imagine this level of tagging being an *optional* compiler flag, which could be used during development but then stripped at runtime, except for the actual verification at a program's boundaries.
+For memory efficiency, I imagine this level of tagging being an *optional* compiler flag, which could be used during development but then stripped at runtime, except for the actual verification at a program's boundaries.
 
 In all likelihood it would make sense to allow the programmer to define their own types of "metadata", and potentially to add their "inference rules" to the compiler such that it can deduce properties from each other. But it would take a prototype to start to see what these would look like from here. 
 
@@ -441,15 +441,15 @@ rows: List[...] = db.query(q).fetch_all()
 
 As mentioned above, the possibility of defining additional "type metadata" in the language itself will give a place for the kinds of extra annotations (serialization formats, aliased names, etc) that normally would be done with meta-level language features like macros, which one sees all the time in these sorts of examples.
 
-These would be especially useful in SQL itself. In almost all queries you right it makes complete sense for metadata like default values, column descriptions, and column constraints to flow queries—if the input can't be null the output can't be either. This would especially useful in large SQL trees like those seen in data-warehousing contexts, as supported by tools like [dbt](https://www.getdbt.com/). Considerable data-engineer effort has been used to document column lineages and thread documentation through trees of SQL; almost all this should come for free. Same for dataframes in Pandas, Polars, etc.
+These would be especially useful in SQL itself. In almost all queries you write it should eb possible for metadata like default values, column descriptions, and column constraints to flow through queries—if the input can't be null the output can't be either. This would especially useful in large SQL trees like those seen in data warehousing contexts, as supported by tools like [dbt](https://www.getdbt.com/). Considerable data engineer effort has been used to document column lineages and thread documentation through trees of SQL; almost all this should come for free. Same for dataframes in Pandas, Polars, etc.
 
 The most natural application of the type system I've described are in the basic "domain model" building blocks used in almost every program—e.g. in Python, `dict`, `NamedTuple`, `dataclass`, or Pydantic. The features I've described provide a middle ground between the quick-and-dirty patterns employed in one-off scripts, where one typically writes functions that declare their arguments directly with little organization into a sensible set of types or structs, vs the kind of verbose detailed organization occurring in large programs.
 
 The popularity of dataclasses and Pydantic in Python demonstrate this: people *really want* a more-sophisticated and lightweight "struct" class in their everyday programming language, and will jump through considerable—and often illegible—hoops to get one. Pydantic's [docs](https://docs.pydantic.dev/latest/why/#customisation) are more-or-less a list of the same features discussed here, but bolted-on to the inadequate constructs of Python itself, at a considerable cost of complexity.
 
-Of the languages I've used, Scala gets closest to realizing the ideal of a type system, but is—it seems to me—hopelessly confined to the compiler-focused sense of "types". The "types" in the current essay are instead a kind of "privileged object" within the language, which interact with the type-checker and get special syntaxes, but, being objects, can also be interacted with normally. The kinds of types the JVM expects could be produced by a compilation stage that strips away the extra metadata from the types I've discusesd here.
+Of the languages I've used, Scala gets closest to realizing the ideal of a type system, but is—it seems to me—hopelessly confined to the compiler-focused sense of "types". The "types" in the current essay are instead a kind of "privileged object" within the language, which interact with the type checker and get special syntaxes, but, being objects, can also be interacted with normally. The kinds of types the JVM expects could be produced by a compilation stage that strips away the extra metadata from the types I've discusesd here.
 
-Typescript too has converged in a similar direction, coming out better than Python but still riddled with "jankiness", in my opinion. It's telling that all these languages seem to be reaching for the same "ideal": what I've described is my attempt to glimpse the ideal that these languages are already converging on (but without ANY rigor; instead, with the characteristic sloppiness of a user request, which can be a virtue, able to escape the rigid confines of a too-rigid of how things work at present, and why). 
+Typescript too has converged in a similar direction, coming out better than Python but still riddled with "jankiness", in my opinion. It's telling that all these languages seem to be reaching for the same "ideal": what I've described is my attempt to glimpse the ideal that these languages are already converging on (but without ANY rigor; instead, with the characteristic sloppiness of an end-user request. But this can be a virtue! The user, who has no clue why things are the way they are at present, will freely imagine their way out of the too-rigid ways things work at present). 
 
 What holds our languages back, I speculate, is the hewing to a "type system" from the view of a "compiler" rather than the user. How do we get the features we want? How close can we get; how many imperfections can we tolerate? The "click" in this kind of thinking is to realize that the ability to convey structured metadata through a program is incredibly valuable in itself—even if can't enforce it statically. 
 
