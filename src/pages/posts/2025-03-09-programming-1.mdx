@@ -12,7 +12,7 @@ bskyPostCid: "3lxgmvmh2ik2h"
 #### Table of Contents
 
 
-# Part 1: Type System Ergonomics
+# Type System Ergonomics
 
 After months away I have once again picked up the tools of programming, and have once again been assailed by a torrent of frustrations: nothing is *clean*, I cannot express my *intention*, all my ideas are mired in *implementation details*, everything is documented *badly*, if at all... surely we can do better...
 
@@ -25,17 +25,20 @@ The type "systems" (if they can be called that) added to Python and Javascript i
 
 But the type systems so far added to high-level dynamic languages seem to be rooted in the concept of "types" as it appears at the low-level and compiler-focused end of the spectrum, working "upward" from there to add a few ergonomic features, rather than starting from the "user ergonomics" end and working "downward" to add static guarantees. The resulting state of things is quite inadequate to the needs of actual programmers. Perhaps two systems are needed which meet in the middle: one rigorous and verified, one imperfect and only checked as well as feasible; people don't seem to get too bothered by imperfect type systems anyway. 
 
-Here then are some things I think any sane language ought to have (there are no sane languages, as far as I know). I've never written a programming language, and as such am only lightly familiar with technical terminology. Consider this to be a *user*'s feature-asks, to be treated as you would the requests of any user.
+Here then are some things I think any sane language ought to have. (There are no sane languages, as far as I know. Typescript comes closest.) I've never written a programming language, and as such am only lightly familiar with technical terminology. Consider this to be a *user*'s feature-asks, to be treated as you would the requests of any user.
 
 ## Constraints
-First up: **constraints**. (This is my catch-all name for "refinement types", "contracts", and "dependent types".)
+
+First up: **constraints**. (This is a catch-all name for "refinement types", "contracts", and "dependent types".)
 
 This is so basic I can't believe it's not commonplace. There is a difference between an integer variable
-```
+```scala
 x: int
 ```
-and an non-negative integer variable:
-```
+
+and a non-negative integer variable:
+
+```scala
 x: int
 assert x > 0
 ```
@@ -47,18 +50,18 @@ It should additionally not require a separate `assert` or a wrapper class or any
 Type nnInt = {x: int | x > 0}
 ```
 but this is ugly because of, first, the extraneous variable name `x`, and second because in many cases I would like avoid having to give the constrained type a *name*, instead declaring it inline. My instinct is to use a Scala-like "anonymous argument" symbol `_`, acting like the 
-```
+```scala
 x: {int, _ > 0} = ...
 ```
 
 Or perhaps we do without the braces:
-```
+```scala
 x: int, _ > 0 = ...
 ```
 
 Or a list?
 
-```
+```scala
 x: [int, _ > 0]
 ```
 
@@ -71,7 +74,7 @@ I'll use `{ ... }` for the rest of the post, but I suspect I will eventually pre
 
 By all means give a type a name:
 
-```
+```scala
 email_re = re(“[^@]+@[^@]+\.[^@]+”), // Checks @ and .
 
 Email = Type {
@@ -84,9 +87,7 @@ def send_email(msg: str, e: Email) = { ... }
 
 Or better, we define the regex inside the type:
 
-```
-
-
+```scala
 Email = Type {
   Str,
   regex = re(“[^@]+@[^@]+\.[^@]+”), // Checks @ and .
@@ -98,7 +99,7 @@ This has the advantage of letting us interpret `Email` itself as an object; one 
 
 One ergonomic win for such type constraints is to not have to declare a bunch of information about your arguments in both the docstrings for a function and its body, or in many different functions. This is verbose:
 
-```
+```scala
 def send_email(msg: Str, e: Str):
   """
   send an email
@@ -116,7 +117,7 @@ def send_email(msg: Str, e: Str):
 
 Instead we can encode as much as possible in the types themselves:
 
-```
+```scala
 Email = Type { ... }
 
 def send_email(msg: Str, e: Email):
@@ -144,7 +145,17 @@ This of course is what types do already, but when we start to imagine this behav
 - a condition on the length of a list (if checked at compile-time would be an example of a "dependent type"). You could then place constraints on the arguments to a function, e.g. `List.head` would require a nonempty list, or `Vec.dot` would require two vectors of the same length. (All linear algebra code would be vastly more enjoyable to work with with the help of some type constraints.)
 - that a type is non-null (in languages where such things are allowed and it's not sufficient to distinguish `int | None` from `int`).
 - a condition that asserts that an object is known to exist in a database or on-disk, perhaps including the timestamp when it was confirmed (a complication, to be sure).
-- a condition that a list is sorted; this is preferable to a dumb wrapper `SortedList` that conveys the information to a reader but carries no semantic information. This would be implemented by a kind of "tagging" mechanism; more on this momentarily.
+- a condition that a list is sorted; this is preferable to a dumb wrapper `SortedList` that conveys the information to a reader but carries no semantic information.
+
+These requirements are rather overlapping: a condition for a list to be sorted, say, is a lot like a constraint on a structure. Some of these can be hacked with "tagged" or "branded" types, e.g. in Typescript:
+
+```scala
+type Sorted = { readonly __brand: unique symbol };
+export type SortedList<T> = T[] & Sorted;
+```
+
+but such a construction does not provide a way to supply further constraints on what "sorted" means. 
+
 
 ## Constraint Validation
 
@@ -155,7 +166,8 @@ The obvious answer, already mentioned, is at the point where the type is instant
 But consider the case where we sort a list and want to wind up with a `SortedList`. We wouldn't necessarily want to "validate" the condition explicitly, as it would amount to an extra unnecessary pass over the data after sorting.
 
 The best case would a compile-time check that the sorting algorithm actually produces a sorted list, with the aid of some kind of theorem prover (making this a "refinement type"). But for non-trivial examples this is not likely to be possible. In most instances it would be overkill anyway: let the programmer figure it out, and let the test cases prove it to their satisfaction. Therefore it should also be possible to optionally put off a check in a constructor, i.e. marking the instance `unchecked` or `verified` or something, or just `as`:
-```
+
+```scala
 // I'm not sure what the best syntax is here.
 // Maybe just _.isSorted
 SortedList[T] = Type {list[T], _[i] < _[i+1] for i in _.index}
@@ -175,7 +187,7 @@ Take the earlier example of a `Email`. The `Email.regex` object ideally would be
 
 Consider the similar case of date-format strings (which I, personally, have to look up how these work on every single encounter.) In a typical case like:
 
-```
+```scala
 s: Str = "2025-01-01"
 d = DateTime.parse(s, "%Y-%m-%d")
 ```
@@ -184,7 +196,7 @@ the type of the format string `"%Y-%m-%d"` is really "`DateFormat`", and these a
 
 In these two examples we saw a couple of "stages" of constraint-checking, which elide the distinction between compile- and run time. We can take this further. Consider the case of data analysis in Python, where one might write:
 
-```
+```python
 import pandas as pd
 
 df: pd.DataFrame = pd.read_csv('trips.csv')
@@ -195,7 +207,7 @@ First: if you actually write this in an editor, the declared type of the `format
 
 Furthermore, probably half of all data analysis loads a single file statically as in the example above. You would _like_ to be able to treat a `DataFrame` as a typed object of its columns and even its dimensions throughout the rest of the analysis; i.e. you would like to proceed with a "typed `DataFrame`" like:
 
-```
+```python
 df: pd.DataFrame[1000, {date: str, trip_id: int, length: float}]
 ```
 
@@ -204,7 +216,7 @@ But you can't because that imperative `read_csv` step has to happen at "runtime"
 All of this is the product of a limited imagination. Data analysis libraries would like to (in the sense of, are drawn towards the "attractor state" of) elide completely the distinction between "compile" and "run-time", and instead "compile" almost every single line of user code as its encountered, and then use the results as a static background for the next line. Instead of Python's "every thing is run time", go the other direction and make every step a "compile time" by loosening the sense of what "compile" actually entails.
 
 
-```
+```python
 df: pd.DataFrame = pd.read_csv('trips.csv')
 df: pd.DataFrame[1000, {date: str, trip_id: int, length: float}]  # is now true
 
@@ -223,7 +235,8 @@ I'll concede that re-using the same variable name like this might turn out to be
 ## Anonymous Type Definitions
 
 It would often be handy to define a type inline and then refer to it elsewhere. Something like this:
-```
+
+```scala
 an_email: {
   Str,
   regex = re(“[^@]+@[^@]+\.[^@]+”), // Checks @ and .
@@ -237,8 +250,8 @@ def send_email(msg: str, e: typeof(an_email)) = { ... }
 That `typeof` is ugly, though. For something so fundamental I'd prefer a symbol, such as `~an_email`, with `~` having a bit of a sense of "similar to".
 
 The main application of this is an ergonomics feature I find myself wanting *all the time*: the ability to refer to input and output types of a function anonymously. For the time being let's define `f(~)` to refer to the input type and `f~` for the output type. (With `~f` referring to the function type itself.) Then an example would be:
-```
 
+```scala
 def step1 = (a: int, b: str) => {
   ...
   return {x: b, y: a + 1}
@@ -253,18 +266,32 @@ def step2 = args => { ... }
 ```
 
 So we have:
-```
+
+```scala
 step1~ == Type {x: str, y: int}
 ~step3 == Type list[int]
 ```
 
 Obviously you could define the required types separately, but that would be quite verbose! And one issue here is that the set of "valid function signatures" is different from the "set of valid types" in most languages—most languages' functions can take both positional and keyword arguments. The basic struct/object type would have to able to represent the same things, which would make all functions be interpretable as a mapping from a single object type to another. But that's a convenient unification, so why not?
 
-Some other particularly useful "anonymous types" would be:
+Some other particularly useful "anonymous types" are:
 - a copy of another type but without any of its constraints, to be used as a container for unvalidated input
-- a copy of another type but with all its fields optional, to be used as a builder or partial constructor
+- a copy of another type but with all its fields optional, to be used as a builder or partial constructor; this can be seen as removing only a narrow set of constraints
 - a subset of the fields of another struct, including a syntax for "all fields except..."
-- a sub-struct within a struct
+- a sub-struct from within a struct
+- the element type of an array
+
+Typescript has a lot of these already, though some of the syntaxes are strange:
+
+```typescript
+type UserBuilder = Partial<User>
+type UserPrePK = Omit<User, "id">  // before an PK is generated in the DB, for example
+type UserFormData = Pick<User, "name" | "address" | "email" | "phone>  // strange syntax
+type Addr = User['address']
+type UserFlags = User['flags'][number]  // strange syntax
+```
+
+As a general rule you can tell what features are desired because people keep building them!
 
 ## General Metadata
 
@@ -282,23 +309,81 @@ Type constraints make me think of a SQL table definition: the basic constraints 
 
 ### Opaque Type Aliases
 
-One also ought to be able distinguish, say, a `user_id` from an `event_id` at a language level, even if both are of type "nonnegative `int`". Scala, for one, has features like this under the strange names "value classes" or "opaque type aliases" or "tagged types"; the "tagging" concept makes the most sense to me, but the particular syntax in Scala lives in a library and makes use of some obscure macros, and I can't recommend it. I certainly think this should be the norm, rather than passing around `user_id: Int` everywhere, and the type checker needs to be designed such that it understands this and can work with it efficiently. The right idea might be to always "tag" subtypes, but not "opaquely": a `UserId` is still a subtype of `Int` even though it is also definitely a `UserId`. In some instances it might make sense for a cast of `Int` to `UserId` would require validation, but the condition "is a `UserId`" is un-validatable, so it has to be asserted with the "`x as UserId`" sort of construction from before. In any case this should be a first-class language construct, and the default rather than an exception to the rule; Scala's feature always felt like an afterthought to me. 
+One also ought to be able distinguish, say, a `user_id` from an `event_id` at a language level, even if both are of type "nonnegative `int`". 
 
-For memory efficiency, I imagine this level of tagging being an *optional* compiler flag, which could be used during development but then stripped at runtime, except for the actual verification at a program's boundaries.
+Typescript, for example, can do this with a brand:
+
+```typescript
+type Celsius = number & { readonly __brand: "Celsius" };
+```
+
+Or generically:
+
+```typescript
+type Opaque<Type, Brand extends string> = Type & { readonly __brand: Brand };
+type Celsius = Opaque<string, "Celsius">;
+type Fahrenheit = Opaque<string, "Fahrenheit">;
+
+function cToF(c: Celsius) {
+  return ((c as number) * 9/5 + 32) as Fahrenheit;
+}
+```
+
+
+You can also use a private constructor:
+
+```typescript
+class UserId {
+  private constructor(readonly value: string) {}
+  static from(raw: string): UserId {
+    if (!raw.match(/^[a-z0-9]+$/)) throw new Error("bad id");
+    return new UserId(raw);
+  }
+}
+
+const u = UserId.from("abc123");
+```
+
+Or in Scala there are a few inequivalent methods:
+```scala
+// opaque type in Scala 3
+opaque type Celsius = Double
+
+// value class
+final class Celsius(val value: Double) extends AnyVal { }
+
+// tagged via Shapeless
+trait Tagged[U]
+type @@[T, U] = T with Tagged[U]
+object CelsiusTag
+type Celsius = Double @@ CelsiusTag
+```
+
+Only the first of these I find satisfactory. 
+
+Note that in neither language does
+
+```typescript
+type Celsius = number;
+```
+
+do what you want; the type-checker will never catch any mistakes with this pattern.
+
+I certainly think these patterns should be the norm rather than the excption; rather than passing around `user_id: Int` everywhere, and the type checker needs to be designed such that it understands this and can work with it efficiently. The right idea might be to always "tag" subtypes, but not "opaquely": a `UserId` is still a subtype of `Int` even though it is also definitely a `UserId`. In some instances it might make sense for a cast of `Int` to `UserId` would require validation, but the condition "is a `UserId`" is un-validatable, so it has to be asserted with the "`x as UserId`" sort of construction from before. I imagine this level of tagging would be stripped at runtime, or something. In any case this should be a first-class language construct, and perhaps the default practice rather than an exceptional case—I think we'd get used to language which did this pretty quickly.
 
 In all likelihood it would make sense to allow the programmer to define their own types of "metadata", and potentially to add their "inference rules" to the compiler such that it can deduce properties from each other. But it would take a prototype to start to see what these would look like from here. 
 
+
 ### Anonymous Variables
 
-Now another ergonomic feature comes to mind. Once your `user_id` always has type `UserId`, you rarely even need a variable name. In many cases it should be possible to use the type name only, as long as there aren't two values of the same type in scope. Variable names themselves would appear as "anonymous tags" which distinguish between conflicting instances of the same type in a scope. For example, using `#UserId` as if `#` stands for the word "the":
+Now another ergonomic feature comes to mind. Once your `user_id` always has type `UserId`, you rarely even need a variable name. In many cases it should be possible to use the type name only, as long as there aren't two values of the same type in scope. Between the two, the variable name contains no information except its string constant, while the type name is linked to all kinds of useful metadata; the type itself at a minimum!
 
-```
+In this paradigm, variable names themselves wind up appearing as "anonymous tags" which distinguish between conflicting instances of the same type in a scope. "Which `UserId`?"—"The `UserId`". Or "the first `UserId`" or "the `UserId` who initiated the transaction", etc. For example, using `#` to act like the word "the":
+
+```scala
 def login(#UserId, password: Str) = {
   // here #UserId refers to "the user"
   token | loginFailure = checkPassword(#UserId, password)
-
-  // or maybe your #UserId is passed implicitly, and anon values can similarly be 
-  // injected into the current scope from return values
   if token:
     #User = getUser(#UserId, token) 
     return loggedInResponse(#User)
@@ -308,18 +393,18 @@ def login(#UserId, password: Str) = {
 }
 
 // whereas here we still name the two users
-def transfer(amount: {Money, _>0}, u1: UserId, u2: UserId) = {
+def transfer(amount: {Money, _>0}, fromUser: UserId, toUser: UserId) = {
   ...
 }
 ```
 
-At this point if I wonder if I've lost my mind and simply arrived at "variables" after circling the block. But I think there's something here. If I have to pick between a single identifier being a "name" and "type with metadata", I'd rather have the type! A program is just a series of tubes, and not all of those tubes need names all the time!
+At this point if I wonder if I've lost my mind and simply arrived at "variables" after circling the block. But I think there's something here. If I have to pick between a single identifier being a "name" and "type with metadata", I'd rather have the type! A program is just a series of tubes—not all of those tubes need names all the time!
 
 ### Implicit Variables
 
 We could go even farther and write only `#` when the type is known statically:
 
-```
+```scala
 def login(#UserId, password: Str) = {
   # = checkPassword(#, password)
 
@@ -331,9 +416,9 @@ def login(#UserId, password: Str) = {
 }
 ```
 
-Or, Hell, be entirely implicit:
+Or, heck, be implicit:
 
-```
+```scala
 Password = {str, |_| > 0, ...other password complexity constraints...}
 
 def login(#UserId, #Password) = {
@@ -341,7 +426,7 @@ def login(#UserId, #Password) = {
 
   if #Token:  // if there exists a single instance of Token in scope.
     getUser()  // consumes #Token, returns #User
-    return loggedInResponse()   // consumes #Token, #User
+    return loggedInResponse()   // consumes #User
   else:
     ... raise an error... 
 }
@@ -353,13 +438,26 @@ catch ValidationError[Password] as e:
   // tell the user what they did wrong.
 ```
 
+Of course in the above it would be a type error if the implicit value could possibly be ambiguous.
+
 It is not at all hard to imagine a language where the above block unambiguously defines the correct execution graph. You could skip the prose and draw it all with arrows if you wanted to. 
+
+And actually, when we think of the above as an "execution graph", the function calls in the above (`checkPassword`, `getUser`, `loggedInResponse`) end up playing the part of "edges" in the graph. The above `login` function is a graph (ignoring the error cases):
+
+```
+UserId -> (checkPassword)
+Password -> (checkPassword) -> Token -> (getUser)
+UserId -> (getUser) -> User -> (loggedInResponse) -> LoggedInResponse
+```
+
+with the function call pushing data through that graph to generate a `LoggedInResponse | Error`.
+
 
 ### Docstrings
 
 Related to this, I think of the fairly-common duplication of types and names one uses to help make code like the following legible:
 
-```
+```scala
 def polar_to_cartesian(r: {Number, _>0}, θ: Number) -> (Int, Int):
   """
   args:
@@ -375,7 +473,7 @@ def polar_to_cartesian(r: {Number, _>0}, θ: Number) -> (Int, Int):
 
 As above we are clearly duplicating names and types between the docstring, arguments, return value, and even the variable names in the code block. It should be possible to strip all of these:
 
-```
+```scala
 def polar_to_cartesian(
   r: {Number, _ > 0, "the radial coordinate"},
   θ: {Number, % 2π,  "the angular coordinate"}
@@ -389,7 +487,7 @@ The actual essence of such a function is a single "graph node" with two inputs a
 
 If you combine this with the `#` symbol above you can even do away with the variable names and pare this down to something like:
 
-```
+```scala
 def polar_to_cartesian(#R, #θ):
   return {#R * cos(#θ) as X, #R * sin(#θ) as Y}
 ```
@@ -401,7 +499,7 @@ with `R, θ, X, Y` all as "typed" variable-names for the various coords.
 
 At this point I ought to give some more compelling examples of how this extended type system would be used. The clearest cases would be the sorts of boilerplate you put in every script—configuration from a file or environment variable and CLI params. With all the type system elements presented so far, it should be possible to write the configuration and CLI spec for a simple app as, more or less, a single type:
 
-```
+```scala
 Config = {
   database_url: PostgresURL,
   port: http.Port = 8000,
@@ -427,7 +525,7 @@ Branching can be modeled with a union type, e.g. `Config: PostgresConfig | Sqlit
 
 Another obvious example is in the translation to/from a SQL database: most of the metadata described so far has a direct translation into SQL, meaning either that struct types can be used directly in an ORM, or statically derived from a query (though this would require accessing the DB itself, or at least a file representing its schema, from within one's editor):
 
-```
+```scala
 MyStruct = Type { ... }
 myStructTable = orm.table_of(MyStruct)
 // or add some type metadata
