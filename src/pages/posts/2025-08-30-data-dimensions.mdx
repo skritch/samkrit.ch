@@ -1,6 +1,7 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Drawing Dimensions 3: Data Engineering"
+title: "Drawing Dimensions III"
+subtitle: "Data Engineering"
 date: 2025-08-30
 math: true
 toc: true
@@ -95,7 +96,7 @@ But if we have $N$ separate time dimensions, we can extract the labels of their 
 
 Data pipelines are rarely so linear, though. The fundamental structure is the DAG: 
 
-![a DAG](../../images/dag.png)
+![a DAG](../../images/datadims/dag.png)
 
 Even though a DAG can branch and recombine, it's still a dimension—it's "partially ordered", falling somewhere between an unordered discrete set (which is also a dimension) and an ordered set (like our discretized time above). I don't know if we need to represent this on the diagram, but one way to do it might be with a half-arrowhead:
 

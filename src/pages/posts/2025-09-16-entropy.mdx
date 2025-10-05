@@ -1,0 +1,307 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "Entropy I"
+subtitle: Motivating Shannon
+date: 2025-09-16
+math: true
+bokeh: true
+toc: true
+bskyPostCid:
+
+---
+import EntropyBar from "../../components/diagrams/entropy/EntropyBar";
+import EntropyReorder from "../../components/diagrams/entropy/EntropyReorder";
+import BokehPlot from "../../components/diagrams/BokehPlot";
+
+The word "entropy" is surrounded in a strange mystique. This is confusing. Let us illuminate it.
+
+
+*This is part of a series on entropy.*
+1. *(This post)*
+1. *<a href="/posts/2025-09-27-entropy2/">Entropy II: The Entropy Function</a>*
+
+<br/>
+
+#### Table of Contents
+
+
+<br/>
+
+## 1. Information Density
+
+Consider the division of a whole into parts:
+
+<EntropyBar total={16} weights={[16]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[8,8]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[4,4,4,4]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[2,2,2,2,2,2,2,2]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[]} displayBits={false} client:visible />
+
+You can count or label a row of $N$ blocks with $\log_2 N$ binary numbers. For the row of 8 these would be:
+
+$$
+\{000, 001, 010, 011, 100, 101, 110, 111\}
+$$
+
+What about these?
+
+<EntropyBar total={16} weights={[8,4,4]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[8,5]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[8,3,2]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[7,4,2]} displayBits={false} client:visible />
+<EntropyBar total={16} weights={[4]} displayBits={false} client:visible />
+
+We could, of course, count the number of distinct blocks. Two binary bits are enough to count the first row of 3 (using $\{00, 01, 10\}$) with one "code" to spare ($11$).
+
+Or, four binary bits could count the 13 blocks in last row, with three codes to spare.
+
+For any row, we could use the set of binary numbers as "codes", "labels", "pointers", or "addresses" to refer to the blocks in that row. To write out a sequence of, say, 100 blocks from the last row of 13 would take 400 binary bits: one 4-bit number per block.
+
+But could we do a bit better? The set of all four-bit binary numbers is
+
+$$
+\left\{
+\begin{matrix}
+  0000,& 0001,& 0010,& 0011, \\
+  0100,& 0101,& 0110,& 0111, \\
+  1000,& 1001,& 1010,& 1011, \\
+  1100,& 1101,& 1110,& 1111 \\
+\end{matrix}
+\right\}
+$$
+
+Of those, exactly four start with a pair of $11$s in a row: $\{ 1100, 1101, 1110, 1111 \}$. If we omit those four numbers from our counting (which we can do because we have 16 codes for only 13 blocks) we can instead use the *two*-bit code $11$ for the big block, saving two bits. 
+
+The rule will be: if we encounter $11$ it means "big block, and only read two bits", otherwise we read four bits. $11$ in the middle of a code like $0110$ doesn't mean anything special. With this scheme we could encode 100 blocks in a row with perhaps fewer than 400 bits, depending on whether the big block shows up.
+
+If, furthermore, the big block shows up in proportion to its size--one fourth of the time--we can expect to save two bits each time we encode it, meaning it will take on average only 350 binary bits to list 100 of these blocks (4 bits three-quarters of the time, 2 bits one-quarter of the time).
+
+Can we do any better? Since there are 13 distinct blocks, could we perhaps do the job with only $\frac{13}{16} \times 4 = 3.25$ bits? But we can't shorten the $11$ code any further to $1$, because we wouldn't be able to avoid conflicting interpretations; and we definitely can't count the other twelve with fewer than twelve codes, so it seems not.
+
+So in some sense, the blocks in the row 
+
+<EntropyBar total={16} weights={[4]} displayBits={false} client:visible />
+
+seem to be able to be encoded with, not 4, but only 3.5 bits of data.
+
+This "3.5 bits" characterization, remember, relied on the interpretation that the blocks have an inherent *probability* proportional to their size.
+
+And, in fact, we can arrive at that same number $3.5$ by taking $\frac{12}{16} = \frac{3}{4}$ of the $4$ bits required to label the full set of sixteen little blocks, plus $\frac{1}{4}$ of the $2$ bits required to label the four blocks:
+
+$$
+\frac{3}{4} \times \log_2 (16) + \frac{1}{4} \times \log_2 (4) = \frac{3}{4} \times 4 + \frac{1}{4} \times 2 = 3.5 \text{ bits}
+$$
+
+Apparently, the quarter-length block brought along its $0.5$ bit contribution from its original home among the other quarter-length blocks, while the little blocks each brought $\frac{1}{16}$ of their $4$ bits.
+
+By a similar approach, you could determine the bits required to describe any of the oddly-sized rows. Even the blocks that don't divide evenly can be shoved into the above formula, for example in
+
+<EntropyBar total={16} weights={[8, 5]} displayBits={false} client:visible />
+
+the length-$\frac{5}{16}$ block could fit into a row of, uh, $\frac{16}{5}$ copies of itself, so its bit contribution should be
+
+$$
+\frac{5}{16} \times \log_2{\left(\frac{16}{5 }\right)} \approx \frac{5}{16} \times (1.678) \approx 0.524 \text{ bits?}
+$$
+
+So the $\frac{5}{16}$ block contributes just a little more than the $\frac{1}{4}$ block did: even though $\log_2{\frac{16} {5}} \approx 1.678 < 2$, the fraction $\frac{5}{16} > \frac{1}{4}$ more than made up for it.
+
+What we've just found is that the contribution of a single block comprising a fraction $p = \frac{k}{N}$ of the whole is
+
+$$
+p \log_2 \frac{1}{p}
+$$
+
+and so the number of bits required to encode an entire row of blocks is just a sum of $i$ blocks:
+
+$$
+H_2[p_i] = \sum_i p_i \log_2 \frac{1}{p_i}
+$$
+
+This is what is called the "base-2 Shannon entropy" or just "entropy", which I will write[^H] as $H_2[p_i]$. Its units are "information" or perhaps "data", which, like "length", can be measured in various units, depending on the base used for the logarithm. In base-2 it is measured in "bits", while base-$10$ would be "digits" and base-$e$ is sometimes called "nats":
+
+$$
+\log_2{N} = \frac{\log{N}}{\log_2{e}} \approx \frac{\log{N} \text{ [nats]}}{1.442 \frac{\text{ [nats]}}{\text{ [bits]}}}
+$$
+
+[^H]: The $H$ was probably intended originally to be a Greek capital "eta", for "entropy", but it's indistinguishable from the letter $H$. The square brackets $H[\:\cdot:]$ indicate that this thing is not exactly a *function* of its argument, it is really a function of the full vector of $p_i$ values.
+
+The following rows of $N$ uniform blocks have entropies $\log_2(N)$:
+
+<EntropyBar total={16} weights={[16]} client:visible />
+<EntropyBar total={16} weights={[8,8]} client:visible />
+<EntropyBar total={16} weights={[4,4,4,4]} client:visible />
+<EntropyBar total={16} weights={[2,2,2,2,2,2,2,2]} client:visible />
+<EntropyBar total={16} weights={[]} client:visible />
+
+and our non-uniform rows have entropies
+
+<EntropyBar total={16} weights={[8,4,4]} client:visible />
+<EntropyBar total={16} weights={[8,5]} client:visible />
+<EntropyBar total={16} weights={[8,3,2]} client:visible />
+<EntropyBar total={16} weights={[7,4,2]} client:visible />
+<EntropyBar total={16} weights={[4]} client:visible />
+
+The last of those rows is the $3.5$-bit example we calculated before. Here we see the entropy as representing some kind of lower bound on the ability of some sequence of unevenly-weighted objects to be encoded or compressed.[^1]
+
+This problem--"how to optimally encode a sequence of samples from a distribution"--is probably the standard derivation of "entropy". But here the mystique of that word is nowhere to be seen: it is not at all clear why the thing just described would be called "entropy", or why anyone should care about it unless they are trying to write a compression algorithm. It seems to be a synonym for "information density", perhaps.
+
+[^1]: It turns out that the entropy of a distribution, defined in this way, places a *theoretical limit* on the compressibility of any data which arrives randomly according to that distribution. The compression algorithm sketched in the introduction is a [prefix code](https://en.wikipedia.org/wiki/Prefix_code), which uses shorter codes to encode the more-frequent members of the set. If the data is non-random (like real data), you can probably do much better by dedicating codes to commonly-occurring sequences.
+
+<br/>
+
+## 2. Log-Likelihood per Sample
+
+Now a second scenario.
+
+Suppose some process in reality emits data according to a probability distribution $p_i$ over $N$ outcomes, $i \in \{1, \ldots, N\}$. A sample example is a 6-sided dice, for which the probabilities are uniform:
+
+$$
+p_i = \left\{\frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6} \right\}
+$$
+
+If you sample from this distribution (e.g. roll the dice) $K$ times, you'll get some particular sequence $\mathbf{x} = (x_1, x_2, \ldots, x_K)$ with 
+
+$$
+\begin{align}
+\text{Pr}(\mathbf{x}) &= p(x_1) \times p(x_2) \times \ldots \times p(x_K)
+\end{align}
+$$
+
+You expect, on average, to see each of the $N$ outcomes appear $k_i$ times according to its probability:
+
+$$
+k_i \approx p_i K
+$$
+
+Suppose we take a vey large number of samples $K$, such that we can safely assume the counts of samples in each bin $k_i$ are approxiamtely equal to these averages. Then the "likelihood" of any *particular* sequence $\mathbf{x}$ with exactly this typical distribution of outcomes $(k_1, \ldots, k_N) = (p_1 K, \ldots, p_n K)$ will be the product of the $k_i$ factors of each of the $p_i$:
+
+$$
+\begin{align}
+\text{Pr}( \mathbf{x} \mid \forall i, \text{exactly } k_i \text{ samples = } i) &= {(p_1)}^{k_1} {(p_2)}^{k_2} \cdots {(p_N)}^{k_N} \\
+  &= {(p_1)}^{p_1 K} {(p_2)}^{p_2 K} \cdots{(p_N)}^{p_N K} \\
+  &\coloneqq \mathcal{L}[k_i]
+\end{align}
+$$
+
+We'll call the above the "likelihood of $k_i$", $\mathcal{L}[k_i]$, with the understanding that this stands for the probability of seeing any *single* sequence with counts $k_i$, rather than the probability of seeing *any* sequence with those counts $k_i$ (which would be the above multiplied by the number of such sequences, which is a multinomial coefficient ${K \choose ( k_i )} = \frac{K!}{{k_1}!{k_2}!\cdots {k_N}!}$).
+
+If the distribution $p_i$ were uniform with $p_i = \frac{1}{N}$ for all $i$, this likelihood would simply be equal to ${\left(\frac{1}{N}\right)}^K$; every sequence would be equally likely to occur. For each new sample you tack on, the likelihood of that specific sequence would decrease by a factor of $N$, but this rate would never change. Larger values of $N$ would have a greater "cost" in likelihood per sample—for a given length, a larger base set can produce more sequences, and therefore could encode more data or count to a larger number.
+
+For any other distribution the rate of increase of the likelihood would vary, but in the long run it would center on some average rate. Furthermore we could weaken our assumption that our samples occur in exact proportion to $k_i \propto p_i$; this would also alter the likelihood-per-sample, but again we could expect to see the result centered around some average rate.
+
+The above expression for the likelihood is unwieldy because it decreases by a fraction every time we add a new sample. To get something directly interpretable as a "rate", we should a) invert it, b) take a logarithm, and c) divide out $K$:
+
+
+$$
+\begin{align}
+\frac{1}{K}\log{ \frac{1}{\mathcal{L}[k_i] } } &= \frac{1}{K} \log {\frac{1}{{(p_1)}^{p_1 K}  \cdots {(p_N)}^{p_N K} }}\\
+&= \frac{1}{K} \left[ \log{ \frac{1}{{p_1}^{p_1 K}}} + \ldots + \log{\frac{1}{{p_N}^{p_N K}}} \right]\\
+&= \frac{1}{K} \left[ (p_1 K)\log{{\frac{1}{p_1}}} + \ldots + (p_N K)\log{\frac{1}{p_N}}\right]\\
+&= \sum_i p_i \log{\frac{1}{p_i}} \\
+&= H[p_i]
+\end{align}
+$$
+
+
+And voilà: we have found the same "Shannon entropy" formula as in the first example. The interpretation this time is as the "average log-inverse-likelihood per sample"—meaning what?
+
+We got here by considering the likelihood $\mathcal{L}[k_i]$ of a typical sequence of samples $\mathbf{x}$ from a distribution of known $p_i$ over $N$ bins. This rate of likelihood-per-sample represents the *best you can do* predicting samples from this process with any distribution—if we tried to predict this data with any *other* distribution $q_i$, we would invariably judge it to have a lower likelihood, in the long run and on average, than it would according the true generating distribution $p_i$.[^cross]
+
+[^cross]: Predicting this sequence with some other distribution $q_i$ would alter the probability inside the logarithms (which are used to "model" the sequence) but would not change the probabilities outside, which arose from the actual process which produced each value $k_i \approx p_i K$ times. The resulting expression would be $$H[p_i, q_i] = \sum_i p_i \log{\frac{1}{q_i} }$$, which is called the "cross entropy"—a term which, to me, is unsuggestive of its meaning. 
+
+So the "entropy" here seems to describe the inherent difficulty of predicting the results of a probability distribution. It place some kind of an upper bound on how precisely a sample from that distribution can be predicted. It seems now to have a sense of "innate uncertainty" or perhaps "irreducible complexity".
+
+<br/>
+
+## 3. Limit of a Log-Multinomial
+
+A third and final derivation.
+
+Consider again some process with $N$ uniformly distributed with $p_i = \frac{1}{N}$. We expect a sequence of such $K$ samples to have each $i$ represented $k_i = \frac{K}{N}$ times.  The probability of seeing any particular vector of counts $\mathbf{k} = (k_1, \ldots, k_N)$ will be proportional to a multinomial:
+
+$$
+\text{Pr}(\mathbf{k}) \propto {K \choose \mathbf{k}} = \frac{K!}{{k_1}!\cdots {k_N}!}
+$$
+
+Given one such vector $\mathbf{k}$, you could then estimate the original probabilities of the different $k_i$ as $p_i \approx \frac{k_i}{K}$. We expect that all $k_i \approx \frac{K}{N}$, and indeed, the multinomial is largest when the $k_i$ are all equal.
+
+Now apply *any selection process* to the set of possible outcomes $\mathbf{k}$, such that only certain distributions of the $k_i$ survive. This could mean masking certain outputs, discarding outputs which fail to adhere to some constraint, or it could mean we use some additional evidence which narrows the candidate list.
+
+It will help to have a few examples in mind:
+- "the player folds all hands worse than $99$" (Texas Hold'em, where $N = 52$ cards in the deck, $K$ = 2 cards in a hand)
+- "the word contains an "H" in the first position but does not have any of "OUSE". ([Wordle](https://www.nytimes.com/games/wordle/index.html), $N \approx 1000$ candidate words, $K = 1$)
+- "the measured volume is $1 \text{ Liter}$" ($N$ is the number of states per particle and is inconceivably large, $K \approx 10^{23}$ particles)
+- "if can't metabolize lactose it dies" ($N \approx 4000$ distinct genes which can mutate for *E. coli* or something, $K$ however many cells you want to study )
+- "keep only distributions with mean $\mu = 5$ and variance $\sigma^2 = 10$" ($N, K$ = whatever you want)
+
+What vectors $\mathbf{k}$ should we expect to see now?
+
+The answer is: whichever have the highest probabilities among all those surviving the selection. Which are these? What is the "posterior distribution" after this selection process?
+
+We can make two simplifications to the above probabilities:
+- all of the $\text{Pr}(\mathbf{k})$ have the same denominator (it's just $N^K$), so their relative sizes will depend on the multinomials in the numerator only.
+- we can safely take a logarithm of both sides without changing the relative sizes of any terms.
+
+Therefore the most probable vectors $\mathbf{k}$ will be those for which 
+
+$$
+\begin{align}
+\log \left( \frac{K!}{{k_1}!\cdots {k_N}!} \right) &= \log K! - \log {k_1 !} - \ldots - \log {k_N !} \\
+   &= \log K! - \sum_i \log {k_i !}
+\end{align}
+$$
+
+is greatest.
+
+We can simplify further by applying the Stirling approximation for the logarithm of a factorial: $\log{n!} \approx n\log n - n$. (This assumes that the number of samples $K$ is very large.) The above then becomes
+
+$$
+\begin{align}
+\log K! - \sum_i \log {k_i !} &\approx  (K \log K - K) - \sum_i \left( k_i \log {k_i} - k_i \right) \\
+  &= \underbrace{K \log K}_{(\sum_i k_i)\log K} - K + \underbrace{\sum_i k_i}_{ K} - \sum_i k_i \log k_i \\
+  &= \sum_i k_i \left( \log K - \log k_i \right) \\
+  &= K \sum_i \frac{k_i}{K} \log \frac{K}{k_i} \\
+  &= K \times H\left[ \frac{k_i}{K} \right]
+\end{align}
+$$
+
+... and we find that the largest surviving distributions are exactly those for which the probability distribution implied by $\frac{k_i}{K}$ has the highest Shannon entropy.
+
+The interpretation is this: out of all distributions compatible with the selection process (or a constraint, or any information we have), the most probable are those with the highest entropy. 
+
+In fact, we can plug this expression for the entropy back in to the original probabilities:
+
+$$
+\text{Pr}(\mathbf{k}) \propto \exp{\left( K \times H\left[\frac{k_i}{K}\right]\right)}
+$$
+
+We find that each outcome of the original uniform distribution (in the large-$K$ limit) appears in exact proportion to the above function of its entropy. We can therefore see $e^{K\times H}$ as measuring the "volume of sample space"—but this is not sample space of $k_i$ itself; instead it is the sample space of a *uniform* distribution over all $N$ values of $i$.
+
+I find this clarifying so I'll restate it in terms of $p_i$: the Shannon Entropy $H[p_i]$ determines the relative probability that a very large sample from a *uniform* distribution over the $i$ would produce a distribution of outcomes proportional to $p_i$.
+
+High-entropy distributions are common; the uniform distribution is the highest of all. The growth rate of this probability with respect to the entropy is fantastically high: it goes as ${(e^K)}^H$ and we are taking $K$ to be large, perhaps even infinite.
+
+This is really no different from our earlier "average likelihood per sample" formulation, since the above can be rearranged into
+
+$$
+H[p_i] \sim \frac{1}{K} \log \text{Pr}(k_i = p_i K)
+$$
+
+though this relation is neither an equality (since we've discarded the denominators and approximated the multinomials), nor is it a "proportional to" (since we took a logarithm), instead we might say $H$ "goes as" the above the expression.
+
+The derivation just given is the [Wallis derivation](https://en.wikipedia.org/wiki/Principle_of_maximum_entropy) of the "Principle of Maximum Entropy", which states that the optimal posterior distribution to expect from any system about which we have some partial knowledge is that with the highest Shannon Entropy consistent with our knowledge (or with any constraints we know to apply).
+
+Most standard probability distributions are exactly the maximum-entropy distributions for certain sets of constraints:
+- a uniform distribution has the maximum entropy under no constraints
+- a normal $\mathcal{N}(\mu, \sigma^2)$ has the highest entropy of all distributions on $\mathbb{R}$ with its specific mean and variance.
+- a Bernoulli distribution, which models a flip of an unfair coin with probabilities $(1-p, p)$ on the two-element set $\{0, 1\}$, has the maximum entropy of any distribution on that set with a mean of $p$.
+
+
+All of this is fairly mind-bending to me. It's a strange and nonphysical way of thinking about probability distributions: obviously a Bernoulli distribution—the distribution of an unfair coin—does not arise because you flipped a *fair* coin over and over and threw out any sequences which don't have mean $p$; obviously that is describing a different scenario which would also happen to be Bernoulli-distributed.
+
+Still I find this to be the most elementary derivation of the equation $\sum p \log \frac{1}{p}$ itself: it is the large-$K$ scaling of the multinomial. This suggests the reason for its universality: it is closely related to the frequentist sense of a "probability" itself; a probability $p_i$ is only empirical meaningful, measurable, if one could repeat an identical experiment and see a distribution of outcomes; any finite sequence of samples from such a distribution will always imply some posterior distribution of probabilities with a multinomial shape; this is simply what it means to be a "probability" and the entropy is the limiting form which comes with it.[^KL]
+
+[^KL]: It may be clarifying to know that this argument also works if the underlying distribution is some other distribution $q_i$. In that case the probabilities are $\propto {K \choose \mathbf{k}} \prod_i q_i^{k_i}$, which in the large-$K$ limit implies *minimization* of the *relative* entropy between $p_i$ and $q_i$, $\sum_i p_i \log{\frac{p_i}{q_i}}$, a.k.a. the Kullback-Liebler Divergence. The simpler case of a Shannon entropy falls out if you set $q_i = \frac{1}{N}$.
+
+<br/><hr/><br/>

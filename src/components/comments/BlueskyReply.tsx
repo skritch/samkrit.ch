@@ -52,7 +52,7 @@ const BlueskyReply = ({
     bskyPost = record as BlueskyPost;
   }
 
-  if (depth==0 && skipFirst) {
+  if (depth==0 && !thread.replies && skipFirst) {
     return (
       <p>No comments yet...</p>
     );
@@ -69,7 +69,7 @@ const BlueskyReply = ({
     <div style={{ 
       marginLeft: marginLeft, 
       // borderLeft: hasBorderLeft ? '2px solid #e5e7eb' : 'none', 
-      // paddingLeft: hasBorderLeft ? '12px' : '0'
+      paddingLeft: hasBorderLeft ? '12px' : '0'
     }}>
       {!skipFirst && (
         <div style={{ 

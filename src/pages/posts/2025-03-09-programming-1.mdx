@@ -1,6 +1,7 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Dreaming Up a Programming Language, Part 1"
+title: "Dreaming Up a Programming Language"
+subtitle: "Type Systems"
 date: 2025-03-09
 math: true
 toc: true
@@ -11,8 +12,6 @@ bskyPostCid: "3lxgmvmh2ik2h"
 
 #### Table of Contents
 
-
-# Type System Ergonomics
 
 After months away I have once again picked up the tools of programming, and have once again been assailed by a torrent of frustrations: nothing is *clean*, I cannot express my *intention*, all my ideas are mired in *implementation details*, everything is documented *badly*, if at all... surely we can do better...
 
@@ -27,7 +26,7 @@ But the type systems so far added to high-level dynamic languages seem to be roo
 
 Here then are some things I think any sane language ought to have. (There are no sane languages, as far as I know. Typescript comes closest.) I've never written a programming language, and as such am only lightly familiar with technical terminology. Consider this to be a *user*'s feature-asks, to be treated as you would the requests of any user.
 
-## Constraints
+# Constraints
 
 First up: **constraints**. (This is a catch-all name for "refinement types", "contracts", and "dependent types".)
 
@@ -146,6 +145,7 @@ This of course is what types do already, but when we start to imagine this behav
 - that a type is non-null (in languages where such things are allowed and it's not sufficient to distinguish `int | None` from `int`).
 - a condition that asserts that an object is known to exist in a database or on-disk, perhaps including the timestamp when it was confirmed (a complication, to be sure).
 - a condition that a list is sorted; this is preferable to a dumb wrapper `SortedList` that conveys the information to a reader but carries no semantic information.
+- that a function is linear in an argument, or that a list is linear in its index
 
 These requirements are rather overlapping: a condition for a list to be sorted, say, is a lot like a constraint on a structure. Some of these can be hacked with "tagged" or "branded" types, e.g. in Typescript:
 
@@ -157,7 +157,7 @@ export type SortedList<T> = T[] & Sorted;
 but such a construction does not provide a way to supply further constraints on what "sorted" means. 
 
 
-## Constraint Validation
+# Constraint Validation
 
 Where should constraints be validated? And when?
 
@@ -232,7 +232,7 @@ df: pd.DataFrame[200, {date: str, datetime: DateTime, trip_id: int, length: floa
 I'll concede that re-using the same variable name like this might turn out to be unwise, though.
 
 
-## Anonymous Type Definitions
+# Anonymous Type Definitions
 
 It would often be handy to define a type inline and then refer to it elsewhere. Something like this:
 
@@ -293,7 +293,7 @@ type UserFlags = User['flags'][number]  // strange syntax
 
 As a general rule you can tell what features are desired because people keep building them!
 
-## General Metadata
+# General Metadata
 
 For the programmer, the primary function of "types" is convey "metadata" information through the program structure, as labels on the "pipes" containing the data. This helps save brain space by offloading some of the state to one's tools—which is what tools are for. 
 
@@ -307,7 +307,7 @@ Type constraints make me think of a SQL table definition: the basic constraints 
 - serialization metadata, e.g. to JSON, protobuf, or SQL, which is often annotated with language magic or macros. 
 - a "unique" constraint, which says that only each instance in scope or perhaps in memory must be distinct. This seems intuitive-enough to me, but I'm sure it would be complicated in practice.
 
-### Opaque Type Aliases
+## Opaque Type Aliases
 
 One also ought to be able distinguish, say, a `user_id` from an `event_id` at a language level, even if both are of type "nonnegative `int`". 
 
@@ -336,7 +336,6 @@ You can also use a private constructor:
 class UserId {
   private constructor(readonly value: string) {}
   static from(raw: string): UserId {
-    if (!raw.match(/^[a-z0-9]+$/)) throw new Error("bad id");
     return new UserId(raw);
   }
 }
@@ -344,7 +343,7 @@ class UserId {
 const u = UserId.from("abc123");
 ```
 
-Or in Scala there are a few inequivalent methods:
+In Scala there are a few (technically inequivalent) methods:
 ```scala
 // opaque type in Scala 3
 opaque type Celsius = Double
@@ -374,7 +373,7 @@ I certainly think these patterns should be the norm rather than the excption; ra
 In all likelihood it would make sense to allow the programmer to define their own types of "metadata", and potentially to add their "inference rules" to the compiler such that it can deduce properties from each other. But it would take a prototype to start to see what these would look like from here. 
 
 
-### Anonymous Variables
+## Anonymous Variables
 
 Now another ergonomic feature comes to mind. Once your `user_id` always has type `UserId`, you rarely even need a variable name. In many cases it should be possible to use the type name only, as long as there aren't two values of the same type in scope. Between the two, the variable name contains no information except its string constant, while the type name is linked to all kinds of useful metadata; the type itself at a minimum!
 
@@ -398,9 +397,9 @@ def transfer(amount: {Money, _>0}, fromUser: UserId, toUser: UserId) = {
 }
 ```
 
-At this point if I wonder if I've lost my mind and simply arrived at "variables" after circling the block. But I think there's something here. If I have to pick between a single identifier being a "name" and "type with metadata", I'd rather have the type! A program is just a series of tubes—not all of those tubes need names all the time!
+At this point if I wonder if I've lost my mind and simply arrived at "variable names" after circling the block. But I think there's something here. If I have to pick between a single identifier being a "name" and "type with metadata", I'd rather have the type! A program is just a series of tubes—not all of those tubes need names all the time!
 
-### Implicit Variables
+## Implicit Variables
 
 We could go even farther and write only `#` when the type is known statically:
 
@@ -453,7 +452,7 @@ UserId -> (getUser) -> User -> (loggedInResponse) -> LoggedInResponse
 with the function call pushing data through that graph to generate a `LoggedInResponse | Error`.
 
 
-### Docstrings
+## Docstrings
 
 Related to this, I think of the fairly-common duplication of types and names one uses to help make code like the following legible:
 
@@ -495,7 +494,7 @@ def polar_to_cartesian(#R, #θ):
 with `R, θ, X, Y` all as "typed" variable-names for the various coords.
 
 
-## Applications
+# Applications
 
 At this point I ought to give some more compelling examples of how this extended type system would be used. The clearest cases would be the sorts of boilerplate you put in every script—configuration from a file or environment variable and CLI params. With all the type system elements presented so far, it should be possible to write the configuration and CLI spec for a simple app as, more or less, a single type:
 

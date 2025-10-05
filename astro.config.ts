@@ -4,8 +4,22 @@ import rehypeMathjax from 'rehype-mathjax'
 import remarkToc from 'remark-toc'
 import remarkConsistentHeadingIds from './plugins/remark-consistent-heading-ids.js'
 import mdx from '@astrojs/mdx';
+import { visit } from 'unist-util-visit'
 
 import react from '@astrojs/react';
+
+function removeFootnoteLabel() {
+  return (tree) => {
+    visit(tree, 'element', (node) => {
+      if (node.tagName === 'h2' &&
+          node.properties?.id === 'footnote-label' &&
+          node.properties?.className?.includes('sr-only')) {
+        node.tagName = 'span'
+        node.properties.style = 'display: none;'
+      }
+    })
+  }
+}
 
 export default defineConfig({
   integrations: [mdx({
@@ -14,7 +28,7 @@ export default defineConfig({
       remarkConsistentHeadingIds,
       [remarkToc, { skip: 'references:' }]
     ],
-    rehypePlugins: [rehypeMathjax],
+    rehypePlugins: [rehypeMathjax, removeFootnoteLabel],
   }), react()],
   redirects: {
     // Old Jekyll-style URLs to new Astro URLs

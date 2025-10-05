@@ -1,7 +1,8 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Exterior Algebra Notation 2: Star Indices"
-date: 2025-01-17
+title: "Exterior Algebra II"
+subtitle: "Star Indices"
+date: "2025-01-17"
 math: true
 toc: true
 bskyPostCid: "3lxgmqhe3sk2h"
@@ -110,7 +111,11 @@ $$
 
 The "Laplace expansion in rows" would be $$A_i^j A^{\star j[\star i]}$$, by analogy.
 
-Normally one sees some extra minus-signs in the cofactor $$C_i^j$$, because the normal expression is given in terms of matrix minors. These are equivalent to: $$A^{\wedge (N-1)} (\mathbf{e}_{1} \wedge \ldots \wedge \mathbf{e}_{i-1} \wedge \mathbf{e}_{i+1}\wedge \ldots \wedge \mathbf{e}_{N})$$This differs from the $$\star$$-index in that the vector $$\mathbf{e}_i$$ has been removed "in place" rather than first being transposed to the front of ths list. We can represent this with another special multi-index $$\enclose{horizontalstrike}{i}$$, called "strike-$$i$$". The two differ by a sign, since it takes $$i-1$$ transposition to move $$i$$ from the front of the list to its normal position:
+Normally one sees some extra minus-signs in the cofactor $$C_i^j$$, because the normal expression is given in terms of matrix minors. These are equivalent to:
+
+$$A^{\wedge (N-1)} (\mathbf{e}_{1} \wedge \ldots \wedge \mathbf{e}_{i-1} \wedge \mathbf{e}_{i+1}\wedge \ldots \wedge \mathbf{e}_{N})$$
+
+This differs from the $$\star$$-index in that the vector $$\mathbf{e}_i$$ has been removed "in place" rather than first being transposed to the front of ths list. We can represent this with another special multi-index $$\enclose{horizontalstrike}{i}$$, which I'll call "strike-$$i$$". The two differ by a sign, since it takes $$i-1$$ transposition to move $$i$$ from the front of the list to its normal position:
 
 $$
 (-1)^{i-1} \mathbf{e}_i \wedge \mathbf{e}_{\enclose{horizontalstrike} i} = \Omega  =\mathbf{e}_i \wedge \mathbf{e}_{\star i} 

@@ -9,14 +9,15 @@ interface Props {
   title: string
   url?: string
   math?: boolean
+  bokeh?: boolean
 }
 
-const { title, url, math } = Astro.props;
+const { title, url, math, bokeh } = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <Head title={title} math={math} url={url}/>
+    <Head title={title} math={math} url={url} bokeh={bokeh}/>
     
   </head>
   <body>

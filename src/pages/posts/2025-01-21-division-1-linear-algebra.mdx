@@ -1,6 +1,7 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Division 1: Linear Algebra"
+title: "Division I"
+subtitle: "Linear Algebra"
 date: 2025-01-21
 math: true
 toc: true
@@ -25,10 +26,19 @@ ax = b
 $$
 
 There are three cases:
-1. $$x$$ is the number $$\frac{b}{a}$$.
-2. ... unless $$a$$ is zero, in which case $$x = \frac{1}{0}$$ and there's no solution.
-3. ... unless $$b$$ is also zero, in which case $$x = \frac{0}{0}$$ and any number is a solution.
-
+<br/>
+<hr/>
+**Case 1**: $$x$$ is the number $$\frac{b}{a}$$.
+<hr/>
+<br/>
+<hr/>
+**Case 2**: ... unless $$a$$ is zero, in which case $$x = \frac{1}{0}$$ and there's no solution.
+<hr/>
+<br/>
+<hr/>
+**Case 3**: ... unless $$b$$ is also zero, in which case $$x = \frac{0}{0}$$ and any number is a solution.
+<hr/>
+<br/>
 Easy. Now let's talk about vectors.
 
 ## Scalar / Vector
@@ -39,12 +49,14 @@ $$
 \mathbf{a}\cdot \mathbf{x} = b
 $$
 
-Three cases again:
+Three cases again:[^elemlinalg]
 1. No solution, unless we're in one dimension. The equation fixes the component of $$\mathbf{x}$$ onto $$\mathbf{a}$$ to be $$\frac{\mathbf{a}}{\vert a\vert^2}b$$, but we're free to add any perpendicular vector without changing the answer.
 2. ... unless $$\mathbf{a}$$ is zero, in which case even there are no solutions.
 3. ... unless $$b$$ is also zero, in which case any $$N$$-vector is a solution.
 
-(2) and (3) are the same special cases as in scalar division.
+[^elemlinalg]: For a thorough exploration of this kind of division, see my post on *<a href="/posts/2024-11-01-dimensions/">Elementary Linear Algebra</a>*.
+
+Note (2) and (3) are the same special cases as in scalar division.
 
 For (1), the set of solutions is a "generalized inverse" of the function "dot product with a vector $$\mathbf{a}$$", which I'll write
 
@@ -53,14 +65,14 @@ $$
 $$
 
 This can be thought of in a few ways:
-a. as a *set* of solutions $${(\mathbf{a} \cdot ~)}^{-1}(\mathbf{b}) \{ \mathbf{x} \mid \mathbf{a}\cdot \mathbf{x} = b \}$$
-b. or as a "standard" solution $$\frac{\mathbf{a}}{\vert a\vert^2}b$$ plus any single element from the orthogonal subspace $$\{ \mathbf{\lambda} \mid \mathbf{a}\cdot \mathbf{\lambda} = 0 \}$$
-c. or as a function giving a solution given a choice of vector in the orthogonal subspace: $$\lambda \mapsto \mathbf{x}(\lambda)$$
+- a) as a *set* of solutions $${(\mathbf{a} \cdot ~)}^{-1}(\mathbf{b}) \{ \mathbf{x} \mid \mathbf{a}\cdot \mathbf{x} = b \}$$
+- b) or as a "standard" solution $$\frac{\mathbf{a}}{\vert a\vert^2}b$$ plus any single element from the orthogonal subspace $$\{ \mathbf{\lambda} \mid \mathbf{a}\cdot \mathbf{\lambda} = 0 \}$$
+- c) or as a function to solutions, depending on the choice of element in the orthogonal subspace: $$\lambda \mapsto \mathbf{x}(\lambda)$$
 
-Of these, (a) is most commonly seen, but in this post I'll prefer (c).
+Of these, (a) is most commonly seen, but in this post I'll prefer (c). 
 
-My preferred notation will be as follows: the full inverse be represented by $${(\mathbf{a} \cdot ~)}^{-1}$$, and depending on the context can have any of the above three interpretations as a set, a standard part + a member of a set, or a function to a single value.
-A "fraction" or "division" notation $$\frac{b}{\mathbf{a}}$$ will always stand for the "standard" or "best" part of the inverse. We then use $$\mathbf{\lambda}_{\perp \mathbf{a}}$$ for the "orthogonal" or "complement" term:
+My preferred notation will be as follows. The full inverse be represented by $${(\mathbf{a} \cdot ~)}^{-1}$$, and depending on the context can have any of the above three interpretations as the full affine set, a standard part plus a homogenous set, or a function to a single value.
+A "fraction" or "division" notation $$\frac{b}{\mathbf{a}}$$ will always stand for the "standard" or "natural" part of the inverse. We then use $$\mathbf{\lambda}_{\perp \mathbf{a}}$$ for the "orthogonal" or "complement" term:
 
 $$
 \begin{aligned}
@@ -75,9 +87,14 @@ $$
 \mathbf{x} = \frac{b}{\mathbf{a}} + \mathbf{\lambda}
 $$
 
-The "division" notation is really the point here. This "generalized inverse" with a "division" for a "standard part", will be our 4th "prototype" case of division:
 
-**Case 4**: Division gives a solution but only up to the addition of a term which multiplies to zero, for whatever definition of "multiplies" we're currently using.
+The "division" notation is the main point of all this. This "generalized inverse" with a "division" for a "standard part", will be our 4th "prototype" case of division:
+
+<br/>
+<hr/>
+**Case 4**: Division gives a solution only up to the addition of a term which multiplies to zero, for whatever definition of "multiplies" we're currently using.
+<hr/>
+<br/>
 
 This is non-standard, reader beware, but my aim is to take it as far as I can, as a way of unifying what would otherwise be a number of distinct concepts.
 
@@ -92,7 +109,9 @@ $$
 
 The two copies of $$\mathbf{a}$$ in "$$\mathbf{a} \cdot \frac{b}{\mathbf{a}}$$" simply cancel out. It's right to think of this as just $$b$$ times $$\mathbf{a} \cdot \frac{1}{\mathbf{a}}$$; $$\frac{1}{\mathbf{a}}$$ multiplies against a thing to measure "how many copies of $$\mathbf{a}$$ are in it". It might be convenient to omit the dot product and just write $$\mathbf{a} \cdot \frac{b}{\mathbf{a}} = \mathbf{a} \frac{b}{\mathbf{a}} = b$$. Then we can even write this as $$\frac{\mathbf{a}}{\mathbf{a}}$$. Then we can extend this to multiplication by a *multiple* of $$\mathbf{a}$$ in the obvious way:
 
-$$(c\mathbf{a})\frac{1}{\mathbf{a}} = \frac{(c\mathbf{a})}{\mathbf{a}} = c$$
+$$
+(c\mathbf{a})\frac{1}{\mathbf{a}} = \frac{(c\mathbf{a})}{\mathbf{a}} = c
+$$
 
 and
 
@@ -114,7 +133,7 @@ $$
 \mathbf{x}(\lambda) = \frac{b}{\mathbf{a}} + \lambda{\mathbf{a}_\perp}
 $$
 
-Note that I've used $$(\perp \mathbf{a})$$ for the *subspace*, but $$\mathbf{a}_{\perp}$$ with a subscript for the vector itself. Note also that, although $$\mathbf{a}_{\perp}$$ would seem to be the obvious choice for a second basis vector, it is exactly as suitable as any other vector in $$(\perp \mathbf{a})$$ for the purposes of parameterizing the complement term.
+Note that I've used $$(\perp \mathbf{a})$$ for the *subspace*, but $$\mathbf{a}_{\perp}$$ with a subscript for the vector itself. Note also that, although $$\mathbf{a}_{\perp}$$ would seem to be the obvious choice for a second basis vector, it is exactly as suitable as any other vector in $$(\perp \mathbf{a})$$ for the purposes of parameterizing the complement term; only the value of $\lambda$ will change accordingly—in fact, $\lambda$ can simply be thought of as being defined by division $\frac{\mathbf{x}}{\mathbf{a}_\perp}$.
 
 In $$N$$ dimensions we need $$(N-1)$$ basis vectors, which I will call $$\left\{\mathbf{f}_{2}, \mathbf{f}_{ 3, ...}\right\}$$, reserving $$\mathbf{e}$$ for a basis on the entire space. We can put these in an $$N \times (N-1)$$ matrix $$F_{\perp a}= \left(\mathbf{f}_{ 2}, \mathbf{f}_{ 3, ...}\right)$$; then the vector $$\mathbf{\lambda}$$ will have coordinates in this basis, which can be written as a matrix multiplication:
 
@@ -153,7 +172,8 @@ Before we move on, I'll note one common example that works like this: the integr
 
 $$
 \begin{aligned}
-\frac{df}{dx} = g \longrightarrow f &= {\left(\frac{d}{dx}\right)}^{-1} g \\
+\frac{df}{dx} &= g\\
+ f &= {\left(\frac{d}{dx}\right)}^{-1} g \\
 &= \int g~dx + C
 \end{aligned}
 $$
@@ -177,7 +197,11 @@ Three basic cases:
 
 But if $$\mathbf{b}$$ isn't parallel to $$\mathbf{a}$$, we don't get any of the above. So we'll add a 5th case: 
 
+<br/>
+<hr/>
 **Case 5**: Division can be defined to give a standard part but is not a "generalized inverse" of multiplication. Instead a remainder is left over.
+<hr/>
+<br/>
 
 The remainder case is exactly what occurs for scalar division on integers. If in our original scalar example $$ax = b$$ we had taken all three variables to represent integers, then an inverse $$x = b/a$$ would't necessarily exist. 
 Instead you can either choose a "best" answer, for which a good choice would be floor division $$\lfloor{b/a}\rfloor$$, or you can use floor division but additionally include a "remainder" to get an "exact" solution:
@@ -253,7 +277,12 @@ This is clearly now a case of "dividing by zero". Furthermore these are $$N$$ eq
 
 Secondly, we could expand the space in which $$x$$ lives. This will be our 6th "prototypical" case:
 
-**Case 6**: Division is defined within a larger space of solution.
+<br/>
+<hr/>
+
+**Case 6**: Division is defined as an exact inverse, but within a larger space of solutions.
+<hr/>
+<br/>
 
 Of course this can get out of hand—you could in principle expand the space to *anything*. The trick is to expand it as little as possible while still getting a division operation that's well-defined.
 
@@ -370,7 +399,7 @@ A \mathbf{x} = \mathbf{b}
 $$
 
 We've bumped into the matrix inverse three times already:
-* when we wanted to put coordinates on the $$\mathbf{\lambda}$$ term in the generalized inverse $$\mathbf{x} = \frac{b}{\mathbf{a}} + E_{\perp a} \vec{\lambda}$$
+* when we wanted to put coordinates on the $$\mathbf{\lambda}$$ term in the generalized inverse $$\mathbf{x} = \frac{b}{\mathbf{a}} + F_{\perp a} \vec{\lambda}$$
 * when "expanding the space of solutions" of $$\mathbf{a}x = \mathbf{b}$$ to get $$X \mathbf{a} = \mathbf{b}$$
 * just now when considering the components of a vector $$\mathbf{b}$$ in an arbitrary basis: $$\mathbf{b} = \left(\frac{\mathbf{b}}{\mathbf{e}_1} \right)\mathbf{e}_1 + \left(\frac{\mathbf{b}}{\mathbf{e}_2}\right)\mathbf{e}_2 + \ldots$$
 
@@ -421,14 +450,14 @@ That is the simplest case: the matrix is perfectly invertible, so its "generaliz
 We can also convert the inverse-vectors into regular vectors:
 
 $$
-\mathbf{x} = \left(\frac{\mathbf{b}}{\mathbf{a}_1}, \ldots, \frac{\mathbf{b}}{\mathbf{a}_{N}}\right)^T 
-= \left(\frac{\mathbf{a}_1 \cdot \mathbf{b}}{\vert\mathbf{a}_1\vert^2}, \ldots, \frac{\mathbf{a}_{N}\cdot \mathbf{b}}{\vert\mathbf{a}_{N}\vert^2}\right)^T
+\mathbf{x} = \left(\frac{\mathbf{b}}{\mathbf{A}_1}, \ldots, \frac{\mathbf{b}}{\mathbf{A}_{N}}\right)^T 
+= \left(\frac{\mathbf{A}_1 \cdot \mathbf{b}}{\vert\mathbf{A}_1\vert^2}, \ldots, \frac{\mathbf{A}_{N}\cdot \mathbf{b}}{\vert\mathbf{A}_{N}\vert^2}\right)^T
 $$
 
 The denominators of these fractions are the diagonal elements of $$A^T A$$, because—again—the columns are orthogonal: 
 
 $$
-A^T A = \begin{pmatrix}\vert\mathbf{a}_1\vert^2 \\ & \ddots \\ & & \vert\mathbf{a}_N\vert^2\end{pmatrix}
+A^T A = \begin{pmatrix}\vert\mathbf{A}_1\vert^2 \\ & \ddots \\ & & \vert\mathbf{A}_N\vert^2\end{pmatrix}
 $$
 
 so we can also write $$\mathbf{b}/A$$ in "numerator" form:
@@ -505,7 +534,9 @@ $$
 
 I've used two different symbols $${A \perp}$$ and $${\perp A}$$, since, while we didn't have to distinguish for one-dimensional vectors, for matrix $$A: \mathbb{R}^M \to \mathbb{R}^N$$ the vectors $$\mathbf{\lambda}_{A\perp}$$ and $$\mathbf{b}_{\perp A}$$ will live in different spaces.  The first is the "kernel" or "null space" of vectors which go to zero under $$A$$, while the latter is the "cokernel" of vectors which are not in the image of $$A$$ (and are therefore the kernel of $$1/A$$.) So we could also call the "free parameter" and "remainder" by the names "kernel term" and "cokernel term", for some symmetry.
 
-The following diagram sketches the full picture: $$A$$ maps its row-space to its column-space invertibly, maps its kernel to zero, and maps nothing to its cokernel. The double lines stand for "a one-or-more-dimensional subspace perpendicular to all the rest", so the row-space is the complement of the kernel and column-space is the complement of the cokernel.
+The following diagram sketches the full picture: $$A$$ maps its row-space[^rowspace] to its column-space invertibly, maps its kernel to zero, and maps nothing to its cokernel. The double lines stand for "a one-or-more-dimensional subspace perpendicular to all the rest", so the row-space is the complement of the kernel and column-space is the complement of the cokernel.
+
+[^rowspace]: I am being fairly imprecise here by pretending vectors may be identified with their duals. $A$ doesn't, in fact, do anything to its row space; $A^T$ does.
 
 ![](../../images/division/kernelco.png)
 
@@ -624,7 +655,7 @@ $$
 \mathbf{A}_1 {x}^1 + \mathbf{A}_2 {x}^2 + \ldots = \mathbf{b}
 $$
 
-We can then "solve for" any single $$x^i$$ by wedging both sides of this expression with all of the other columns of $$A$$. The "[star index](https://samkrit.ch/2025/01/17/exterior-algebra-notation-2.html)" $$\mathbf{A}_{\star i}$$ represents the ordering of columns-other-than-$$i$$ such that $$\mathbf{A}_{\star i} = \mathbf{A}_{(\star i)_1} \wedge \mathbf{A}_{(\star i)_2} \wedge \ldots \wedge \mathbf{A}_{(\star i)_{N-1}}$$gives determinant times the $$N$$-volume: $$(\det A)\mathbf{e}_{\wedge 1..N}$$. This can also be seen as the "$$(N-1)$$th" wedge power of the matrix acting on the complement of the basis vector $$\mathbf{e}_i$$, written $$A^{\wedge (N-1)} (\star \mathbf{e}_i$$), where $$\star$$ is the "Hodge Star" operator which gives the $$(N-1)$$-dimensional volume orthogonal to a vector. 
+We can then "solve for" any single $$x^i$$ by wedging both sides of this expression with all of the other columns of $$A$$. The "[star index](https://samkrit.ch/2025/01/17/exterior-algebra-notation-2.html)" $$\mathbf{A}_{\star i}$$ (a non-standard notation) represents the ordering of columns-other-than-$$i$$ such that $$\mathbf{A}_{\star i} = \mathbf{A}_{(\star i)_1} \wedge \mathbf{A}_{(\star i)_2} \wedge \ldots \wedge \mathbf{A}_{(\star i)_{N-1}}$$gives determinant times the $$N$$-volume: $$(\det A)\mathbf{e}_{\wedge 1..N}$$. This can also be seen as the "$$(N-1)$$th" wedge power of the matrix acting on the complement of the basis vector $$\mathbf{e}_i$$, written $$A^{\wedge (N-1)} (\star \mathbf{e}_i$$), where $$\star$$ is the "Hodge Star" operator which gives the $$(N-1)$$-dimensional volume orthogonal to a vector. 
 
 All of the other terms $$\mathbf{A}_j \wedge \mathbf{A}_{\star i} = 0$$ for $$j\ne i$$ because the column $$\mathbf{A}_j$$ appears twice in wedge product. The only one that survives is the $$\mathbf{A}_i$$ term:
 
@@ -837,3 +868,7 @@ All of this is really preliminary work for a larger project—my aim at this poi
 - Matrices requiring Jordan Normal form. Whatever I once knew about this I have long since forgotten, but my understanding is that these too can be diagonalized by a "case 6"-type maneuver, but now by adding "dual numbers" with $$\epsilon^k = 0$$ to the number system. 
 
 That is surely enough for now, though. The next post in this series will be an attempt to express the basic constructs of *exterior* algebra as "divisions"; my hope is that some of these wind up appearing so elementary that they hardly deserve having their own names, but we'll see.
+
+<br/>
+<hr/>
+<br/>

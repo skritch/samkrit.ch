@@ -9,8 +9,6 @@ bskyPostCid: "3lxgmfvnm6s2h"
 
 #### Table of Contents
 
-### The Information of a Generating Function
-
 Consider the binomial generating function $${(x+y)}^N$$:
 * We can read this literally as "$$N$$ copies of a two-state system", where the states $$x$$ and $$y$$ are indistinguishable between the $$N$$ systems.
 * Plug in $$x = y =1$$ and you count the total number of states of $$N$$ 1-bit systems, $$2^N$$.
@@ -20,7 +18,7 @@ Consider the binomial generating function $${(x+y)}^N$$:
 Now: what is the "information" of this g.f.? A few different ideas come to mind, but they contradict into each other. This small post will try them out in turn until we arrive at some clarity.
 
 
-#### 1. Counting States?
+## 1. Counting States?
 
 The expression $$2^N$$ represents the data in an $$N$$-bit system; the information content ought to be $$N \log 2$$ and is just $$N$$ if the $$\log$$ is a $$\log_2$$. 
    
@@ -28,11 +26,13 @@ My immediate instinct is to say that $$N \log{(x+y)}$$ ought to be the informati
    
 So "plugging in 1 to count the total states" is not the same operation as "entropy"; they only coincide when all states are distinct. The "information" ought to make use of the fact that $$x, y$$ are distinct. However you define the entropy of a g.f., it shouldn't be the same for the g.f.s $$({x+y})^N$$ and $$\Pi_i^N (x_i + y_i)$$; the operation of marking certain states as indistinguishable ought to change it—by narrowing the distribution.
 
-#### 2. Shannon?
+## 2. Shannon?
 
 The Shannon entropy of the distribution represented by the fully-expanded g.f. 
 
-$$H\left[p_k = \sum_k {N \choose k} x^k y^{N-k}\right] = \sum_k p_k \ln \frac{1}{p_k}$$
+$$
+H\left[p_k = \sum_k {N \choose k} x^k y^{N-k}\right] = \sum_k p_k \ln \frac{1}{p_k}
+$$
 
 This is not a normalized distribution; its sum is—what else?—$${(x+y)}^N$$. But the entropy of an unnormalized pdf is related to the normalized one by a Leibniz rule: $$H[p_i] = H\left[\frac{1}{Z} \times (Z p_i)\right]$$, where $$Z$$ is a normalization constant, which rearranges into:
 
@@ -42,11 +42,13 @@ $$
 
 So we get for the normalized distribution, with $$p_x = p$$ and $$p_y = 1-p$$: 
 
-$$H\left[p_k = {N \choose k}p^k {(1-p)}^{N-k}\right] = \frac{H\left[p_k = {N \choose k}x^k y^{N-k}\right]}{ {(x+y)}^N} + N \ln {(x+y)}$$
+$$
+H\left[p_k = {N \choose k}p^k {(1-p)}^{N-k}\right] = \frac{H\left[p_k = {N \choose k}x^k y^{N-k}\right]}{ {(x+y)}^N} + N \ln {(x+y)}
+$$
 
 These are just two ways of writing the entropy of the distribution $${N \choose k} x^k y^{N-k}$$, as a function of the values of $$x, y$$. 
 
-#### 3. Shannon again?
+## 3. Shannon again?
 
 But now another idea comes to mind. The Shannon entropy just discussed is arguably _not_ the actual distribution represented by the g.f. $$\sum_k {N \choose k} x^k y^{N-k}$$, which is just distribution over terms $$x^k y^{N-k}$$. If we view these as generic expressions $$z_k$$, then the g.f. is $$\sum_k {N \choose k} z_k$$, representing an unnormalized series with $$p(k) \propto {N \choose k}$$; the normalization constant is $$\sum_k {N \choose k} = 2^N$$. The Shannon entropy of _this_ would be $$H[p_k = {N\choose k}] = -\sum_k {N \choose k} \ln {N \choose k}$$ which is some negative number, and the normalized form would be 
 
@@ -56,7 +58,7 @@ $$
 
 Note this is just the earlier entropy $$H\left[p_k = {N \choose k}x^k {y}^{N-k}\right]$$ for $$x=y=\frac{1}{2}$$, since the factors $$x^k y^{N-k}$$ are then equal to $$2^{-N}$$. Our first stab at the information, $$N \ln 2$$, has popped out—it was the entropy of *something*, but it wasn't the best interpretation of the entropy of our g.f.
 
-#### 4. Composing Entropies
+## 4. Composing Entropies
 
 And one more idea. Doesn't entropy add across independent systems? A product of g.f.s represents a product of systems, so shouldn't $$H[xy] = H[x] + H[y]$$, and $$H[z^N] = NH[z]$$? What does this have to do with the Leibniz rule that makes $$H$$ a derivation $$H[pq] = pH[q] + qH[p]$$? 
    
@@ -66,9 +68,11 @@ Pointwise multiplication is like a dot product: $$\{p_i\} \cdot \{q_i\} = \{p_i 
    
 The Cartesian product of two sets $$\{p_i\} \times \{q_j\} = \{(p_i, q_j)\}$$, and its entropy is, by the previous derivation rule:
 
-$$H[p_i q_j] = \sum_{ij} ( q_j H[p_i]) + p_i H[q_j] = \sum_j q_j H[p_i] + \sum_i p_i H[q] = q H[p_i] + pH[q_j]$$
+$$
+H[p_i q_j] = \sum_{ij} ( q_j H[p_i]) + p_i H[q_j] = \sum_j q_j H[p_i] + \sum_i p_i H[q] = q H[p_i] + pH[q_j]
+$$
 
-and this thing is simply the sum of the entropies $$H[p] + H[q]$$ iff both sets are normalized to 1. So this is the rule I was thinking of, but it only applies to distributions. Then the product of $$N$$ _independent_ copies of the same distribution would be $$H[z^N] = NH[z]$$. But this corresponds to the g.f. $$(x_0 + y_0)(x_1 + y_1) \cdots (x_N + y_N)$$, rather than the g.f. $${(x+y})^N$$, which has additional structure. 
+and this thing is simply the sum of the entropies $$H[p] + H[q]$$ iff both sets are normalized to 1. So this is the rule I was thinking of, but it only applies to distributions. Then the product of $$N$$ _independent_ copies of the same distribution would be $$H[z \times z \times \ldots] = NH[z^{N-1}]$$. But this corresponds to a g.f. $$(x_0 + y_0)(x_1 + y_1) \cdots (x_N + y_N)$$, rather than the g.f. $${(x+y)}^N$$, which has additional structure.  (TODO: check this I got confused)
    
 So my confusion comes from the fact that $$H[pq] = H[p] + H[q]$$ only holds for normalized distributions, and therefore only holds for single numbers or one-element sets if both numbers are 1. The derivation rule is the general one. And neither applies to $${(x+y)}^N$$ because that g.f. has supplied additional information by grouping the different $$x, y$$ terms—its entropy should be correspondingly _lower_ than the full $$N \ln 2$$ we'd get if every combination of $$x$$s and $$y$$s was independent, by the correction term $$\frac{H\left[{N \choose k}\right]}{2^N}$$ from above (which is a negative number since the distribution $$N \choose k$$ is not normalized.)
    
@@ -88,7 +92,7 @@ $$
    
 That last term is the entropy of a single number, $$H(p+q) = - (p+q) \ln (p+q)$$.
 
-#### 5. Counting Again.
+## 5. Counting Again.
 
 In a couple of places we have also encountered the Shannon entropy of a single number, like the $$H(p+q) = - (p+q) \ln (p+q)$$ we just saw. You could apply this to a g.f. like $$H[{(x+y)^N}] = -N {(x+y)}^N \ln (x+y)$$, but I'm not sure what this would mean. 
 
@@ -96,7 +100,7 @@ In a couple of places we have also encountered the Shannon entropy of a single n
 <br/>
 <br/>
 
-### The Entropy of a Generating Function
+## The Entropy of a Generating Function
 
 Well. Those are the different ideas that come to mind when I wonder about the "information of a g.f.". 
 
@@ -137,7 +141,7 @@ $$
 <hr/>
 <br/>
 
-### In Summary
+## In Summary
 
 
 That's enough musing. I'll summarize the progress I've made on untangling my confusions:

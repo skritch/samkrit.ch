@@ -183,7 +183,7 @@ We can visualize the joint distribution of the $$E_A$$-dependent systems, $$A \t
 
 The rectangles widths grow according to $$\Omega_A$$ while their heights shrink according to to $$e^{-\beta E_A}$$. The partition function $$Z$$ is the combined area of the all of the rectangles.[^1]
 
-[^1]: Here I'm plotting $\Omega$ on the axes, not $E$; the $E_i$ values are labeling the bins. If the $E$ distribution were bounded, this would be like plotting against the quantile of $E$ rather than $E$ itself, or against the "position on $E$'s c.d.f.". Basically this is a [copula](https://en.wikipedia.org/wiki/Copula_(statistics)) plot, a concept I only learned about when I was trying to figure out what this thing I was drawing was.
+[^1]: Here I'm plotting $\Omega$ on the axes, not $E$; the $E_i$ values are labeling the bins. If the $E$ distribution were bounded, this would be like plotting against the quantile of $E$ rather than $E$ itself, or against the "position on $E$'s c.d.f.". Basically this is an unnormalized [copula](https://en.wikipedia.org/wiki/Copula_(statistics)) plot, a concept I only learned about when I was trying to figure out what this thing I was drawing was.
 
 Their joint multiplicity $$\Omega(E) = \Omega_A(E) e^{-\beta E}$$ represents the _areas_, which grow and then shrink again:
 
@@ -475,9 +475,9 @@ The Shannon Entropy of the Boltzmann distribution is:
 
 $$
 \begin{align}
-H[p(x)] &= -\sum _x\frac{e^{-\beta E}}{Z(\beta)} \ln \frac{e^{-\beta E}}{Z(\beta)}\\
-     &= \left(\sum_x p(x) \ln Z(\beta)\right) + \left(\sum p(x) \beta E\right)\\
-H[p(x)] &= \ln Z + \beta \langle E \rangle
+H[p(x)] &= -\sum _x\frac{e^{-\beta E(x)}}{Z(\beta)} \ln \frac{e^{-\beta E(x)}}{Z(\beta)}\\
+     &= \left(\sum_x p(x) \ln Z(\beta)\right) + \left(\sum p(x) \beta E(x)\right)\\
+&= \ln Z + \beta \langle E \rangle
 \end{align}
 $$
 
@@ -485,8 +485,8 @@ Clearly this is just another expression for $$\frac{1}{k}S = -\beta F + \beta U$
 
 We also note the fact that the Shannon entropy of any uniform distribution over $$\Omega$$ elements is $$\ln \Omega$$. Then:
 
-* $$H[p(x)] = S(U) = \ln \Omega(U)$$ admits interpretation as the Shannon entropy of *either*:
-  * The Boltzmann distribution
+* $$H[p(x)] = S(U) = \ln \Omega(U)$$ admits interpretation as the Shannon entropy of:
+  * Either the Boltzmann distribution
   * Or of a uniform distribution over the $$\Omega(U)$$ states at the mean energy.
 * While $$-\beta F = \ln Z$$ is the Shannon entropy of a uniform distribution over the $$Z$$ accessible states in the joint system $$A \times B_A$$. 
 
@@ -495,12 +495,16 @@ Turning on the reservoir appears to have "smeared" the fixed state $$U$$, whose 
 If we express the Shannon entropy of a uniform distribution of $$n$$ elements as $$h(n) = -\sum_n \frac{1}{n} \ln \frac{1}{n} = \ln n$$, with $$h(nm) = h(n) + h(m)$$, we can rewrite the Shannon entropy to make these interpretations clear:
 
 $$
-\sum_x p(x) h(e^{-\beta E(x)}) + H[p(x)] = h(Z)
+\begin{align}
+H[p(x)] &= h(Z) - \sum_x p(x) \beta E(x)\\
+  &= h(Z) + \sum_x h(e^{-\beta E(x)}) \\
+\sum_x p(x) h(e^{-\beta E(x)}) + H[p(x)] &= h(Z)
+\end{align}
 $$
 
-which we can read as describing the entropy of two equivalent subdivisions of the system:
-1. choosing one of $$Z$$ total states of $$A \times B_A$$.
-2. choosing a state $$x$$ of systsem $$A$$ with probability $$p(x)$$, then for each $$x$$ choosing one of the $$e^{-\beta E(x)}$$ states of the reservoir $$B_A$$.
+which we can read as describing the entropies of two equivalent subdivisions of the system:
+1. choosing a state $$x$$ of system $$A$$ with probability $$p(x)$$, then for each $$x$$ choosing one of the $$e^{-\beta E(x)}$$ states of the reservoir $$B_A$$.
+2. choosing one of $$Z$$ total states of $$A \times B_A$$.
 
 If we had computed the Shannon entropy of the distribution of energies $$p(E)$$ instead of $$p(x)$$, we would have gotten:
 
@@ -537,7 +541,7 @@ Then:
 * The difference of the two granularities of entropy above, $$H[p(x)] - H[p(E)] = \frac{1}{Z} \sum_E \Omega(E) \ln \Omega(E)$$ is a relative entropy $$D( \frac{\Omega(E)}{Z} ~ \Vert ~ \frac{1}{Z})$$, which we can read as the information gained by grouping the energies—marking states indistinguishable—according to $$\Omega(E)$$.
 * We can view $$\ln Z$$ as the divergence $$D\left(\delta_x ~ \Vert ~ \frac{1}{Z}\right)$$, where $$\delta_x$$ is a distribution localized at any single point $$x$$. Thus the Shannon entropy $$h(Z) = \ln Z$$ of a uniform distribution represents the information to be gained by going from that entire uninformative uniform distribution to any single state.
 
-Hence we can express the Shannon entropies entirely as differences of divergences, capturing the fact that entropy is only ever define relative to some finer-grained description of a system.
+Hence we can express the Shannon entropies entirely as differences of divergences, capturing the fact that entropy is only ever defined relative to some finer-grained description of a system.
 
 $$
 \begin{align}
@@ -638,10 +642,10 @@ $$
 I'll sketch the first constraint-optimization derivation to illustrate the method; the full details can be found in any stat-mech textbook. We add Lagrange multipliers for the constraints to get a Lagrangian function for the problem:
 
 $$
-L = H[p]- \mu\left(\sum p(x) - 1\right) - \beta\left(\sum E(x) p(x) - U\right)
+L = H[p(x)]- \mu\left(\sum p(x) - 1\right) - \beta\left(\sum E(x) p(x) - U\right)
 $$
 
-Here $$H[p]$$ is the Shannon entropy $$- \sum p \ln p$$.
+Here $$H[p(x)]$$ is the Shannon entropy $$- \sum p(x) \ln p(x)$$.
 
 The condition $$\delta L = 0$$ ought to hold for any variation $$\delta p(x)$$, $$\delta \mu$$, or $$\delta \beta$$ at the extremal $$p^*(x)$$. A little calculus leads to:
 

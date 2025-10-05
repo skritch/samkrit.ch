@@ -257,7 +257,9 @@ $$
 
 Clearly you get 2x2 different functions. And we see that you could transform many variables at once by 
 
-$$F(\vec{x}) \to \vec{x}\cdot\vec{s} - F$$
+$$
+F(\vec{x}) \to \vec{x}\cdot\vec{s} - F
+$$
 
 At this point an annoying bit of pedantry comes up which will help to clarify the situation in thermodynamics. The above diagram shows what you get if you view the final doubly-transformed function $$F(\alpha, \beta)$$ as "the original $$F$$ twice-transformed." But if you stop after one transformation, say $$F(\alpha, b)$$, give that a new name $$G(\alpha, b) = F(\alpha, b)$$, and then forget where it came from and transform the second variable $$G(b) \to H(\beta)$$, you get a different set of signs for the "double-transformed" result:
 
@@ -343,6 +345,10 @@ What about entropy $$S$$?
 
 As detailed above, entropy is *not* a Legendre-transform of any of these potentials; instead it is obtained by inverting $$U$$ w.r.t. one of its arguments.
 
+We can therefore create a second cube of "transformed entropies" starting from $$S$$.
+
+![](../../images/thermo/s-potentials.png)
+
 The "Making Sense Of..." paper suggests it would be more intuitive to use Legendre transforms which start from the entropy. They suggest a *dimensionless* entropy $$\mathcal{S} = S/k = \ln \Omega$$. In this approach the duality between $$S$$ and $$T$$ would instead be a duality between inverse-temperature $$\beta = \frac{1}{kT}$$ and energy $$U$$, because $$\beta = \frac{\partial {\mathcal S}}{\partial U}$$. (Note they use $$E$$.)
 
 We're then free to introduce dimensionless analogs of all of the potentials ($$\eta$$ is a dimensionless pressure $$\beta P$$):
@@ -355,11 +361,9 @@ $$
 $$
 
 
-These two "transformed entropies" are easy to relate to back to the normal "transformed energies" because $$T$$ is accessible from $$S$$ as easily as from $$U$$ ($$T = \frac{dU}{dS} = {(\frac{dS}{dU})}^{-1}$$). $$H$$ is weirder, because ordinarily it a function of $$S$$ so it cannot be reached from it by Legendre transform, only by a function inverse. Instead we can imagine a dimensionless enthalpy $$\mathcal{H}(U, N, \eta)$$, or a dimensionless Landau Free Energy in terms of $$\frac{\partial \mathcal{S}}{\partial N}$$. I won't spell everything out, but I tried the calculations for the ideal gas example and, indeed, all the potentials turn out simpler than their energy-based analogs; all are simple $$\ln(\ldots)$$ without any exponentials mixed in. 
+These two "transformed entropies" are easy to relate to back to the normal "transformed energies" because $$T$$ is accessible from $$S$$ as easily as from $$U$$ ($$T = \frac{dU}{dS} = {(\frac{dS}{dU})}^{-1}$$). $$H$$ is weirder, because ordinarily it is a function of $$S$$ and so cannot be reached by Legendre transforms alone; a function inverse is needed. Instead we can imagine a dimensionless enthalpy $$\mathcal{H}(U, N, \eta)$$, or a dimensionless Landau Free Energy in terms of $$\frac{\partial \mathcal{S}}{\partial N}$$. I won't spell everything out, but I tried the calculations for the ideal gas example and, indeed, all the potentials turn out simpler than their energy-based analogs; all are simple $$\ln(\ldots)$$ without any exponentials mixed in. 
 
-We can therefore create a second cube of "transformed entropies" starting from $$S$$. Mostly this approach is only useful to clarify the relationship of $$S$$ to everything else—and, somehow, the knowledge that there *is* a clean way to do this is some relief for my frustration at the version of thing I actually had to learn.
-
-![](../../images/thermo/s-potentials.png)
+Mostly this approach is only useful to clarify the relationship of $$S$$ to everything else—and, somehow, the knowledge that there *is* a clean way to do this is some relief for my frustration at the version of thing I actually had to learn.
 
 And that's it. I wish I'd had all of this back when I first made contact with stat-mech., so I hope it helps someone else.
 

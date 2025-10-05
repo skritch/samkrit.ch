@@ -6,6 +6,7 @@ interface Post {
   url: string;
   frontmatter: {
     title: string;
+    subtitle?: string;
     date: string;
     bskyPostCid?: string;
     math?: boolean;
@@ -34,7 +35,7 @@ const sortedPosts = allPosts
 ---
 
 <BaseLayout title={siteConfig.title} , url={siteConfig.baseUrl}>
-  <h1>{siteConfig.title}</h1>
+  <h1>All Posts</h1>
 
   <section class="posts-list">
     <ul class="post-list">
@@ -46,6 +47,9 @@ const sortedPosts = allPosts
                 <a href={post.url + '/'} class="post-link">
                   {post.frontmatter.title}
                 </a>
+                {post.frontmatter.subtitle &&
+                  <p>{post.frontmatter.subtitle}</p>
+                }
               </h3>
               <time class="post-meta" datetime={post.frontmatter.date}>
                 {parseLocalDate(post.frontmatter.date).toLocaleDateString(

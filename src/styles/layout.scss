@@ -43,18 +43,18 @@
 .header-col-1,
 .header-col-2 {
     width: -webkit-calc(50% - (#{$spacing-unit} / 2));
-    width:         calc(50% - (#{$spacing-unit} / 2));
+    width: calc(50% - (#{$spacing-unit} / 2));
 }
 
 .nav-links {
     .page-link {
         color: $grey-color;
         text-decoration: none;
-        
+
         &:not(:last-child) {
             margin-right: 20px;
         }
-        
+
         &:hover {
             color: $grey-color-dark;
         }
@@ -99,7 +99,7 @@
 .footer-col-1,
 .footer-col-2 {
     width: -webkit-calc(50% - (#{$spacing-unit} / 2));
-    width:         calc(50% - (#{$spacing-unit} / 2));
+    width: calc(50% - (#{$spacing-unit} / 2));
 }
 
 
@@ -120,7 +120,7 @@
     margin-left: 0;
     list-style: none;
 
-    > li {
+    >li {
         margin-bottom: $spacing-unit;
     }
 }
@@ -154,8 +154,19 @@
     }
 }
 
+.post-subtitle {
+    font-size: 22px;
+    letter-spacing: -1px;
+    line-height: 1;
+
+    @include media-query($on-laptop) {
+        font-size: 20px;
+    }
+}
+
 .post-content {
     margin-bottom: $spacing-unit;
+
     h1 {
         font-size: 36px;
 
@@ -195,7 +206,9 @@
 
 .contact {
     text-align: right;
+
     .contact-icon {
+
         // Gaps between nav items, but not on the last one
         &:not(:last-child) {
             margin-right: 20px;

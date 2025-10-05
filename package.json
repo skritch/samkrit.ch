@@ -15,9 +15,11 @@
     "@atcute/bluesky": "^3.2.1",
     "@atcute/client": "^4.0.3",
     "@atcute/lexicons": "^1.1.1",
+    "@bokeh/bokehjs": "^3.8.0",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.8",
     "astro": "^5.13.4",
+    "d3": "^7.9.0",
     "mdast-util-to-string": "^4.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@atcute/lex-cli": "^2.2.0",
+    "@types/d3": "^7.4.3",
     "typescript": "^5.9.2"
   }
 }
