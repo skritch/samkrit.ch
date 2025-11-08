@@ -41,7 +41,7 @@ function makeDiagram(el: SVGSVGElement, { total, weights, displayBits }: Props) 
     const processedData: BarData[] = processWeights(weights, total);
 
     const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-    const width = 600;
+    const width = 740;
     const barHeight = 24;
     const formulaHeight = 20;
     const gapWidth = Math.max(0.5, Math.min(4, 64 / total)); // Dynamic gap width based on total

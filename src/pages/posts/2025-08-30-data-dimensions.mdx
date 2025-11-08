@@ -157,7 +157,7 @@ It's worth it to isolate parts of the overall DAG of a business which can be rea
 
 ![unfolding dag into pipeline/job/run](../../images/datadims/dag_unfolding.png)
 
-## 3. Technology
+## 3. The Tech
 
 Where does the data live? How is it updated?
 
@@ -183,7 +183,7 @@ As a business grows its DAG will grow in complexity, as ever-more tools and plat
 ![a business with a prod stack, data stack, DWH, etc](../../images/datadims/data_stack.png)
 
 
-## 4. Versions
+## 4. Versioning
 
 What about the fact that the implementations of our data pipelines themselves will vary with time? 
 
@@ -217,9 +217,9 @@ Contemplating the variety of version dimensions leads one to the perspective tha
 [^3]: Sometimes I'll see DE tools wrapping up all these different kinds of assets together in ways that strike my organized SWE-brain as heretical: deploying Python scripts by writing them onto S3, or zipping scripts up alongside datasets, or versioning datasets in Git. But I suppose I've just made a case for these kinds of heresies.
 
 
-## 5. Institutional
+## 5. Human Factors
 
-Finally and briefly we have the human factors. Any piece of data has:
+Finally and briefly we have the human factors. Any piece of data has "institutional dimensions":
 - owners: maintainers, internal and external stakeholders...
 - monitoring: accuracy, freshness, validitation...
 - error recover: SLAs, runbooks, alerting policies, retry policies...
@@ -242,3 +242,8 @@ A given dataset has "coordinates" in the space of all these dimensions, and more
 <br/>
 
 The utility of the "dimension diagrams" here is to give a kind of taxonomy to all the dimensions. "Time", say, is a coarse-grained description, and the first thing you might think of; zooming in exposes a world of detail, but it's useful to step back and forth between the two levels of abstraction and to understand how they relate. These dimension diagrams come close to depicting to how I have come to *think* about dimensions, for whatever reasons, so perhaps this approach can be useful.
+
+
+<br/>
+<hr/>
+<br/>

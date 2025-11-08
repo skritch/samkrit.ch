@@ -1,6 +1,7 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: The Partition Function
+title: Statistical Mechanics II
+subtitle: The Partition Function
 date: 2024-09-30
 math: true
 bskyPostCid: "3lxgmf2onwk2h"
@@ -845,42 +846,47 @@ That's probably enough about this, although my mind wanders off in a few more di
 
 <br/>
 
-## $$Z$$ is a few kinds of generating functions at once
+## Moment Generating Functions
 
-We have mentioned that $$Z$$ is a generating function, but it's a little unclear what sort of generating function it is. Its derivatives are moments: $$\langle {(E)}^n\rangle = \frac{1}{Z} \left[ {\left(\frac{\partial }{\partial \beta}\right)}^{n}   \ldots \right]Z(\beta)$$. But the standard moment-generating-function defined in probability theory, which looks like$$M_X(t) = \langle e^{tX} \rangle$$, is normally utilized by evaluating its derivatives at zero: $$\langle x^n \rangle = \left.\frac{d M_X}{d t}\right\vert _{t=0}$$. The moments of $$Z$$ don't take $$\beta = 0$$, though.
+We have mentioned that $$Z$$ is a generating function, but it's a little unclear what sort of generating function it is. Its derivatives are moments: $$\langle {(E)}^n\rangle = \frac{1}{Z} \left[ {\left(\frac{\partial }{\partial \beta}\right)}^{n}   \ldots \right]Z(\beta)$$. But the standard moment-generating-function defined in probability theory, which looks like $$M_X(t) = \langle e^{tX} \rangle$$, is normally utilized by evaluating its derivatives at zero: $$\langle x^n \rangle = \left.\frac{d^n M_X}{d t^n}\right\vert _{t=0}$$. The moments of $$Z$$ don't take $$\beta = 0$$, though.
 
-If you stare at this for a minute you'll realize that $$Z$$ is indeed an m.g.f., but it's the standard m.g.f. of the *uniform* distribution over all $$\sum \Omega(E)$$ energy states. But when we use it to calculate moments of the Boltzmann distribution, we evaluate it not at $$\beta=0$$, but at some other finite $$\beta$$. If we call this point $$\beta^*$$ we can document the three series expansons of $$M, Z$$ and $$\ln Z$$ below:
+If you stare at this for a minute you'll realize that $$Z$$ is indeed an m.g.f., but it's the standard m.g.f. of the *uniform* distribution over all $$\Omega = \sum \Omega(E)$$ energy states. When we use it to calculate moments of the Boltzmann distribution, we evaluate it not at $$\beta=0$$ but at some other finite $$\beta$$. If we call this point $$\beta^*$$ we can document the three series expansons of $$M, Z$$ and $$\ln Z$$ below:
 
 $$
 \begin{align}
-M(-\beta) &= \langle e^{-\beta E} \rangle_\text{uniform} = \frac{1}{\Omega} \sum_E \Omega(E) e^{-\beta E}
+\frac{Z(\beta)}{\Omega} &=  \frac{1}{\Omega}\sum_E  \Omega(E) e^{-\beta E}
 \\
-&= M(0 - \beta)  && \text{(Taylor series around 0)}
+&= \sum_E \frac{\Omega(E) }{\Omega} e^{-\beta E}
+\\
+&= \langle e^{-\beta E} \rangle_\text{uniform}
+\\
+&= M_{\text{uniform}}(-\beta) 
+\\
+&= \sum_E \frac{\Omega(E) }{\Omega} \left( 1 + \frac{(-\beta E)}{1!} + \frac{{(-\beta E)}^2}{2!} + \cdots\right) 
 \\
 &= 
 1
 - {\langle E\rangle}_\text{uniform}\beta
 + {\langle E^2\rangle}_\text{uniform}\frac{\beta^2}{2}
 + \ldots && \text{(m.g.f. for uniform distr.)}
+\\
+&= M_{\text{uniform}}(0 + (-\beta))
 \end{align}
 $$
 
-So $$M(-\beta)$$ is the m.g.f. of a uniform distribution. This is not especially useful: it corresponds to $$\beta = 0$$, i.e. infinite temperature. Now $$Z$$:
+So $$\frac{Z(\beta)}{\Omega} = M_{\text{uniform}}(-\beta)$$ is the m.g.f. of a uniform distribution. This uniform distribution is not especially useful: it corresponds to $$\beta = 0$$, i.e. infinite temperature. Instead we can think of $Z(\beta)$ as an expansion around some $\beta^*$
 
 $$
 \begin{align}
-Z(\beta) &= \Omega \times M(-\beta^* + (\beta^* - \beta)) && (\text{Taylor series around } -\beta^*)\\
-&= \Omega \times \bigg[ M(-\beta^*) \\
-& \quad\quad\quad\quad {+} M'(-\beta^*)\frac{(\beta^* - \beta)}{1!} \\
-& \quad\quad\quad\quad {+} M''(-\beta^*)\frac{ {(\beta^* -\beta)}^2}{2!} + \ldots \bigg]
+Z(\beta) &= Z(\beta^* + (\beta - \beta^*)) \\
+&= Z(\beta^* + d\beta) \\
+&= Z(\beta^*) + Z'\vert_{\beta^*} \frac{d\beta}{1!} + Z''\vert_{\beta^*} \frac{{(d\beta)}^2}{2!} + \cdots
 \\
 &= \left(\sum \Omega(E)e^{-\beta^* E}\right) \\
-&\quad\quad {+} \left(\sum (-E)\Omega(E)e^{-\beta^* E} \right)\frac{(\beta-\beta^*)}{1!} \\
-&\quad\quad {+} \left(\sum (+E^2)\Omega(E)e^{-\beta^* E} \right)\frac{ {(\beta-\beta^*)}^2}{2!} \cdots
+&\quad\quad {+}\left(\sum (-E)\Omega(E)e^{-\beta^* E} \right)\frac{d\beta}{1!} \\
+&\quad\quad {+} \left(\sum (+E^2)\Omega(E)e^{-\beta^* E} \right)\frac{ {(d\beta)}^2}{2!} + \cdots
 \\
-&= Z(\beta^*) \\
-& \quad\quad {-} Z(\beta^*){\langle E\rangle}_\text{Boltzmann}\frac{(\beta-\beta^*)}{1!} \\
-& \quad\quad {+} Z(\beta^*){\langle E^2 \rangle}_\text{Boltzmann}\frac{ {(\beta-\beta^*)}^2}{2!}
+&= Z(\beta^*)\left(1 - {\langle E\rangle}_\text{Boltzmann}\frac{d\beta}{1!} + {\langle E^2 \rangle}_\text{Boltzmann}\frac{ {(d\beta)}^2}{2!} + \cdots\right) 
 \end{align}
 $$
 
@@ -891,30 +897,29 @@ We have to divide out $$Z(\beta^*)$$ to produce a proper m.g.f.:
 $$
 \begin{align}
 \frac{Z(\beta)}{Z(\beta^*)}
-&= 1 \\
-& \quad\quad {-} {\langle E\rangle}_\text{Boltzmann}\frac{(\beta-\beta^*)}{1!}\\
- &\quad\quad {+} {\langle E^2 \rangle}_\text{Boltzmann}\frac{ {(\beta-\beta^*)}^2}{2!}
-\cdots && \text{(m.g.f. for Boltzmann distr.)}
+&= 1 - {\langle E\rangle}_\text{Boltzmann}\frac{d\beta}{1!}\\
+ &\quad\quad {+}~ {\langle E^2 \rangle}_\text{Boltzmann}\frac{ {(d\beta)}^2}{2!}
++ \cdots && \text{(m.g.f. for Boltzmann distr.)}
 \end{align}
 $$
+
 
 Since I've spelled out the $$\beta - \beta^*$$ dependence, you would use this to calculate e.g. $$\langle E \rangle$$ by taking $$\left. \frac{1}{Z}\frac{d Z(\beta)}{d\beta}\right\vert_{\beta = \beta^*}$$. So, like a standard m.g.f., we "set something" to remove the terms we don't care about. But we normally don't distinguish between $$\beta, \beta^*$$, which makes usage simpler.
 
 
-Finally we have the series $$\ln Z$$:
+Finally we have the series $$\ln Z$$. The series expansion of  $$\ln Z$$ appears to generate central moments, but this turns out not to hold after the third moment. This turns out to be a general property of the logarithm $$\ln M_X$$ of any mgf, called the "[cumulant generating function](https://en.wikipedia.org/wiki/Cumulant)". It is:
 
 $$
 \begin{align}
 \ln Z(\beta)
 &= \ln Z(\beta^*) \\
-& \quad\quad {-} {\langle E\rangle}_\text{Boltzmann}\frac{(\beta-\beta^*)}{1!} \\
-& \quad\quad {+} {\mathrm{var}[E]}_\text{Boltzmann}\frac{ {(\beta-\beta^*)}^2}{2!}
+& \quad\quad {-}~ {\langle E\rangle}_\text{Boltzmann}\frac{(\beta-\beta^*)}{1!} \\
+& \quad\quad {+}~ {\langle E^2 \rangle}_\text{Boltzmann}\frac{ {(\beta-\beta^*)}^2}{2!}
 \cdots && \text{(c.g.f. for Boltzmann distr.)}
 \\
 \end{align}
 $$
 
-$$\ln Z$$ appears to generate central moments, but this turns out not to hold after the third moment. This turns out to be a general property of the logarithm $$\ln M_X$$ of any mgf, called the "[cumulant generating function](https://en.wikipedia.org/wiki/Cumulant)".
 
 Note that these are all just normal Taylor series! They will generalize in the usual way to multiple dimensions, so if $$Z$$ involves $$K$$ constraint functions like $$f_k$$, it will have $$K$$ separate $$\frac{\partial }{\partial \lambda_k}$$ first derivative terms, a $$K \times K$$ Hessian for a second derivative, etc., and all of these will have interpretations as expectations and covariances. 
 
@@ -971,8 +976,9 @@ which encodes the constraint as the condition $$\nabla_{x_A} \ln f_A = \nabla_{x
 
 
 
----
+<hr/>
 
+<br/>
 
 # References
 
@@ -981,3 +987,6 @@ which encodes the constraint as the condition $$\nabla_{x_A} \ln f_A = \nabla_{x
 3. "What is Entropy?", John C Baez, [ebook](https://math.ucr.edu/home/baez/what_is_entropy.pdf)
 
 
+<br/>
+<hr/>
+<br/>

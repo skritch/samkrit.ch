@@ -160,7 +160,7 @@ $$
 p_i = \left\{\frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6} \right\}
 $$
 
-If you sample from this distribution (e.g. roll the dice) $K$ times, you'll get some particular sequence $\mathbf{x} = (x_1, x_2, \ldots, x_K)$ with 
+If you sample from this distribution (i.e. roll the dice) $K$ times, you'll get some particular sequence $\mathbf{x} = (x_1, x_2, \ldots, x_K)$ with 
 
 $$
 \begin{align}
@@ -174,29 +174,33 @@ $$
 k_i \approx p_i K
 $$
 
-Suppose we take a vey large number of samples $K$, such that we can safely assume the counts of samples in each bin $k_i$ are approxiamtely equal to these averages. Then the "likelihood" of any *particular* sequence $\mathbf{x}$ with exactly this typical distribution of outcomes $(k_1, \ldots, k_N) = (p_1 K, \ldots, p_n K)$ will be the product of the $k_i$ factors of each of the $p_i$:
+Suppose we take a vey large number of samples $K$, such that we can safely assume the counts of samples in each bin $k_i$ are approximately equal to these averages. Then the "likelihood" of any particular sequence $\mathbf{x}$ with exactly the typical distribution of outcomes 
+
+$$(k_1, \ldots, k_N) = (p_1 K, \ldots, p_n K)$$
+
+will be the product of the $k_i$ factors of each of the $p_i$
 
 $$
 \begin{align}
-\text{Pr}( \mathbf{x} \mid \forall i, \text{exactly } k_i \text{ samples = } i) &= {(p_1)}^{k_1} {(p_2)}^{k_2} \cdots {(p_N)}^{k_N} \\
+\text{Pr}( \mathbf{x} \mid \text{each } i \text{appears exactly }  k_i  \text{ times}) &= {(p_1)}^{k_1} {(p_2)}^{k_2} \cdots {(p_N)}^{k_N} \\
   &= {(p_1)}^{p_1 K} {(p_2)}^{p_2 K} \cdots{(p_N)}^{p_N K} \\
-  &\coloneqq \mathcal{L}[k_i]
+  &\coloneqq \mathcal{L}[\mathbf{x} \mid k_i]
 \end{align}
 $$
 
-We'll call the above the "likelihood of $k_i$", $\mathcal{L}[k_i]$, with the understanding that this stands for the probability of seeing any *single* sequence with counts $k_i$, rather than the probability of seeing *any* sequence with those counts $k_i$ (which would be the above multiplied by the number of such sequences, which is a multinomial coefficient ${K \choose ( k_i )} = \frac{K!}{{k_1}!{k_2}!\cdots {k_N}!}$).
+The notation above $\mathbf{x} \mid k_i$ should be understand as representing the likelihood of seeing any *single* one of sequences with counts $k_i$, rather than the probability of seeing those counts $k_i$ in any order. For that we'd have to multiply by the number of such sequences, a multinomial coefficient ${K \choose ( k_i )} = \frac{K!}{{k_1}!{k_2}!\cdots {k_N}!}$.
 
 If the distribution $p_i$ were uniform with $p_i = \frac{1}{N}$ for all $i$, this likelihood would simply be equal to ${\left(\frac{1}{N}\right)}^K$; every sequence would be equally likely to occur. For each new sample you tack on, the likelihood of that specific sequence would decrease by a factor of $N$, but this rate would never change. Larger values of $N$ would have a greater "cost" in likelihood per sample—for a given length, a larger base set can produce more sequences, and therefore could encode more data or count to a larger number.
 
 For any other distribution the rate of increase of the likelihood would vary, but in the long run it would center on some average rate. Furthermore we could weaken our assumption that our samples occur in exact proportion to $k_i \propto p_i$; this would also alter the likelihood-per-sample, but again we could expect to see the result centered around some average rate.
 
-The above expression for the likelihood is unwieldy because it decreases by a fraction every time we add a new sample. To get something directly interpretable as a "rate", we should a) invert it, b) take a logarithm, and c) divide out $K$:
+The above expression for the likelihood is unwieldy because it decreases by a fraction every time we add a new sample. To get something directly interpretable as a "rate of increase", we should a) invert it, b) take a logarithm, and c) divide out $K$:
 
 
 $$
 \begin{align}
-\frac{1}{K}\log{ \frac{1}{\mathcal{L}[k_i] } } &= \frac{1}{K} \log {\frac{1}{{(p_1)}^{p_1 K}  \cdots {(p_N)}^{p_N K} }}\\
-&= \frac{1}{K} \left[ \log{ \frac{1}{{p_1}^{p_1 K}}} + \ldots + \log{\frac{1}{{p_N}^{p_N K}}} \right]\\
+\frac{1}{K}\log{ \frac{1}{\mathcal{L}[\mathbf{x} \mid k_i] } } &= \frac{1}{K} \log {\frac{1}{{(p_1)}^{p_1 K}  \cdots {(p_N)}^{p_N K} }}\\
+&= \frac{1}{K} \left[ \log{ \frac{1}{{(p_1)}^{p_1 K}}} + \ldots + \log{\frac{1}{{(p_N)}^{p_N K}}} \right]\\
 &= \frac{1}{K} \left[ (p_1 K)\log{{\frac{1}{p_1}}} + \ldots + (p_N K)\log{\frac{1}{p_N}}\right]\\
 &= \sum_i p_i \log{\frac{1}{p_i}} \\
 &= H[p_i]
@@ -206,7 +210,7 @@ $$
 
 And voilà: we have found the same "Shannon entropy" formula as in the first example. The interpretation this time is as the "average log-inverse-likelihood per sample"—meaning what?
 
-We got here by considering the likelihood $\mathcal{L}[k_i]$ of a typical sequence of samples $\mathbf{x}$ from a distribution of known $p_i$ over $N$ bins. This rate of likelihood-per-sample represents the *best you can do* predicting samples from this process with any distribution—if we tried to predict this data with any *other* distribution $q_i$, we would invariably judge it to have a lower likelihood, in the long run and on average, than it would according the true generating distribution $p_i$.[^cross]
+We got here by considering the likelihood $\mathcal{L}[\mathbf{x} \mid k_i]$ of a typical sequence of samples $\mathbf{x}$ from a distribution of known $p_i$ over $N$ bins. This rate of likelihood-per-sample represents the *best you can do* predicting samples from this process with any distribution—if we tried to predict this data with any *other* distribution $q_i$, we would invariably judge it to have a lower likelihood, in the long run and on average, than it would according the true generating distribution $p_i$.[^cross]
 
 [^cross]: Predicting this sequence with some other distribution $q_i$ would alter the probability inside the logarithms (which are used to "model" the sequence) but would not change the probabilities outside, which arose from the actual process which produced each value $k_i \approx p_i K$ times. The resulting expression would be $$H[p_i, q_i] = \sum_i p_i \log{\frac{1}{q_i} }$$, which is called the "cross entropy"—a term which, to me, is unsuggestive of its meaning. 
 
@@ -229,15 +233,17 @@ Given one such vector $\mathbf{k}$, you could then estimate the original probabi
 Now apply *any selection process* to the set of possible outcomes $\mathbf{k}$, such that only certain distributions of the $k_i$ survive. This could mean masking certain outputs, discarding outputs which fail to adhere to some constraint, or it could mean we use some additional evidence which narrows the candidate list.
 
 It will help to have a few examples in mind:
-- "the player folds all hands worse than $99$" (Texas Hold'em, where $N = 52$ cards in the deck, $K$ = 2 cards in a hand)
+- "the player folds all hands worse than $99$" (Texas Hold'em, where $N = 52$ cards in the deck, $K = 2$ cards in a hand)
 - "the word contains an "H" in the first position but does not have any of "OUSE". ([Wordle](https://www.nytimes.com/games/wordle/index.html), $N \approx 1000$ candidate words, $K = 1$)
-- "the measured volume is $1 \text{ Liter}$" ($N$ is the number of states per particle and is inconceivably large, $K \approx 10^{23}$ particles)
-- "if can't metabolize lactose it dies" ($N \approx 4000$ distinct genes which can mutate for *E. coli* or something, $K$ however many cells you want to study )
-- "keep only distributions with mean $\mu = 5$ and variance $\sigma^2 = 10$" ($N, K$ = whatever you want)
+- "the measured volume is $1 \text{ Liter}$" (Ignoring distinguishability considerations, $N$ is the number of possible states per particle and is $O(10^{29})$ according to [ChatGPT](https://chatgpt.com/c/68f7efe4-b274-8330-8512-96bbd0d3ea10), while $K \sim O(10^{25})$ particles)
+- "if can't metabolize lactose it dies" ($N \approx 4000$ distinct genes which can mutate for *E. coli* or something, $K$ however many cells you want to study)
+- "keep only distributions with mean $\mu = 5$ and variance $\sigma^2 = 10$" ($N$ is the discretization of the space, $K$ can be whatever you want, you might consider the limit $K \to \infty$)
 
 What vectors $\mathbf{k}$ should we expect to see now?
 
-The answer is: whichever have the highest probabilities among all those surviving the selection. Which are these? What is the "posterior distribution" after this selection process?
+The answer is: whichever have the highest probabilities among all those surviving the selection. 
+
+Which are these? What is the "posterior distribution" after this selection process?
 
 We can make two simplifications to the above probabilities:
 - all of the $\text{Pr}(\mathbf{k})$ have the same denominator (it's just $N^K$), so their relative sizes will depend on the multinomials in the numerator only.
@@ -300,8 +306,8 @@ Most standard probability distributions are exactly the maximum-entropy distribu
 
 All of this is fairly mind-bending to me. It's a strange and nonphysical way of thinking about probability distributions: obviously a Bernoulli distribution—the distribution of an unfair coin—does not arise because you flipped a *fair* coin over and over and threw out any sequences which don't have mean $p$; obviously that is describing a different scenario which would also happen to be Bernoulli-distributed.
 
-Still I find this to be the most elementary derivation of the equation $\sum p \log \frac{1}{p}$ itself: it is the large-$K$ scaling of the multinomial. This suggests the reason for its universality: it is closely related to the frequentist sense of a "probability" itself; a probability $p_i$ is only empirical meaningful, measurable, if one could repeat an identical experiment and see a distribution of outcomes; any finite sequence of samples from such a distribution will always imply some posterior distribution of probabilities with a multinomial shape; this is simply what it means to be a "probability" and the entropy is the limiting form which comes with it.[^KL]
+Still I find this to be the most elementary derivation of the equation $\sum p \log \frac{1}{p}$ itself: it is the large-$K$ scaling of the multinomial. This suggests the reason for its universality: it is closely related to the frequentist sense of a "probability" itself. A probability $p_i$ is only empirical meaningful, measurable, if one could repeat an identical experiment and see a distribution of outcomes; any finite sequence of samples from such a distribution will always imply some posterior distribution of probabilities with a multinomial shape; this is simply what it means to be a "probability"—and the entropy is the limiting form which comes with that.[^KL]
 
-[^KL]: It may be clarifying to know that this argument also works if the underlying distribution is some other distribution $q_i$. In that case the probabilities are $\propto {K \choose \mathbf{k}} \prod_i q_i^{k_i}$, which in the large-$K$ limit implies *minimization* of the *relative* entropy between $p_i$ and $q_i$, $\sum_i p_i \log{\frac{p_i}{q_i}}$, a.k.a. the Kullback-Liebler Divergence. The simpler case of a Shannon entropy falls out if you set $q_i = \frac{1}{N}$.
+[^KL]: It is clarifying that this argument also works if the underlying distribution is some other distribution $q_i$. In that case the probabilities are $\propto {K \choose \mathbf{k}} \prod_i q_i^{k_i}$, which in the large-$K$ limit implies *minimization* of the *relative* entropy between $p_i$ and $q_i$, $\sum_i p_i \log{\frac{p_i}{q_i}}$, a.k.a. the Kullback-Liebler Divergence. The simpler case of a Shannon entropy falls out if you set $q_i = \frac{1}{N}$.
 
 <br/><hr/><br/>

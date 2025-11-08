@@ -1,6 +1,7 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: Thermodynamics and Legendre Transforms
+title: Statistical Mechanics I
+subtitle: Thermodynamic Legendre Transforms
 date: 2024-08-19
 math: true
 bskyPostCid: "3lxgmakoh222h"
@@ -8,9 +9,10 @@ bskyPostCid: "3lxgmakoh222h"
 import { Image } from 'astro:assets';
 import legendreOld from '../../images/thermo/legendre-old.png';
 
+
 Statistical mechanics is introduced as the unified theory explaining thermodynamics—but nobody taking it even understands thermo. Derivations in stat-mech tend to arrive at some formula for a Helmholtz Free Energy, or Gibbs, or one or another definition of the specific heat—but so what? These things are all too arbitrary and disconnected to compress easily into memory, and the derivations make use of innumerable seemingly-arbitrary partial derivatives; getting from one expression to any other amounts to navigating a labyrinth. 
 
-This was my experience, anyway, and none of my peers seemed to understand it any more than I did. Here are, years later, some resources to help make sense of things.
+This was my experience, anyway, and none of my peers seemed to understand it any more than I did. Here, years later, are some resources to help make sense of things.
 
 #### Table of Contents
 
@@ -50,9 +52,9 @@ Next we have three potentials which relate to the energy by "swapping" the entro
 </div>
 
 
-Think of Helmholtz as the "something like the energy", but specifically in a closed container where you can control the temperature and $$N, V$$ are fixed. This is a more useful notion than the energy itself, as the energy is a function of $$S$$—though it must be the case that you could parameterize energy by temperature; I don't understand why this isn't done. Gibbs additionally gives control over the external pressure—appropriate for a vial of liquid open to the air. The relation $$G =\mu N$$, though particularly simple, only holds when $$U$$ is a function of no other variables than the ones given above.
+Think of Helmholtz as the "something like the energy", but specifically in a closed container where you can control the temperature and $$N, V$$ are fixed. This is a more useful notion than the energy itself, as the energy is a function of $$S$$—effectively this is what it takes to parameterize energy by temperature. Gibbs additionally gives control over the external pressure—appropriate for a vial of liquid open to the air. The relation $$G =\mu N$$, though particularly simple, only holds when $$U$$ is a function of no other variables than the ones given above.
 
-Enthalpy I confess to not understanding the point of at all.
+Enthalpy I do not understand the point of at all.
 
 We can additionally swap the $$N/\mu$$ relation:
 
@@ -124,14 +126,11 @@ But this gives no insight at all. Why those lines? Why would anyone DO that?
 
 I tried an article called "[Making Sense Of the Legendre Transform](https://arxiv.org/abs/0806.1147)", but it came up short of making sense of things. It was a post on [ForeXiv](https://blog.jessriedel.com/2017/06/28/legendre-transform/) which finally offered, to me, a cogent explanation of the Legendre Transform for the first time.
 
-The "transform" in qeuestion turns an $$F(x)$$ into a $$G(s)$$ as: 
+The "transform" in question turns an $$F(x)$$ into a $$G(s)$$ as: 
 
 $$
 G(s) \to \max_x (xs - F(x))
 $$
-
-which for suitable $$F$$ can be written without the $$\max$$ (or $$\min$$)
-
 
 The right view is this. To take the Legendre transform of a convex function $$F(x)$$, you:
 1. Take a derivative $$F(x) \to f(x) = \frac{dF}{dx}$$
@@ -181,7 +180,7 @@ Apparently, there are three equivalent ways to calculate $$G(s)$$ once you have 
 
  
 A few notes:
-* For convex functions, the transform "conserves" all of the information in the function, as can be seen in the diagram above. Thus if a function has multiple arguments like $$F(x, y)$$, then taking its Legendre transform can be thought of as a reparameterization of *one* of its arguments in of terms the derivative w.r.t. that argument. It's as if we had a blackbox with an inlet that says "takes $$x$$s at a rate of $$F'$$", and we swapped it to now take $$F'$$s at a rate of $$x$$." It "wants" to be written like $$F(x, y) \to F(\tilde{x}, y)$$, but this steps on with our normal notation, as the new function almost certainly doesn't have the same functional form as the original $$F$$.
+* For convex functions, the transform "conserves" all of the information in the function, as can be seen in the diagram above. Thus if a function has multiple arguments like $$F(x, y)$$, then taking its Legendre transform can be thought of as a reparameterization of *one* of its arguments in terms of the derivative w.r.t. that argument. It's as if we had a blackbox with an inlet that says "takes $$x$$s at a rate of $$F'$$", and we swapped it to now take $$F'$$s at a rate of $$x$$." It "wants" to be written like $$F(x, y) \to F(\tilde{x}, y)$$, but this steps on with our normal notation, as the new function almost certainly doesn't have the same functional form as the original $$F$$.
 * We're not thinking about the lower bounds of integration, but all three terms in the Legendre formula $$F + G = xs$$ are really integrals:
 
   $$
@@ -375,4 +374,6 @@ And that's it. I wish I'd had all of this back when I first made contact with st
 - Pathria & Beale
 
 
+<br/>
 <hr/>
+<br/>

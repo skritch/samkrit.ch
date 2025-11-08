@@ -368,9 +368,9 @@ type Celsius = number;
 
 do what you want; the type-checker will never catch any mistakes with this pattern.
 
-I certainly think these patterns should be the norm rather than the excption; rather than passing around `user_id: Int` everywhere, and the type checker needs to be designed such that it understands this and can work with it efficiently. The right idea might be to always "tag" subtypes, but not "opaquely": a `UserId` is still a subtype of `Int` even though it is also definitely a `UserId`. In some instances it might make sense for a cast of `Int` to `UserId` would require validation, but the condition "is a `UserId`" is un-validatable, so it has to be asserted with the "`x as UserId`" sort of construction from before. I imagine this level of tagging would be stripped at runtime, or something. In any case this should be a first-class language construct, and perhaps the default practice rather than an exceptional case—I think we'd get used to language which did this pretty quickly.
+I certainly think these patterns should be the norm rather than the excption; rather than passing around `user_id: Int` everywhere, and the type checker needs to be designed such that it understands this and can work with it efficiently. The right idea might be to always "tag" subtypes, but not "opaquely": a `UserId` is still a subtype of `Int` even though it is also definitely a `UserId`. In some instances it might make sense that a cast of `Int` to `UserId` would require validation, but the condition "is a `UserId`" is un-validatable, so it has to be asserted with the "`x as UserId`" sort of construction from before. I imagine this level of tagging would be stripped at runtime, or something. In any case this should be a first-class language construct, and perhaps the default practice rather than an exceptional case—I think we'd get used to a language which did this pretty quickly.
 
-In all likelihood it would make sense to allow the programmer to define their own types of "metadata", and potentially to add their "inference rules" to the compiler such that it can deduce properties from each other. But it would take a prototype to start to see what these would look like from here. 
+In all likelihood it would make sense to allow the programmer to define their own types of "metadata", and potentially to add their "inference rules" to the compiler such that it can deduce properties from each other. But at this point I exceed the limits of imagination; a prototype would be needed. 
 
 
 ## Anonymous Variables
@@ -553,7 +553,9 @@ What holds our languages back, I speculate, is the hewing to a "type system" fro
 With all that said, the next post in this series will step out of the weeds of single types and variables to look at programming from the opposite end, where I'll try to put into words some of the features of high-level program organization which our present-day languages are already trying to converge to.
 
 
-
+<br/>
+<hr/>
+<br/>
 
 
 
