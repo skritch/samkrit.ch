@@ -1,6 +1,8 @@
 ---
 import { siteConfig } from "../data/site.ts";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { parseLocalDate } from "../utils/date.ts";
+import { toRoman } from "../utils/formatting.ts";
 
 interface Post {
   url: string;
@@ -12,14 +14,29 @@ interface Post {
     math?: boolean;
     preview?: boolean;
     description?: string;
+    series?: {
+      name: string;
+      part: number;
+    };
   };
 }
 
-// Helper function to parse date as local
-const parseLocalDate = (dateString: string) => {
-  const [year, month, day] = dateString.split("T")[0].split("-").map(Number);
-  return new Date(year, month - 1, day);
-};
+function getDisplayTitle(post: Post): string {
+  if (post.frontmatter.series) {
+    const seriesName = post.frontmatter.series.name;
+    const romanPart = toRoman(post.frontmatter.series.part);
+    return `${seriesName} ${romanPart}`;
+  }
+  return post.frontmatter.title;
+}
+
+function getDisplaySubtitle(post: Post): string | undefined {
+  if (post.frontmatter.series) {
+    return post.frontmatter.title;
+  }
+  return post.frontmatter.subtitle;
+}
+
 
 // Get all posts and sort by date (newest first)
 const allPosts = Object.values(
@@ -45,10 +62,10 @@ const sortedPosts = allPosts
             <article class="post-preview">
               <h3>
                 <a href={post.url + '/'} class="post-link">
-                  {post.frontmatter.title}
+                  {getDisplayTitle(post)}
                 </a>
-                {post.frontmatter.subtitle &&
-                  <p>{post.frontmatter.subtitle}</p>
+                {getDisplaySubtitle(post) &&
+                  <p>{getDisplaySubtitle(post)}</p>
                 }
               </h3>
               <time class="post-meta" datetime={post.frontmatter.date}>

@@ -1,18 +1,21 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: Reaction Networks II
-subtitle: Equilibria and Symmetries
+title: "Equilibria and Symmetries"
 date: 2024-10-15
 math: true
 bskyPostCid: "3lxgmlx5krc2h"
+series:
+  name: "Reaction Networks"
+  part: 2
 ---
+
+
 
 #### Table of Contents
 ## Introduction
 
-This is Part 2/? of a series.
 
-In <a href="/posts/2024-10-06-reaction-networks-1/">part 1</a> we encountered the following "levels of abstraction" of Reaction Networks
+In  we encountered the following "levels of abstraction" of Reaction Networks
 0. Equilibria: the behavior in the $$t \to \infty$$ limit.
 1. Population Dynamics: described by the Rate Equation itself. (Or continuous dynamics?)
 2. Stochastic dynamics: described by the Master Equation
@@ -168,13 +171,15 @@ $$
 
 But look—the expression in the last line $$\left(\frac{ {\lambda_i}^{n_i}}{n_i!} e^{-a_i}\right)$$ is nothing but a Poisson distribution: 
 
-$$n_i \sim \text{Poisson}(\lambda_i)$$
+$$
+n_i \sim \text{Poisson}(\lambda_i)
+$$
 
 So our full distribution is a product of independent Poissons with means: $$\bar{\lambda} = \langle \bar{N} \rangle$$; of course I knew this when I called them $$\lambda$$. In tuple notation we can write this whole combination as $$\bar{n} \sim \text{Poisson}(\bar{\lambda})$$. 
 
 We could also call these product-of-Poisson distributions "coherent states", borrowing from quantum mechanics, where the same distribution appears and acts in a similar way. I will call them "Poisson states", however, to avoid introducing too much jargon.
 
-Recapping, we have found that, if a Poisson state satisfies the Master Equation, then its expectation $$\langle \bar{N} \rangle$$ also will satisfy the Rate Equation. Apparently this works because the Poisson states are eigenstates of the $$a^-$$ operator and therefore of $$N^{k \downarrow} = {(a^+)}^k{(a^-)}^s$$, but the physical meaning of this fact is obscure to me. 
+Recapping, we have found that, if a Poisson state satisfies the Master Equation, then its expectation $$\langle \bar{N} \rangle$$ also will satisfy the Rate Equation. Apparently this works because the Poisson states are eigenstates of the $$a^-$$ operator and therefore of $$N^{k \downarrow} = {(a^+)}^k{(a^-)}^k$$, but the physical meaning of this fact is obscure to me. 
 
 These results are found in a similar Q.M.-inspired notation in [this paper](https://arxiv.org/pdf/1306.3451) of Baez, though the results themselves are older. I have tried, though, to present the derivation in the same way you might arrive at it yourself.
 
@@ -257,10 +262,10 @@ In the last line I've defined $$d\bar{X}_\bar{\kappa}/dt$$ to be the contributio
 
 From the above form of the Rate Equation we see that the "complex-balance" condition on $$\bar{X}(t)$$ automatically solves the Rate Equation as well, even if we hadn't assumed that. If the complexes are balanced, the species must be too—this is rather obvious; the weaker condition follows from the stronger one.
 
-To say this another way—we have encountered s of Rate-Equation solutions:
+To say this another way, observe that we have encountered three kinds of Rate-Equation solutions:
 1. (Trivial) All $$\bar{k}_r' = \bar{k}_r$$; this is a network that does nothing.
 2. (Complex-balance) All complexes have zero time-derivative, $$d\bar{X}_{\bar{\kappa}}/dt = 0$$. 
-3. (Detailed-balance?) All species have zero time-derivative, $$d\bar{X}/dt = 0$$
+3. (Detailed-balance) All species have zero time-derivative, $$d\bar{X}/dt = 0$$
 
 (1) implies _all_ states are solutions of (2) and (3), but this isn't interesting. Note that this is a condition
 on networks rather than on states.
@@ -284,7 +289,7 @@ Both of these are really results about the "reduced" network on complexes, but t
 * how many of these complex-balanced solutions are there?
 * are they stable?
 
-To answer these we'll start to look at the "symmetries"—also called "conserved quantities" or "invariants"—of a reaction network. This will also offer an example of the Poisson-state methods from the previous sections.
+To answer these we'll start to look at the "symmetries"—i.e. the "conserved quantities" or "invariants"—of a reaction network. This will also offer an example of the Poisson-state methods from the previous sections.
 
 We consider, following Baez, a simple reversible network with two reactions: $$\alpha$$ creates two $$A$$ molecules from a $$B$$, and $$\beta$$ creates a $$B$$ from two $$A$$s:
 
@@ -311,7 +316,7 @@ $$
 
 Note that both equations can be factored into somewhat simpler forms, because the network consists of only two reactions between the same two species.
 
-Note also that the Rate Equation will be satisfied for any $$\bar{X}$$i wth $$\beta {(X_A)}^2 = \alpha X_B$$. At any such concentrations the rates of the two reactions are equal and the net change in concentration is zero. 
+Note also that the Rate Equation will be satisfied for any $$\bar{X}$$ wth $$\beta {(X_A)}^2 = \alpha X_B$$. At any such concentrations the rates of the two reactions are equal and the net change in concentration is zero. 
 
 Now we observe that time-evolution by the Master equation can never alter the quantity $$n_A + 2n_B$$ from its initial value; hence the following operator can be said to be a "symmetry" or "conserved quantity" of the system:
 
@@ -323,7 +328,7 @@ Z &= N_A + 2N_B \\
 \end{aligned}
 $$
 
-Here I've given the name $$\bar{n}_z$$ to the conserved tuple $$(1, 2)$$, because this tuple acts like a "particle number" of something _other_ than the species in our reaction. In a network representing chemical reactions there ought to be such a conserved operator for each underlying _element_; in particle physics there would be an operator for each conserved quantum number like "lepton number". In this example it clearly corresponds to the total number of $$A$$ atoms, if we interpret $$B$$ as representing a diatomic molecule of two $$A$$s. But it is not the same as $$n_A$$, which counts the free (as opposed to bound) $$A$$ _molecules_, so we use a different name which is still suggestive of a "particle number". (I could see renaming $$Z$$ to $$N_Z$$ too, but I won't for now.)
+Here I've given the name $$\bar{n}_z$$ to the conserved tuple $$(1, 2)$$, because this tuple acts like a "particle number" of something _other_ than the species in our reaction. In a network representing chemical reactions there ought to be such a conserved operator for each underlying element, e.g. "Sodium"; in particle physics there would be an operator for each conserved quantum number like "lepton number". In this example it clearly corresponds to the total number of $$A$$ atoms, if we interpret $$B$$ as representing a diatomic molecule of two $$A$$s. But it is not the same as $$n_A$$, which counts the free (as opposed to bound) $$A$$ _molecules_, so we use a different name which is still suggestive of a "particle number". (I could see renaming $$Z$$ to $$N_Z$$ too, or $n_z$ to $z$, but I won't for now.)
 
 In the generating-function representation we can write the action of this operator on a state $$\psi(\bar{x})$$ as:
 
@@ -338,7 +343,7 @@ Z\psi  &= \left(x_a \frac{\partial }{\partial x_A} + 2 x_B \frac{\partial }{\par
 \end{aligned}
 $$
 
-In the last line I've used $$z_\bar{n}$$ to represent a particular *eigenvalue* of the $$Z$$ operator.
+In the last line I've used $$z_\bar{n}$$ to represent a particular eigenvalue of the $$Z$$ operator.
 
 Apparently, any monomial $$\bar{x}^\bar{n}$$ is an eigenstate of $$Z$$:
 
@@ -346,13 +351,13 @@ $$
 Z \bar{x}^\bar{n} = (n_A + 2n_B)\bar{x}^\bar{n} = z_{\bar{n}} \bar{x}^\bar{n}
 $$
 
-Any state for which $$2n_A + n_B = n_z$$ will have the same eigenvalue. Usually there are a great many, but for very small $$n_z$$ there might be only a few, for example $$n_z=5$$ has only three:
+Any state for which $$2n_A + n_B = z$$ will have the same eigenvalue. Usually there are a great many, but for very small $$n_z$$ there might be only a few, for example $$n_z=5$$ has only three:
 
 $$
 (n_A, n_B) = \begin{cases} (5, 0) \\ (3, 1) \\ (1, 2) \\\end{cases}
 $$
 
-We can visualize this on a grid of $$n_A, n_B$$. Any line of gridpoints related by a multiple of $$(2, -1)$$ will have the same $$n_z$$ value; a few examples are visualized below:
+We can visualize this on a grid of $$n_A, n_B$$. Any line of gridpoints related by a multiple of $$(2, -1)$$ will have the same $$z$$ value; a few examples are visualized below:
 
 ![integer states with different Z eigenvalues](../../images/reaction2/symm-discrete-states.png)
 
@@ -525,18 +530,18 @@ We have seen, for the Master Equation:
 * Furthermore, time-evolution will operate separately on components of distinct $$z$$, and any equilibria will be a linear combination of independent equilibria on each component.
 
 These facts amount to [Noether's Theorem](https://en.wikipedia.org/wiki/Noether%27s_theorem) for reaction networks. The intuitive form of this theorem is:
-* if, for some operator $$Z$$, every "transition" $$\bar{n} \to \bar{n}'$$ defined by the operator $$H$$ links states with the same eigenvalue $$z$$ of $$Z$$
+* if, for some operator $$Z$$, every "transition" $$\bar{n} \to \bar{n}'$$ defined by the operator $$H$$ which links states with the same eigenvalue $$z$$ of $$Z$$
 * ...then no amount of time-evolution $$e^{tH}$$ can ever take a state of one $$z$$ into another; eigenvalues of $$Z$$ are therefore conserved by time-evolution.
 
 This relationship between $$H$$ and $$Z$$ turns out to have a number of equivalent mathematical expressions. A few of these are:
 
 $$
-\begin{aligned}
+\begin{align}
 [Z, H] &= 0\\
 (Z_\bar{n} - Z_{\bar{n}'}) H_{\bar{n}', \bar{n}} &= 0\\
 \langle ZH\rangle_\psi = \langle Z^2 H\rangle_\psi &= 0, \forall \psi\\
 \frac{d }{d t} \left( \mathrm{var}_\psi Z \right) &= 0, \forall \psi
-\end{aligned}
+\end{align}
 $$
 
 To read these, recall that our $$\psi$$ are p.d.f.s, so an expectation is taken $$\langle F \rangle_\psi = \sum_\bar{n} F_\bar{n}\psi_{\bar{n}}$$ and a time derivative is
@@ -578,6 +583,7 @@ This Noether theorem is fairly trivial: $$Z$$ is constant on connected component
 ## Symmetries of Poisson States
 
 Now we'll move on to the second question from above. This was:
+
 2. If we start with a _Rate Equation_ equilibrium solution, and construct a Poisson solution to the Master Equation using the ACK Theorem, what can a symmetry $$Z$$ tell us about this solution in particular?
 
 Any Rate-Equation equilibrium solution for our example network will have $$\beta X_A^2 = \alpha X_B$$. 

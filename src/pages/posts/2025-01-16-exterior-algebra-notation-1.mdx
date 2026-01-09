@@ -1,19 +1,18 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Exterior Algebra I"
-subtitle: "Multi-Indices"
+title: "Multi-Indices"
 date: "2025-01-16"
 math: true
 toc: true
 bskyPostCid: "3lxgmpcccik2h"
+series:
+  name: "Exterior Algebra"
+  part: 1
 ---
 
 
 
 
-*Part of a series on Exterior Algebra:*
-1. *(This post)*
-2. *<a href="/posts/2025-01-17-exterior-algebra-notation-2/">Star Indices</a>*
 
 #### Table of Contents
 
@@ -79,22 +78,41 @@ The wedge product of two vectors in the tensor product basis looks like
 $$
 \begin{aligned}
 \mathbf{u} \wedge \mathbf{v} &=  (u^1 \mathbf{e}_1 + u^2 \mathbf{e}_2) \otimes (v^1 \mathbf{e}_1 + v^2 \mathbf{e}_2) - (v^1 \mathbf{e}_1 + v^2 \mathbf{e}_2)\otimes (u^1 \mathbf{e}_1 + u^2 \mathbf{e}_2) \\
-  &= (u^1 v^2 - v^1 u^2)(e_1 \otimes e_2) + (u^2 v^1 - v^2 u_1)(e_2 \otimes e_1)\\
+  &= (u^1 v^2 - v^1 u^2)(\mathbf{e}_1 \otimes \mathbf{e}_2) + (u^2 v^1 - v^2 u_1)(\mathbf{e}_2 \otimes \mathbf{e}_1)\\
+  &= \sum_{i_1, i_2} \epsilon^{i_1, i_2} u^{i_1}v^{i_2}\mathbf{e}_{i_1 \otimes i_2} \\
+  &= \sum_I \epsilon^I u^{i_1}v^{i_2}\mathbf{e}_{\otimes I} \\
+
 \end{aligned}
 $$
 
-**Permutation Basis**. The basis of $$\mathbf{e}_{\wedge I}$$, i.e. as (1) but with wedge products in the place of tensor products. The indices still range over all $$N^k$$ values, but only those without any duplicates survive, for a total of $$\frac{N!}{(N-k)!}$$ components. Such an expression is manifestly antisymmetric as a tensor, although its coefficients are not necessarily antisymmetric in their indices. I'll call this the "permutation basis", because all permutations of each possible *set* of indices are included in it.
+In the last line we are stuck using $i_1, i_2$ to refer to the explicit indices within the multi-index $I$.
 
-There are two variants of this; the second has antisymmetrized coefficients but therefore has to divide by $$\frac{1}{k!}$$ to avoid double-counting:
+**Permutation Basis**. The basis of $$\mathbf{e}_{\wedge I}$$, i.e. as (1) but with wedge products in the place of tensor products. The indices still range over all $$N^k$$ sequences of indices, but only those without any duplicates survive, for a total of $$\frac{N!}{(N-k)!}$$ components. Such an expression is manifestly antisymmetric as a tensor, although its coefficients are not necessarily antisymmetric in their indices; they will, however, be manifestly antisymmetric when the tensor results from a wedge product of vectors. I'll call this the "permutation basis", because all permutations of each possible *set* of indices are included in it.
+
+There are two variants of this; the first is
 
 
 $$
 \begin{aligned}
-\mathbf{u} \wedge \mathbf{v}  &= u^1 v^2 (e_1 \wedge e_2) + u^2 v^1 (e_2 \wedge e_1)\\
-  &= \frac{1}{2}((u^1 v^2 -v^2 u^1) (e_1 \wedge e_2) + (u^2 v^1 -u^1 v^2)(e_2 \wedge e_1))\\
+\mathbf{u} \wedge \mathbf{v}  &= u^1 v^2 (\mathbf{e}_1 \wedge \mathbf{e}_2) + u^2 v^1 (\mathbf{e}_2 \wedge \mathbf{e}_1)\\
+  &= \sum_{i_1, i_2} u^{i_1}v^{i_2}\mathbf{e}_{i_1 \wedge i_2} \\
+  &= \sum_I u^{i_1}v^{i_2}\mathbf{e}_{\wedge I} \\
 \end{aligned}
 $$
 
+while the second has antisymmetric coefficients therefore has to divide by $$\frac{1}{k!}$$ to avoid double-counting:
+
+$$
+
+\begin{aligned}
+\mathbf{u} \wedge \mathbf{v}  &= \frac{1}{2}((u^1 v^2 -v^2 u^1) (\mathbf{e}_1 \wedge \mathbf{e}_2) + (u^2 v^1 -u^1 v^2)(\mathbf{e}_2 \wedge \mathbf{e}_1))\\
+  
+  &= \frac{1}{2} \sum_{i_1, i_2, j_1, j_2}  \epsilon^{i_1, i_2}_{j_1, j_2} u^{j_1}v^{j_2}\mathbf{e}_{i_1 \wedge i_2} \\
+  &= \frac{1}{2} \sum_{I, J} \epsilon_J^I u^{j_1}v^{j_2}\mathbf{e}_{\wedge I} \\
+\end{aligned}
+$$
+
+Obviously the former is much cleaner.
 
 **Combination Basis**, i.e. the basis of distinct $$\mathbf{e}_{\wedge I}$$ with the indices taken only over the $$N\choose k$$ distinct *combinations* of basis elements. This is $$\frac{1}{k!}$$ smaller than the "permutation" basis. Sometimes the indices are chosen such that $$i_1 \lt i_2 \lt \ldots \lt i_k$$, but this isn't necessary as long as all the $$i$$ are chosen distinctly and the sign of the overall basis element is consistent in some sense. I will generally refer to this by writing a sum over the wedge products themselves $$\sum_{\wedge I}$$ rather than $$\sum_I$$, which indicates that only distinct wedge products are to be considered.
 
@@ -102,8 +120,10 @@ Our example can be written in two equivalent ways:
 
 $$
 \begin{aligned}
-\mathbf{u} \wedge \mathbf{v}  &= (u^1 v^2 - u^2 v^1) (e_1 \wedge e_2)\\
-&= (u^2 v^1 - u^1 v^2) (e_2 \wedge e_1)
+\mathbf{u} \wedge \mathbf{v}  &= (u^1 v^2 - u^2 v^1) (\mathbf{e}_1 \wedge \mathbf{e}_2)\\
+&= (u^2 v^1 - u^1 v^2) (\mathbf{e}_2 \wedge \mathbf{e}_1) \\
+&= \sum_{i_1 \wedge i_2, j_1, j_2}  \epsilon^{i_1, i_2}_{j_1, j_2} u^{j_1}v^{j_2}\mathbf{e}_{i_1 \wedge i_2} \\
+&= \sum_{\wedge I, J} \epsilon_J^I u^{j_1}v^{j_2}\mathbf{e}_{\wedge I} \\
 \end{aligned}
 $$
 

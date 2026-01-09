@@ -1,12 +1,14 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Entropy II"
-subtitle: The Entropy Function
+title: "The Entropy Function"
 date: 2025-09-27
 math: true
 bokeh: true
 toc: true
 bskyPostCid:
+series:
+  name: "Entropy"
+  part: 2
 
 ---
 import BokehPlot from "../../components/diagrams/BokehPlot";
@@ -14,11 +16,6 @@ import EntropyBar from "../../components/diagrams/entropy/EntropyBar";
 import EntropyReorder from "../../components/diagrams/entropy/EntropyReorder";
 import EntropyGraph from "../../components/diagrams/entropy/EntropyGraph";
 
-*This is part of a series on entropy.*
-1. *<a href="/posts/2025-09-16-entropy/">Entropy I: Motivating Shannon</a>*
-2. *(This post)*
-
-<br/>
 
 #### Table of Contents
 
@@ -33,7 +30,7 @@ $$
 H[p_i] = \sum_i p_i \log \frac{1}{p_i}
 $$
 
-Its argument is a probability distribution, such $H[p_i]$, $H[p(x)]$, $H[\mathcal{N}(\mu, \sigma^2)]$, or a random variable $H[X]$ with its distribution given elsewhere. The square brackets $H[\:\cdot\:]$ should be read as indicating that it is a function of an entire distribution rather than of a single numeric value. 
+Its argument is a probability distribution, such $H[p_i]$, $H[p(x)]$, $H[\mathcal{N}(\mu, \sigma^2)]$, or a random variable $H[X]$ with its distribution given elsewhere. The square brackets $H[\:\cdot\:]$ should be read as indicating that it is not really a "function" of its argument's numeric value; instead it is a function of the entire distribution. 
 
 The simplest example is the entropy of a uniform distribution over $N$ elements:
 
@@ -64,7 +61,7 @@ $$
 
 We also saw that the same formula arises when taking the large-$K$ limit of a log of a multinomial
 $$
-H\left[\frac{k_1}{K}, \frac{k_2}{K}, \ldots\right] = \frac{1}{K} \log {K \choose k_1, k_2, \ldots}
+H\left[\frac{k_1}{K}, \frac{k_2}{K}, \ldots\right] = \lim_{K \to \infty} \frac{1}{K} \log {K \choose k_1, k_2, \ldots}
 $$
 
 which can be seen as the relative size of a given outcome of many samples of a uniform distribution.
@@ -99,14 +96,14 @@ and then we divide it in two
 
 <EntropyBar total={18} weights={[9,9,]} client:visible />
 
-the entropy goes up by $1$, in $\log_2$ bits.
+the entropy, as measured in base-2 bits, goes up by $1$.
 
 The same applies for any division into two:
 
 <EntropyBar total={18} weights={[6,6,6]} client:visible />
 <EntropyBar total={18} weights={[3,3,3,3,3,3]} client:visible />
 
-For each block of weight $k_i$ and fraction $p_i = \frac{k_i}{K}$ of the whole, dividing it into two half-cells increases its information $I(p_i)$ by $1$ bit:
+For each block of weight $n_i$ and fraction $p_i = \frac{n_i}{N}$ of the whole, dividing it into two half-cells increases its information $I(p_i)$ by $1$ bit:
 
 $$
 \begin{align}
@@ -116,18 +113,18 @@ I\left(\frac{p_i}{2}\right) &= \log{\frac{1}{p_i/2}} \\
 \end{align}
 $$
 
-so dividing every block in two at once
+Therefore, dividing every block in two at once increases the total entropy by $1$ bit:
 
 $$
 \begin{align}
-H\left[\frac{p_1}{2}, \frac{p_2}{2}, \ldots \right] &= 2 \times \frac{p_1}{2} \log{\frac{1}{p_1/2}} + 2 \times \frac{p_2}{2} \log{\frac{1}{p_2/2}} + \ldots \\
-  &= p_1(\log\frac{1}{p_i} + 1) + p_2(\log\frac{1}{p_i} + 1) + \ldots\\
+H\left[\frac{p_1}{2}, \frac{p_2}{2}, \ldots \right] &= 2 \times \frac{p_1}{2} \log_2{\frac{1}{p_1/2}} + 2 \times \frac{p_2}{2} \log_2{\frac{1}{p_2/2}} + \ldots \\
+  &= p_1(\log_2\frac{1}{p_i} + 1) + p_2(\log_2\frac{1}{p_i} + 1) + \ldots\\
   &= H[p_1, p_2, \ldots] + (p_1 + p_2 + \ldots) \times 1 \\
   &= H[p_1, p_2, \ldots] + 1
 \end{align}
 $$
 
-In the "addressing" or "labeling" interpretation, we think of this as saying: the distribution $\frac{p_1}{2}, \frac{p_2}{2}, \ldots$ can be addressed by first specifying an element with of $p_1, p_2, \ldots$ and then providing a single additional bit: 0 or 1, or "left" or "right", to pick between elements of the new subdivision.
+If we interpret entropy as giving the information required to "address" or "label" the elements of the set, then dividing each element in two can be interpreted as saying: the new distribution $\frac{p_1}{2}, \frac{p_1}{2}, \frac{p_2}{2}, \frac{p_2}{2}, \ldots$ can be addressed by first specifying an element with of the original distribution $p_1, p_2, \ldots$, followed by a single additional bit, 0 or 1, representing the "left" or "right" element of each new subdivision.
 
 Likewise subdividing or "fine-graining" by another factor $f$ adds $\log{f}$ bits:
 
@@ -171,47 +168,47 @@ $$
 
 [^log]: I find this law to be very suggestive—entropy appears to act like a generalization of "logarithms" to the large space of distributions, where we identify the uniform distributions with the original space of numbers themselves. We can follow the analogy in the other direction to interpret logarithms as an "information" function in all cases. Aren't integers, after all, just an abstract "count" of something?
 
-We can go in the other direction to calculate the entropy of a coarse-graining or aggregating operation. For any distribution $p_i$ (ignoring zeros) there will be some common denominator with which we can write probability as a fraction: $\frac{k_i}{K}$. For example if our probabilities are $0.9, 0.099, 0.001$ we can write these as $\frac{900}{1000}, \frac{99}{1000}, \frac{1}{1000}$. Then we can imagine constructing this distribution by first subdividing into $K$ blocks, then merging blocks to wind up with our final distribution. Merging $k$ blocks will change the entropy from
+We can go in the other direction to calculate the entropy of a coarse-graining or aggregating operation. For any distribution $p_i$ there will be some common denominator with which we can write probability as a fraction: $\frac{n_i}{N}$. For example if our probabilities are $0.9, 0.099, 0.001$ we can write these as $\frac{900}{1000}, \frac{99}{1000}, \frac{1}{1000}$. Then we can imagine constructing this distribution by first subdividing into $N$ blocks, then merging blocks to wind up with our final distribution. Merging $n$ blocks will change the entropy from
 
 $$
 \begin{align}
-H\left[ \frac{k}{K}, \ldots \right] &= \frac{k}{K} \log{ \frac{1}{k/K} } + \ldots\\
-  &= \frac{k}{K} (\log{K} + \log{\frac{1}{k}}) + \ldots \\
-  &= \bigg(\underbrace{\frac{1}{K} + \frac{1}{K} + \ldots}_{k \text{ times}}\bigg) \log{\frac{1}{1/K}} - \frac{k}{K} \log k + \ldots \\
-  &= H\big[ \underbrace{\frac{1}{K}, \frac{1}{K}, \ldots}_{k \text{ times}}\big] - \frac{k}{K} \log k
+H\left[ \frac{n}{N}, \ldots \right] &= \frac{n}{N} \log{ \frac{1}{n/N} } + \ldots\\
+  &= \frac{n}{N} (\log{N} + \log{\frac{1}{n}}) + \ldots \\
+  &= \bigg(\underbrace{\frac{1}{N} + \frac{1}{N} + \ldots}_{n \text{ times}}\bigg) \log{\frac{1}{1/N}} - \frac{n}{N} \log n + \ldots \\
+  &= H\big[ \underbrace{\frac{1}{N}, \frac{1}{N}, \ldots}_{n \text{ times}}\big] - \frac{n}{N} \log n
 \end{align}
 $$
 
-So grouping $k$ cells into one of size $\frac{k}{K}$ decreases the entropy by a fraction $\frac{k}{K}$ of $\log{k}$, here by $\frac{4}{12}$ of $\log{4}$ which is $0.66\bar{6}$:
+So grouping $n$ cells into one of size $\frac{n}{N}$ decreases the entropy by a fraction $\frac{n}{N}$ of $\log{n}$, here by $\frac{4}{12}$ of $\log{4}$ which is $0.66\bar{6}$:
 
 <EntropyBar total={12} weights={[]} client:visible />
 <EntropyBar total={12} weights={[4]} client:visible />
 
-And grouping all $K$ cells into one of course brings the entropy down to zero:
+And grouping all $N$ cells into one of course brings the entropy down to zero:
 <EntropyBar total={12} weights={[]} client:visible />
 <EntropyBar total={12} weights={[12]} client:visible />
 
 
-Note that the term subtracting in the above is exactly the (fraction occupied by the merged block) $\times$ (the entropy of a uniform distribution over the merged block). We can create any distribution of blocks by merging a uniform into groups $k_i$:
+Note that the term subtracting in the above is exactly the (fraction occupied by the merged block) $\times$ (the entropy of a uniform distribution with all elements the size of the merged block). We can create any distribution of blocks by merging a uniform into groups $n_i$:
 
 $$
 \begin{align}
-H\left[ \frac{k_i}{K}, \ldots \right] &= H\bigg[ \underbrace{\frac{1}{K}, \frac{1}{K}}_{k \text{ times}}, \ldots\bigg] - \sum_i \frac{k_i}{K} \log k_i \\
- &= H[\text{uniform}(K)] - \sum_i \frac{k_i}{K} H[\text{uniform}(k_i)]
+H\left[ \frac{n_i}{N}, \ldots \right] &= H\bigg[ \underbrace{\frac{1}{N}, \frac{1}{N}}_{n \text{ times}}, \ldots\bigg] - \sum_i \frac{n_i}{N} \log n_i \\
+ &= H[\text{uniform}(N)] - \sum_i \frac{n_i}{N} H[\text{uniform}(n_i)]
 \end{align}
 $$
 
 Rearranging gives
 
 $$
-H\left[ \frac{k_i}{K} \right] +  \sum_i \frac{k_i}{K} H[\text{uniform}(k_i)] = H[\text{uniform}(K)]
+H\left[ \frac{n_i}{N} \right] +  \sum_i \frac{n_i}{N} H[\text{uniform}(n_i)] = H[\text{uniform}(N)]
 $$
 
 in which we can read two the entropy of two equivalent algorithms:
-1. either we first select a block from an uneven distribution $\{ \frac{k_i}{K} \}$, then select uniformly from within that block according to a $\text{uniform}(k_i)$
-2. or, we select one element from a $\text{uniform}(K)$ distribution
+1. either we first select a block from an uneven distribution $\{ \frac{n_i}{N} \}$, then select uniformly from within that block according to a $\text{uniform}(n_i)$
+2. or, we select one element from a $\text{uniform}(N)$ distribution
 
-Clearly we should be able to count or address a set of $K$ elements either way—these two selection processes are the same; they must contain or require the same amount of information, hence, their entropies must also be the same.[^derivingH]
+Clearly we should be able to count or address a set of $N$ elements either way—these two selection processes are the same; they must contain or require the same amount of information, hence, their entropies must also be the same.[^derivingH]
 
 [^derivingH]: One can also derive the formula for $H$ in the first place by asserting a handful of properties like continuity, the logarithm-like property on product distributions, and the equivalence of the two selection processes just given; see [wiki](https://en.wikipedia.org/wiki/Entropy_(information_theory)#Alternative_characterization).
 
@@ -248,7 +245,9 @@ We can also visualize the entropy over all possible probability distributions on
 
 Again we see that the entropy $H$ attains its highest value in the center (a uniform distribution) and goes to zero in all three corners (the indicators on any of the three elements). It treats each probability symmetrically; it is indifferent to the ordering of the three.
 
-For more than three probabilities no direct visualization is possible. Within the space of all possible distributions $p_i$ on an $N$-element set, there are $N$ indicators $\mathbf{1}_i$ each with entropy 0 and one $\text{uniform}(N)$ with entropy $\log(N)$. All other distributions fall somewhere between these two extremes:
+For more than three probabilities no direct visualization is possible. Instead, let us try to say something about the shape of the space and the range of entropies on it.
+
+Within the space of all possible distributions $p_i$ on an $N$-element set, there are $N$ indicators $\mathbf{1}_i = \{\ldots, p_{i-1} = 0, p_i = 1, p_{i+1} = 0, \ldots\}$, each with entropy $H=0$, and one $\text{uniform}(N) = \{ \frac{1}{N}, \frac{1}{N}, \ldots\}$ with entropy $H = \log(N)$. All other distributions $\{p_i\} fall somewhere between these two extremes:
 
 ![](../../images/entropy/indic_to_uni.png)
 
@@ -268,7 +267,13 @@ Let's play with a few, starting from the single partition $\mathbf{1}$ with $H[\
 <EntropyBar total={16} weights={[12, 2, 2]} client:visible />
 <EntropyBar total={16} weights={[8, 8]} client:visible />
 
-... but the three-way partitions quickly overtake the two-way ones, and of course there are a *lot* of these. The total number of partitions is given by the [Bell numbers](https://oeis.org/A000110); the 16th Bell number is around 10 billion. But the number of distinct integer partitions (e.g. $\{14, 1, 1\}$) is far smaller, and all of these have the same entropy—so the problem turns out to be extremely tractable. Plus it's 2025, so I can ask an AI to do it in two minutes.[^chatgpt] Here's a visualization:
+... but the three-way partitions quickly overtake the two-way ones, and of course there are a *lot* of these. The total number of partitions of a set of size $N$ is given by the $N$th [Bell number](https://oeis.org/A000110); the 16th Bell number is around 10 billion. Many of these have the same entropies, though; so the problem of determining the distribution of entropies is actually quite tractable. We only need to calculate the entropies of distinct integer partitions (e.g. $\{14, 1, 1\}$), and the number of these is much smaller; the 16th is only 231. It's then relatively straightforward to determine how many subdivision of a *set* correspond ot each partition—for the single partition into $\{4, 3, 3, 2, 2, 1, 1\}$, the answer is given by a multinomial times a factor for rearranging amongst the pairs of blocks of size $3,2,1$:
+
+$$
+\frac{16!}{4!(3!)^2(2!)^2 (1!)^2} \times \frac{1}{(2!)^3} = 756,756,000
+$$
+
+As it's 2025, I can ask an AI to count them all in about two minutes.[^chatgpt] Here's a visualization:
 
 [^chatgpt]: Here's the [chat](https://chatgpt.com/share/68e0b77e-458c-800b-b3a8-1348cdf31808), including a lot of extra—and impressive—analysis.
 
@@ -276,7 +281,7 @@ Let's play with a few, starting from the single partition $\mathbf{1}$ with $H[\
 <BokehPlot htmlPath="/data/entropy/entropy_counts16.html" client:visible />
 <br/>
 
-There's a clear shape, peaking (the AI tells me) near $\log(16) = 2.77$. Neat. (Note the log scale: at the peak value there appear to be about 800 million partitions!)
+There's a clear shape, peaking (the AI tells me) near $\log(16) = 2.77$. Neat. Note the log scale: at the peak value there appear to be about 800 million set-partitions!
 
 Returning to the first question: what if we did the same for the set of distributions on $N$ elements? The question now is to estimate the measure attaining each value of $H$ within the $(N-1)$-simplex formed by the $N$ probabilities. This is probably hard to calculate, but should be fairly simple to estimate numerically. Again I conjure a visualization from the AI:
 
@@ -288,24 +293,25 @@ Well: it's a similar shape. Note the y-axis is not a log-scale in this one, as t
 
 Before we move on, I want to register a couple of stray thoughts:
 - I find the distinction between the entropy of partitions and distributions here to be suggestive. I suspect that entropy is more naturally defined on partitions: elements with $p=0$ effectively don't exist from the perspective of the entropy. All indicator distributions are the same thing, information-wise (it's the underlying set which is different). I'll have to think on this.
-- I don't think a "uniform measure" makes sense on the space of real-valued probability distributions, so the second visualization just given is probably not very meaningful. It might actually make sense to use the entropy itself as the measure on that space, as $H$ is the asymptotic measure a distribution arising from samples from a uniform, by the third argument from the previous post in thisseries. But I won't try to take that on now.
+- The first visualization acquires its shape only from the integer-partitions with the highest set-partition multiplicities. It might make more sense to smooth this curve out, so as actually get a sense of the measures in the neighborhood of each $H$ value.
+- I don't think a "uniform measure" makes sense on the space of real-valued probability distributions, so the second visualization just given is probably not very meaningful. It might actually make sense to use the entropy itself as the measure on that space, as $H$ is the asymptotic measure a distribution arising from samples from a uniform, by the third argument from the previous post in this series. But I won't try to take that on now.
 
 
 # 4. Entropy vs. Variance
 
-Here's one visualization of some entropies. Now—unlike all the earlier examples—we will associated the indices $i$ with their numeric value, i.e. treating this as a random variable (henceforth "r.v.") $X \sim p_i$ with $X(i) = i$. This will let us compute a variance for the distribution.
+Here's one visualization of some entropies. Now—unlike all the earlier examples—we will associate the indices $i$ with their numeric value, i.e. treating this as a random variable (henceforth "r.v.") $X \sim p_i$ with $X(i) = i$. This will let allow us to compute a mean and variance for the same distribution and, in partiular, to compare the entropy to the variance:
 
 <br/>
 <EntropyReorder n={20} client:visible />
 <br/>
 
-You can observe:
-- the uniform distribution always has the highest entropy.
+Playing with this, we can observe a few things:
+- the uniform distribution has the highest possible entropy for a given number of bins.
 - all of the indicator/delta-function distributions have entropy zero (and variance zero).
-- in general, entropy is lower for very peaked distributions, and high for spread-out ones. In this respect it is similar to the variance.
+- in general, entropy will be low for very peaked distributions, and high for spread-out ones. In this respect it is similar to the variance.
 - but the entropy is unchanged when the cells are shuffled, while the variance will tend to vary a lot.
 
-(Note that you can put in unnormalized distributions, but they will be normalized before calculating stats.)
+(Note that you can put in unnormalized distributions, but they will be normalized before calculating the stats.)
 
 Both the entropy and variance characterize the "uncertainty" or "spread-out-ness" of a distribution. Both are zero for an indicator and large for a uniform distribution—but the entropy attains its highest possible value on a uniform, while it's easy to make the variance even larger by creating something bimodal. (If you click the "Beta" button enough times you'll get something bimodal, or you can draw your own.)
 
@@ -315,16 +321,13 @@ We'll write the entropy of a r.v. $X$ as a function of the r.v. rather than of t
 
 $$
 \begin{align}
-H(X) = \mathrm{E}\left[\log{\frac{1}{p(X)}}\right] && \mathrm{Var}(X) = \mathrm{E}[X^2] - \mathrm{E}[X]^2
+H[X] = \mathrm{E}\left[\log{\frac{1}{p(X)}}\right] && \mathrm{Var}(X) = \mathrm{E}[X^2] - \mathrm{E}[X]^2
 \end{align}
 $$
 
-Clearly the entropy does not depend on the value of $X$, while the variance does. 
+Despite this notation, the entropy does not depend on the *value* of $X$, only on the probabilities, while the variance does depend on the values attained by $X$.
 
-
-
-
-And yet if we plot the two against each other for a few distributions, they seem to be closely related:
+Yet if we plot the two against each other for a few typical distributions, they appear to be closely related:
 
 <br/>
 
@@ -332,29 +335,31 @@ And yet if we plot the two against each other for a few distributions, they seem
 
 <br/>
 
-(These are discretized normals and betas, not continuous distributions. We'll get to the entropy of continuous distributions later.)
+(The normals and betas here are discretized, rather than continuous distributions. We'll address the entropy of continuous distributions another time.)
 
 What's going on?
 
-Here are a family of normal distributions centered on $0.5$:
+Let's investigate further. Here are a family of normal distributions centered on $0.5$:
 
 <EntropyGraph dataPath='/data/entropy/entropy_var_normals.json' client:visible />
 
 We see a clear pattern, which interpolates between the nearly-indicator-like $\sigma^2 = 0.0001$ and the nearly-uniform $\sigma^2 = 0.1$.
 
-Here now are a family of $\text{Beta}(\alpha, \beta)$  distributions, which might represent the posterior distribution of the probability $p$ that an unfair coin comes up heads, which can be seen to converge to the true value I used in the simulation of $p=0.25$.
+Here now are a family of $\text{Beta}(\alpha, \beta)$  distributions, representing the posterior probability $p$ that an unfair coin (whose actual $p = 0.25$) comes up heads. At first we have only a broad idea of the value of $p$, but over many flips our posterior belief converges to the true value.
 
 <EntropyGraph dataPath='/data/entropy/entropy_var_betas.json' client:visible />
 
-Again wee see entropies and variances which decreasing together.
+Again wee see entropies and variances which decreasing together. 
 
-Let's try a more contrived scenario: you flip a coin of unknown $H$-probability $p$ repeatedly and get the same result $N$ times in a row, but you don't know if this is $H$ or $T$. The probability of such a streak given $p$ is
+But all of these distributions have been approximately normal; guided by our first widget we probably need to be looking at more spread-out distributions. 
+
+Let's try a contrived scenario: you flip a coin of unknown $H$-probability $p$ repeatedly and get the same result $K$ times in a row, but you don't know if these are $H$ or $T$. The probability of such a streak given $p$ is
 
 
 $$
 \begin{align}
-\text{Pr}(N \text{ in a row} \mid p) &= p^N + {(1-p)}^N \\
-  &= \text{Beta}(N+1, 1) + \text{Beta}(1, N+1)
+\text{Pr}(K \text{ in a row} \mid p) &= p^K + {(1-p)}^K \\
+  &= \text{Beta}(K+1, 1) + \text{Beta}(1, K+1)
 \end{align}
 $$
 
@@ -362,9 +367,9 @@ If we take our prior on $p$ to be uniform (i.e. a $\text{Beta}(1,1)$), the poste
 
 $$
 \begin{align}
-\text{Pr}(p \mid N) &\propto \text{Pr}(N \mid p) \times \text{Pr}(p) \\
-  &\propto (\text{Beta}(N+1, 1) + \text{Beta}(1, N+1))\times \text{Beta}(1, 1) \\
-  &\propto \text{Beta}(N+2, 2) + \text{Beta}(2, N+2)
+\text{Pr}(p \mid K) &\propto \text{Pr}(K \mid p) \times \text{Pr}(p) \\
+  &\propto (\text{Beta}(K+1, 1) + \text{Beta}(1, K+1))\times \text{Beta}(1, 1) \\
+  &\propto \text{Beta}(K+2, 2) + \text{Beta}(2, K+2)
 \end{align}
 $$
 
@@ -374,34 +379,42 @@ which looks like
 
 There's still a tight relationship between entropy and variance, but now it goes the other way.
 
+The difference seems to be that these new distributions are bimodal. 
 
-The difference seems to be that these are bimodal distributions. After all, we should be able to shuffle the probability of any unimodal distribution and change the variance but not the entropy. Likewise if we can find some family of distributions with constant variance, their entropies must vary.
+Apparently we can change the variance of a distribution quite freely without affecting the entropy, simply by shuffling it to be more or less spread out. 
+
+Then if find can find some family of distributions with equal variances, then their entropies must vary.
 
 Let's try it. In the following I started with a $\mathcal{N}(0.5, 0.1)$, and then had the AI conjure up a handful of shuffled versions of that distribution (which should have different variances) and a handful of Beta distributions with this same variance but otherwise different shapes (which should therefore have different entropies):
 
 
 <EntropyGraph dataPath='/data/entropy/entropy_var_shuffled_betas.json' client:visible />
 
-The point appears to be: entropy and variance are closely related *for unimodal distributions*, but not in general. They *can* vary independently, though it can take some pretty contrived distributions to demonstrate it.
+The point is: entropy and variance are closely related *for unimodal distributions*, but not in general. They *can* vary independently, though it can take some pretty contrived distributions to demonstrate it.
 
 Further investigation sheds some light. Apparently, there exists a series expansion for the Shannon entropy in terms of the [cumulants](https://en.wikipedia.org/wiki/Cumulant) of a distribution, which are certain functions $\kappa_n$ of the moments which distribute across independent distributions: $\kappa_n(X_1 + X_2) = \kappa_n(X_1) + \kappa_n(X_2)$.[^z] Up through $\kappa_3$, they are identical with the moments—$\kappa_2$ is just the variance. It seems that any distribution can be expanded in a series in its cumulants around a normal distribution, called an [Edgeworth series](https://en.wikipedia.org/wiki/Edgeworth_series). Hence there exists a "local approximation" of the entropy which will be fairly accurate for distributions which are close to normal:
 
 $$
 \begin{align}
-H(X) &= H[\mathcal{N}(\mu, \sigma^2)] - \frac{\kappa_3^2}{12 \sigma^2} + \frac{\kappa_4}{24\sigma^4} + \ldots \\
+H[X] &= H[\mathcal{N}(\mu, \sigma^2)] - \frac{\kappa_3^2}{12 \sigma^2} + \frac{\kappa_4}{24\sigma^4} + \ldots \\
      &= \frac{1}{2}\log{2\pi e \sigma^2} - \ldots
 \end{align}
 $$
 
 [^z]: In statistical mechanics, the logarithm of the partition function, $\ln Z$, turns out to be a <a href="/posts/2024-09-30-partition-function/#z-is-a-few-kinds-of-generating-functions-at-once">cumulant generating function</a>, which is one way of explaining its many surprising properties.
 
-This was surprising to me, since the Shannon entropy *doesn't* depend on the values taken by the R.V. $X$, while the variance and cumulants do. But I suppose the explanation is that, here, we are parameterizing the *distribution* by its variance and cumulants; then the entropy of course depends on the these because it depends on the specific distribution.
+This was surprising to me, since the Shannon entropy *doesn't* depend on the values taken by the R.V. $X$, while the variance and cumulants do. How can it be that $\sigma^2$ shows up in the formula for $H$, then? The explanation is that, here, we are specifying *which distribution we are talking about* by its variance and cumulants; the entropy depends on these because it depends on the distribution. In other words, the value of the entropy is a function of the parameters of the distribution:
+
+$$
+ H[X(\sigma^2, \ldots)] = h(\sigma^2, \ldots)
+$$
 
 
 <br/>
 
-*Interactive visualizations for this post were authored with [D3.js](https://d3js.org/) in Typescript, embedded in a [Marimo](https://marimo.io/) (Python) notebook via [anywidget](https://anywidget.dev/) with considerable help from Claude Code, and then manually ported into React components to be consumed by Astro, which builds this site. The simpler plots were built with [Bokeh](https://www.bokeh.org/) and exported as HTML. Mostly this was a pain and I wouldn't do it this way again, but it is worth noting that Claude is excellent at one-off D3-type visualizations.*
 
 <br/>
 <hr/>
 <br/>
+
+*Interactive visualizations for this post were authored with [D3.js](https://d3js.org/) in Typescript, embedded in a [Marimo](https://marimo.io/) (Python) notebook via [anywidget](https://anywidget.dev/) with considerable help from Claude Code, and then manually ported into React components to be consumed by Astro, which builds this site. The simpler plots were built with [Bokeh](https://www.bokeh.org/) and exported as HTML. Mostly this was a pain and I wouldn't do it this way again, but it is worth noting that Claude is excellent at one-off D3-type visualizations.*

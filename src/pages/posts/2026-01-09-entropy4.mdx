@@ -1,0 +1,334 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "Entropy as Scaling"
+date: 2026-01-09
+math: true
+bokeh: true
+toc: true
+preview: true
+bskyPostCid:
+series:
+  name: "Entropy"
+  part: 4
+
+---
+
+
+#### Table of Contents
+
+<br/>
+
+# 1. Typical Sequences
+
+Here we'll pick up the thread from the first post in this series of attempting to articulate exactly what it is that the Shannon Entropy $H[p_i]$ is describing. In the process we'll encounter two related concepts, the "cross entropy" and "relative entropy"/"Kullback-Liebler Divergence".
+
+Since that first post I've stabilized my own understanding of how entropy arises, so let us briefly review, hopefully with some new clarity.
+
+The general situation under consideration will be a probability distribution $(p_1, p_2, \ldots p_N)$ over outcomes $(1, 2, \ldots N)$, from which we imagine taking $K$ samples. We'll use $(k_1, k_2, \ldots, k_N)$ for the counts of samples resulting in outcome $i$.
+
+Then the probability of any particular sequence $\mathbf{x} = (x_1, x_2, \ldots, x_K)$, in which each outcome $i$ appears $k_i$ times, can be written either as a product over the $x$ samples or over the $i$ outcomes:
+
+$$
+\begin{align}
+\text{Pr}(\mathbf{x}) &= {p(x_1)}\cdot {p(x_2)} \cdots {p(x_K)} \\
+  &= \prod_{j=1}^K p(x_j) \\
+  &= (p_1)^{k_1} \cdot (p_2)^{k_2} \cdots (p_N)^{k_N} \\
+  &= \prod_{i=1}^N (p_i)^{k_i}
+\end{align}
+$$
+
+The logarithm of this quantity is:
+
+$$
+\begin{align}
+\log \text{Pr}(\mathbf{x}) &= \sum_i k_i \log p_i \\
+  &= - K \sum_i \frac{k_i}{K} \log \frac{1}{p_i} \\
+  &= - K H\left[ \frac{k_i}{K}, p_i \right]
+\end{align}
+$$
+
+This expression $H\left[ \frac{k_i}{K}, p_i \right]$ is the **cross-entropy** between the empirical distribution of our samples $k_i / K$ and the true distribution.
+
+We'll call the empirical distribution $q_i = \frac{k_i}{K}$. Then the expression for the cross entropy is:
+
+$$
+H[q_i, p_i] = \sum_i q_i \log \frac{1}{p_i}
+$$
+
+Note that if $p_i$ = $q_i$, this expression reduces to the Shannon entropy, and if $p_i$ is uniformly-distributed then $H[q_i, p_i] = \log N$ regardless of $q_i$.
+
+We can write the exact probability of obtaining given sequence with empirical distribution $q_i$ with a cross-entropy:
+
+$$
+\text{Pr}(\mathbf{x}) = e^{-K H[q_i, p_i]}
+$$
+
+When the empirical distribution $q_i$ coincides exactly with $p_i$, the cross-entropy reduces to the ordinary Shannon entropy, giving the result from the first post in this series that the probability of any "typical sequence" is directly related to the Shannon entropy of $p_i$:
+
+$$
+\text{Pr}(\mathbf{x}^*) = e^{-K H[p_i]}
+$$
+
+In general the empirical distribution $q_i$ will tend to fluctuate around the true distribution $p_i$, but will converge to the true distribution "in probability" as $K\longrightarrow \infty$  by the [law of large numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers).
+
+
+Now, for any counts $k_i$, the number of sequences with exactly these counts  is given by a multinomial:
+
+$$
+\left\vert\{ \mathbf{x} \mid k_i\}\right\vert = \frac{K!}{k_1! k_2!\cdots k_N!} = {K \choose k_i}
+$$
+
+
+As we saw in the earlier post, a Stirling approximation for logarithm of a multinomial produces another expression involving Shannon entropy:
+
+$$
+\begin{align}
+\log{K \choose k_i} &\approx K\left(\sum_i \frac{k_i}{K} \log{\frac{1}{k_i / K}}\right) - {O}(\log K) \\
+  & \approx KH\left[\frac{k_i}{K}\right] \\
+  & = KH[q_i]
+\end{align}
+$$
+
+Note that, while the error in a single Stirling approximation is positive $\log k! \approx k \log k - k + O(\log k)$, for a multinomial the errors in the denominators outweigh the numberator, making the overall approximation an *underestimate*.
+
+
+Undoing the logarithm, we get an approximation for the multinomial itself:
+
+$$
+{K \choose k_i} \lesssim e^{K H[q_i]}
+$$
+
+Putting these two factors together, the total probability of observing a set of counts $k_i$ is the product of the probability of any one sequence and the number of sequences:
+
+$$ 
+\begin{align}
+\text{Pr}(k_i) &= {K \choose k_i} \prod_{i=1}^N (p_i)^{k_i} \\
+  &\approx \exp{(K H[q_i] - KH[q_i, p_i])} \\
+  &= \exp{(-K (H[q_i, p_i] - H[q_i]))} \\
+\end{align}
+$$
+
+The combination $H[q_i, p_i] - H[q_i]$ is called the [**relative entropy**](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence) or **Kullback-Liebler Divergence**. I'll use the first term. The usual notation is something like $D_{\text{KL}}(q ~\Vert~ p)$, but I don't like that, so I'll borrow the $\Vert$ only and write it as $H[q_i ~\Vert~ p_i]$. Hence, the probabiliy of a count of outcomes $k_i$ is:
+
+$$
+\text{Pr}(k_i) \approx \exp{(-K H[q_i ~\Vert~ p_i])}
+$$
+
+Of the two concepts "cross" and "relative" entropy, the latter is much more fundamental, maybe even moreso than Shannon entropy itself. Its exact expression is
+
+
+$$
+H[q_i ~\Vert~ p_i] = \sum_i q_i \log \frac{q_i}{p_i}
+$$
+
+From this form we can conclude:
+- Relative entropy is never negative, since, by concavity of the logarithm, $\log \frac{q_i}{p_i} = -\log \frac{p_i}{q_i} \ge 1 - \frac{p_i}{q_i}$, so 
+
+$$
+H[q_i ~\Vert~ p_i] \ge \sum q_i(1 - \frac{p_i}{q_i}) = \sum_i q_i - \sum_i p_i = 0
+$$
+
+- Relative entropy is 0 if and only if $q_i = p_i$ for all $i$.
+
+- When $p_i$ is a uniform distribution, $H[q_i ~\Vert~ p_i] = \log N - H[q_i]$
+
+From these properties, and our result for $\text{Pr}(k_i)$, we can conclude a number of things.
+
+First: when $q_i = p_i$, our approximate probability of a sequence with $k_i = q_i K$ goes to exactly $1$:
+$$
+\text{Pr}(k_i = p_i K) \approx \exp{(-K H[p_i ~\Vert~ p_i])} = \exp{(0)} = 1
+$$
+
+This says: in the limit of infinite samples, the empirical distribution of counts will converge to exactly the underlying generating distribution. In this limit, all other counts have measure zero.
+
+For large but finite $K$ the true distribution will arise with some probability infinitesimally less than $1$ because our approximation to the multinomial, which gave us the first term in $K H[q_i] - KH[q_i, p_i]$, was a slight underestimate. Instead we should see some $e^{1-\epsilon} \lesssim 1$.
+
+Second: in the form $\exp{(K H[q_i] - KH[q_i, p_i])}$ or $\exp{(KH[k_i/K] - KH[k_i/K, p_i])}$, we see that this probability is achieved by balancing the growth rate of the multinomial with the probability of any given sequence with counts $k_i$. In the $K\to \infty$ limit these two terms are equal and cancel. In this limit, it therefore must be the case that the distribution effectively becomes a *uniform* one over the $e^{K H[p_i]}$ sequences, each having probability $e^{-KH[p_i]}$. 
+
+Effectively, out of the $N^K$ total possible sequences of samples, we can ignore all those with empirical distributions not within some $\epsilon$ of the true probability $p_i$, limiting our attention only to ${K \choose p_i K} \approx e^{K H[p_i]}$ of all possible sequences. This is called the **[Asymptotic Equipartition Property](https://en.wikipedia.org/wiki/Asymptotic_equipartition_property)**.
+
+Third, and rather trivial at this point: if the underlying distribution $p_i$ is uniform $\mathcal{U}(N)$, the probability of any particular set of counts is 
+
+$$
+\begin{align}
+\text{Pr}(k_i) &\approx \exp{(-K H[q_i ~\Vert~ \mathcal{U}(N)])} \\
+  &= \exp{(K H[q] - K\log N)} \\
+  &=  \frac{\exp{(KH[q])}}{N^K}
+\end{align}
+$$
+
+with each empirical distribution $q_i$ appearing in proportion to its own entropy $H[q_i]$. This is the property we employed in the "Wallis Derivation" in the first post of this series, and is the underlying logic of the "Maximum Entropy Principle" of Bayesian inference.
+
+
+Before we move on, let's sum up the results of this section in a table.
+
+<div class="table-container">
+
+| Distribution $p_i$            | $\text{Pr}(\mathbf{x})$ with $k_i = q_iK$ | $\text{Pr}(\mathbf{x})$ with $k_i = p_iK$      | $\text{Pr}(k_i = q_i K)$         | $\text{Pr}(k_i = p_i K) $                                                                            |
+| --------------------- | ------------- | ----------------------------------------------------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Uniform $\mathcal{U}(N)$ | $\frac{1}{N^K}= e^{K \log N}$ <br/> $= e^{KH[\mathcal{U}(N)]}$  |   $e^{KH[\mathcal{U}(N)]}$  |  $\frac{{K \choose k_i}}{N^K}$ <br/> $\approx e^{KH[q_i] - K\log N}$ | $\approx e^{K\log N - K\log N} = 1$ |
+| Arbitrary $p_i$              | $\prod_i p_i^{q_iK}$ <br/> $= e^{-KH[q_i, p_i]}$  | $e^{-KH[p_i]}$ | ${K \choose k_i}\prod_i p_i^{q_iK}$ <br/> $\approx e^{-KH[q_i \Vert p_i]}$  |$\approx e^{-KH[p_i \Vert p_i]} = 1$   | 
+
+<br/>
+</div>
+<br/>
+
+# 2. The Growth Rate of Sample Spaces
+
+
+All of this is standard information theory, but I was had never really wrapped my head around it when I was learning physics, so I now find it tremendously clarifying.
+
+What emerges is a picture of "entropy" as fundamental to probability itself. A "probability", a frequentist might declare, is nothing but the long run proportion of outcomes giving a particular event. And finite sample from some set of events occurring according to a probability distribution necessarily has a multinomial distribution of outcomes. Entropy, it turns out, is intimately related to the basic act of "sampling". This I find much more satisfying than Shannon's communications-focused vocabulary.
+
+But it still seems mysterious to me that $H[p]$ has the form that it does. What is $p \log \frac{1}{p}$? This expression has the curious property of acting like a derivation, i.e. it obeys the [Leibniz Law](https://en.wikipedia.org/wiki/Product_rule). If we write $h(p) = p\log \frac{1}{p}$, then $h(pq) = pq \log \frac{1}{pq} = p h(q) + q h(p)$. Compare with $d(xy) = xdy + y dx$. Typically this relationship applies to some kind of "boundary" operator. What, then, is entropy the "boundary" of?
+
+The derivations in part 1 suggest that the entropy plays a role something like the "surface area of a sphere", with $K$ analogous to the radius. The "volume" in question appears to be the "size of the effective sample space", which I'll write $\Omega(K)$. 
+
+If, for some underlying distribution $p_i$, we take $K$ large enough that the empirical distribution $q_i$ is effectively equal to $p_i$, then our results above say that the "effective" size of the entire sample space is the inverse of the probability of any of the sequences of $k_i = p_i K$, i.e.:
+$$
+\Omega(K) = \frac{1}{e^{-KH[p_i]}} =e^{KH[p_i]}
+$$
+
+What we want is not the analog of surface area of a sphere $S(r) = 4 \pi r^2$, though.
+
+Instead—I think—we want the "scale derivative", like $D = r \frac{d}{dr}$:
+
+$$
+e^{a \cdot D} V(r) = V(e^a r)
+$$
+
+This may be thought of as a Taylor series in $\log r$, taking $V(\log r) \mapsto v(\log r + a)$. 
+
+For a sphere this is:
+
+$$
+DV(r) = r \frac{d}{dr} V(r) = 4 \pi r^3 = 3 V(r)
+$$
+
+Since the sphere's volume $V(r)$ has eigenvalue $3$, we can replace the operator $D$ with its eigenvalue:
+
+$$
+e^{a \cdot 3}V(r) = e^{a \cdot3} \frac{4}{3}\pi r^3 = \frac{4}{3}\pi (e^a r)^3
+$$
+
+With this in hand, let us turn our eye towards entropy. What is the scale derivative of a factorial?
+
+$$
+\begin{align}
+k\frac{d}{dk} (k!) &\approx k\frac{d}{dk} e^{k \log k - k} = k\left(\frac{d}{dk} (k \log k - k) \right)e^{k \log k - k}\\
+  &= (k \log k) e^{k \log k - k} \\
+  &= (k \log k) (k!)
+\end{align}
+$$
+
+That's promising. Note that $k \log k$ here is not a true *eigenvalue*, but only a "local" eigenvalue, being still a function of $k$. Still, we may plug it in to implement a local approximation to the scaling in the vicinity of some fixed $k$:
+
+
+$$
+\begin{align}
+((e^{\epsilon} k)!) &\approx e^{\epsilon \cdot k \frac{d}{dk}} (k!) \\
+ & \approx e^{\epsilon \cdot (k \log k)} (k!) \\
+\end{align}
+$$
+
+Obviously my aim is to arrive at the Shannon entropy, but we should immediately wonder what to do about that $\epsilon$. All I can think of is to take $\epsilon = 1$—after all, the true step size of a factorial *is* $1$.
+
+
+Now we try a whole multinomial, again using $\epsilon = 1$. We'll express it in two ways. The first is to apply single scaling to $K$, while constraining $k_i = p_i K$, which of course leads to the Shannon entropy:
+
+$$
+
+\begin{align}
+K \frac{d}{dK} {K \choose p_i K} &= (K \log K - \sum_i p_i K \log (p_i K)) \cdot {K \choose p_i K}\\
+&= K H[K] \cdot  {K \choose p_i K}\\
+\exp{(1 \cdot K \frac{d}{dK})} {K \choose p_i K} &\approx \exp{(K H[p_i])} \cdot {K \choose p_i K}
+\end{align}
+$$
+
+The second is to apply separate scalings increasing $K$ and then decrease $k_1, k_2, ...$ all at once. Same result:
+
+
+$$
+\begin{align}
+\exp{(1 \cdot K \frac{d}{dK} - 1 \cdot k_1 \frac{d}{dk_1} - \ldots)} {K \choose k_i} &\approx \exp{(K \log K- k_1 \log k_1 - \ldots)} {K \choose k_i} \\
+&= \exp{(K H[k_i / K])} {K \choose k_i}
+\end{align}
+$$
+
+
+The first expression has $H$ appearing the scale-derivative with respect to the entire sample space at once, given a fixed distribution. This explains why $H$ appears to acts "like a logarithm of an entire distribution", obeying a logarithm-like law $H[pq] = H[p] + H[q]$ for independent distributions and reducing to a logarithm on uniform distributions: $H[\mathcal{U}(N)] = \log N$. 
+
+And, the "local eigenvalue" approximation feels more sound here, as the $H$ expression is no longer a function of $K$ itself.[^2nd]
+
+[^2nd]: The AI tells me that the next term in the "local eigenvalue" approximation is $e^{\epsilon \cdot (k \log k - k)}$. These second terms cancel out in a multinomial, making the approximation somewhat better than it would otherwise be. 
+
+These expressions also explain why $H[p]$ obeys a Leibniz rule. All scale derivatives do:
+
+$$
+D(fg) = r \frac{d}{dr} (fg) = r (f' g + g' f) = (Df)g + f(Dg)
+$$
+
+The Leibniz property is more apparent in the second case where we scale all the $K, k_i$ separately, since these are merely integers and not normalized probability distributions (for which $H[pq] = H[p] + H[q]$.) If we were to identify any or all of our $k_i$ as the products of two dimensions $l_i \times m_i$, our eigenvalues $k_i \log k_i$ will split into $l_i (m_i \log m_i) + m_i (l_i \log l_i)$ exactly as they should.
+
+<br/>
+<br/>
+---
+
+<br/>
+<br/>
+*Speculative*:
+
+This whole thing is a little suspicious, though, mainly because of the $\epsilon = 1$ and the sketchy "local eigenvalue" idea. I would like to tighten it up further. Two similar ideas come to mind which may offer a way around it.
+
+The first is to work with a logarithmic derivative directly $\frac{d}{dk}(k!) \approx \log k$, analogous to the unfamiliar sphere formula $\frac{d}{dr} V(r) = \frac{3}{r}$. We could then integrate this expression, or perhaps apply it as a local approximation to directly to $\log k!$:
+
+$$
+\begin{align}
+\log((k + \epsilon)!) &\approx \log(k!) + \epsilon \log k \\
+(k + \epsilon)! &= (k!) \cdot e^{\epsilon \log k}
+\end{align}
+$$
+
+and perhaps take the value $\epsilon = k$ itself.
+
+Or, we may note that the entropy expression superficially resembles the expression for a derivative in terms of a translation operator:
+
+$$
+\begin{align}
+H[p] = \frac{1}{K} \log \Omega(K) && \partial_x = \frac{1}{a} \log T(a)
+\end{align}
+$$
+
+Rather than interpreting this expression as the "average rate of decrease in probability of a typical sequence", the present discussion suggests we should modify this interpretation in two ways: first by viewing it not as a decrease in probability but as an increase in the size of a sample space, and second by replacing the $\frac{1}{K}$ with an actual derivative w.r.t. $K$. 
+
+This line of thinking suggests an interpretation of entropy as, perhaps, a logarithmic derivative:
+
+$$
+H[p] = \frac{d}{dK} \log \Omega(K)
+$$
+
+For a factorial,
+
+$$
+\frac{d}{dk} \log (k!) \approx \frac{d}{dk} (k \log k - k) = \log k
+$$
+
+To use this we need an expression like
+
+$$
+f(x + dx) = \exp{\left(\int_x^{x + dx} (\frac{d }{dx}\log f(x)) dx'\right)} f(x)
+$$
+
+But if we plug in $\log k$ into the integral, we may as well just integrate it to give $k \log k - k$ again. Then:
+$$
+(k + dk)! = \exp{\left((k \log k - k)\vert_k^{k+dk}\right)} (k!)
+$$
+
+... ignore limits of integration?
+
+
+
+
+<br/>
+<hr/>
+<br/>

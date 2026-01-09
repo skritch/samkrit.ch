@@ -1,7 +1,6 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Division I"
-subtitle: "Linear Algebra"
+title: "Inverses in Linear Algebra"
 date: 2025-01-21
 math: true
 toc: true
@@ -407,7 +406,7 @@ The third case is the simplest, so let's go in with that in mind. And I'll start
 
 ### Invertible Matrices
 
-For now, $$A$$ as the matrix with orthogonal basis vectors $$\mathbf{A}_i$$ as columns. Then the solution vector $$\mathbf{x}$$ will represent "the coordinates of $$\mathbf{b}$$ in $$A$$":
+For now, $$A$$ is a matrix whose columns are orthogonal basis vectors $$\mathbf{A}_i$$. Then the solution vector $$\mathbf{x}$$ will represent "the coordinates of $$\mathbf{b}$$ in $$A$$":
 
 $$
 \begin{pmatrix} \\ \mathbf{A}_1 & \ldots & \mathbf{A}_N \\ ~ \end{pmatrix}
@@ -445,7 +444,7 @@ $$
 \end{aligned}
 $$
 
-That is the simplest case: the matrix is perfectly invertible, so its "generalized inverse" $$A^{-1}$$ is exactly equal to its standard part $$\frac{1}{A}$$ and the therefore $$A\frac{b}{A}$$ is the identity. This is akin to case (1) from the scalar-over-scalar example.
+That is the simplest case: the matrix is perfectly invertible, so its "generalized inverse" $$A^{-1}$$ is exactly equal to its standard part $$\frac{1}{A}$$ and therefore $$A\frac{b}{A}$$ is the identity. This is akin to case (1) from the scalar-over-scalar example.
 
 We can also convert the inverse-vectors into regular vectors:
 
@@ -655,9 +654,17 @@ $$
 \mathbf{A}_1 {x}^1 + \mathbf{A}_2 {x}^2 + \ldots = \mathbf{b}
 $$
 
-We can then "solve for" any single $$x^i$$ by wedging both sides of this expression with all of the other columns of $$A$$. The "[star index](https://samkrit.ch/2025/01/17/exterior-algebra-notation-2.html)" $$\mathbf{A}_{\star i}$$ (a non-standard notation) represents the ordering of columns-other-than-$$i$$ such that $$\mathbf{A}_{\star i} = \mathbf{A}_{(\star i)_1} \wedge \mathbf{A}_{(\star i)_2} \wedge \ldots \wedge \mathbf{A}_{(\star i)_{N-1}}$$gives determinant times the $$N$$-volume: $$(\det A)\mathbf{e}_{\wedge 1..N}$$. This can also be seen as the "$$(N-1)$$th" wedge power of the matrix acting on the complement of the basis vector $$\mathbf{e}_i$$, written $$A^{\wedge (N-1)} (\star \mathbf{e}_i$$), where $$\star$$ is the "Hodge Star" operator which gives the $$(N-1)$$-dimensional volume orthogonal to a vector. 
+We can then "solve for" any single $$x^i$$ by wedging both sides of this expression with all of the other columns of $$A$$. The "[star index](https://samkrit.ch/2025/01/17/exterior-algebra-notation-2.html)" $$\mathbf{A}_{\star i}$$ (a non-standard notation) represents the ordering of columns-other-than-$$i$$ such that $$\mathbf{A}_{\star i} = \mathbf{A}_{(\star i)_1} \wedge \mathbf{A}_{(\star i)_2} \wedge \ldots \wedge \mathbf{A}_{(\star i)_{N-1}}$$, when wedged with the final $\mathbf{A}_{i}$ gives the determinant times the $$N$$-volume:
 
-All of the other terms $$\mathbf{A}_j \wedge \mathbf{A}_{\star i} = 0$$ for $$j\ne i$$ because the column $$\mathbf{A}_j$$ appears twice in wedge product. The only one that survives is the $$\mathbf{A}_i$$ term:
+$$
+\mathbf{A}_{i} \wedge \mathbf{A}_{\star i}= (\det A)\mathbf{e}_{\wedge 1..N}
+$$
+
+This can also be seen as the "$$(N-1)$$th" wedge power of the matrix acting on the complement of the basis vector $$\mathbf{e}_i$$, written $$A^{\wedge (N-1)} (\star \mathbf{e}_i$$), where $$\star$$ is the "Hodge Star" operator which gives the $$(N-1)$$-dimensional volume orthogonal to a vector. 
+
+Of course this construction is zero if $\det A = 0$; for now we limit our discussion to invertible matrices.
+
+For any other column $$\mathbf{A}_j$$, the wedge product $$\mathbf{A}_j \wedge \mathbf{A}_{\star i} = 0$$ because the column $$\mathbf{A}_j$$ would appear twice in wedge product. The only one that survives is the $$\mathbf{A}_i$$ term, meaning, we can use this object to extract the $x^i$ "coordinate" of $\mathbf{b}$:
 
 $$
 \begin{aligned}
@@ -714,9 +721,9 @@ This can be understood visually with the aid of the diagams following. I'll cons
 
 ![](../../images/division/cramer1.png)
 
-As can be seen by studying this diagram, it is *not* the case that $$x^1$$ is merely the projection of $$\mathbf{b}$$ onto $$\mathbf{A}_1$$, that is, $$x^1 \ne {\mathbf{b}}/{\mathbf{A}_1}$$, because all the other $$\mathbf{A}_{2..N}$$ can have components along $$\mathbf{b}$$ as well. 
+As can be seen by studying this diagram, it is *not* the case that $$x^1$$ is merely the projection of $$\mathbf{b}$$ onto $$\mathbf{A}_1$$, that is, $$x^1 \ne {\mathbf{b}}/{\mathbf{A}_1}$$, because all the other $$\mathbf{A}_{2..N}$$ can have components along $$\mathbf{A}_1$$ as well. 
 *That* projection is just $$\mathbf{b}_{\parallel A_1} = ({\mathbf{b}}/{\mathbf{A}_1})\mathbf{A}_1$$, which is labeled in the image. Instead $$x^1 \mathbf{A}_1$$ needs to supply the component of $$\mathbf{b}$$ that only $$\mathbf{A}_1$$ can: the component orthogonal to all the other columns $$\mathbf{b}_{\perp A_{2..N}}$$. 
-We therefore choose a value of $$x^1$$ such that its projection onto $$\perp A_{2..N}$$ gives $$\mathbf{b}_{\perp A_{2..N}}$$.
+We therefore choose a value of $$x^1$$ such that its projection onto $$\perp A_{2..N}$$ gives $$\mathbf{b}_{\perp \mathbf{A}_{2..N}}$$.
 Then $$\mathbf{A}_{2..N}\vec{x}^{2..N}$$ (which should be seen as a matrix multiplication of $$N-1$$ coordinates with the other columns) is chosen to supply the rest of $$\mathbf{b}$$; clearly this _does_ have a component along $$\mathbf{A}_1$$. 
 
 If we had first determined $$\mathbf{A}_{2..N}\vec{x}^{2..N}$$ and *then* $$x^1 \mathbf{A}_1$$, we would have drawn the same triangle but rotated by 180 degrees around the origin to the other side of $$\mathbf{b}$$.

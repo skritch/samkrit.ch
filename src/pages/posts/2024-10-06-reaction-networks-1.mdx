@@ -1,11 +1,14 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: Reaction Networks I
-subtitle: Rate and Master Equations
+title: "Rate and Master Equations"
 date: 2024-10-06
 math: true
 bskyPostCid: "3lxgmioiazs2h"
+series:
+  name: "Reaction Networks"
+  part: 1
 ---
+
 
 #### Table of Contents
 
@@ -466,7 +469,7 @@ $$
 You could motivate this in a few ways:
 * Out of a general love for generating functions (like mine)
 * Or, by analogy to the Rate Equation $$\frac{d \bar{X}}{d t} =  \sum_r r \bar{\Delta}_r \vert \bar{X}^{\bar{k}_r} \vert$$, which involved powers of a species tuple as well, perhaps hoping to derive the Rate from the Master (we'll try this in a bit)
-* Or, by observing that falling powers $$\bar{n}^{\bar{k}\downarrow}$$, which we used above to count the "number of ways of choosing in the reaction inputs $$\bar{k}$$", corresponds exactly to the coefficients you get when taking $$\bar{k}$$ derivatives of the monomial:
+* Or, by observing that falling powers $$\bar{n}^{\bar{k}\downarrow}$$, which we used above to count the "number of ways of choosing in the reaction inputs $$\bar{k}$$", corresponds exactly to the coefficients you get when taking $$\bar{k}$$ derivatives of the monomial[^derivative]:
 
 $$
 \begin{aligned}
@@ -478,7 +481,7 @@ $$
 \end{aligned}
 $$
 
-(Apparently, the coefficient in a derivative $$\frac{d }{d x}x^n = nx^{n-1}$$ was always counting the number of ways to choose which copy of $$x$$ to remove—a fact which I may have learned in calculus class, but have long since forgotten.)
+[^derivative]: Apparently, the coefficient in a derivative $$\frac{d }{d x}x^n = nx^{n-1}$$ was always counting the number of ways to choose which copy of $$x$$ to remove—a fact which I may have learned in calculus class, but have long since forgotten.
 
 Guided by this observation, we'll take our quantum-mechanical analogy even further by defining a "creation" operator $$a_i^+$$ and an "annihilation" operator $$a_i^-$$ for each species $$i$$. The effect of these operators on a monomial $$x_i^{n_i}$$ is to increase or decrease $$n_i$$ by 1 and multiplying by a factor representing the number of ways of doing so—a falling-power for $${(a^-)}^m$$ but just 1 for any power of $$a^+$$. (I'm not using the exact QM notation $$a^\dagger$$, because these are not "Hermitian conjugates". I never cared for that anyway.)
 
@@ -597,9 +600,9 @@ $$
 e^{Ht} = 1 + \frac{t}{1!}(H_\alpha + H_\beta + \cdots) + \frac{t^2}{2!}{(H_\alpha + H_\beta + \cdots)}^2 + \cdots
 $$
 
-Carrying out the powers leads to terms with sequences of $$H_r$$ operators like $$H_{\beta}H_{\gamma}H_{\alpha}$$ with some coefficient, which we read as representing the rate at which that sequence of transitions occurs in the time $$t$$. When everything's expanded, the action of time-evolution as a sum-over-timelines, or a sum-over-all-possible-sequences of transitions. For some initial state $$\bar{n}$$, each $$\bar{n}'$$ will in the final state $$\psi(t)$$ as a sum over all sequence which could produce it, each in proportion to:
+Carrying out the powers leads to terms with sequences of $$H_r$$ operators like $$H_{\beta}H_{\gamma}H_{\alpha}$$ with some coefficient, which we read as representing the rate at which that sequence of transitions occurs in the time $$t$$. When everything's expanded, the action of time-evolution is like taking a sum-over-timelines, or a sum-over-all-possible-sequences of transitions. For some initial state $$\bar{n}$$, each $$\bar{n}'$$ will be associated, in the final state $$\psi(t)$$, with a sum over all sequence which could produce it, each in proportion to:
 * the number of ways to choose candidates for those sequences: a product of terms $$\bar{n}^{\bar{k}_r \downarrow}$$.
-* the probability that those reactions occur independently, which gives a product of factors $$r \times t$$ for each eaction, representing the underlying hypothesis that each reaction occurs with at an independent rate over time.
+* the probability that those reactions occur independently, which gives a product of factors $$r \times t$$ for each reaction $r$, representing the underlying hypothesis that all reaction occur at independent rates over time.
 * a correction $$\frac{1}{p!}$$ for each sequence of $$p$$ reactions, which (I think) avoids an overcounting which arises because permuting the sequence of reactions is equivalent to permuting the times at which those reactions occur
 
 For example, if our network looks like this:

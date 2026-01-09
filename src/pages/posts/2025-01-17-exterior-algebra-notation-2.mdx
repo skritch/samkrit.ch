@@ -1,16 +1,15 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Exterior Algebra II"
-subtitle: "Star Indices"
+title: "Star Indices"
 date: "2025-01-17"
 math: true
 toc: true
 bskyPostCid: "3lxgmqhe3sk2h"
+series:
+  name: "Exterior Algebra"
+  part: 2
 ---
 
-*Part of a series on Exterior Algebra*:
-1. *<a href="/posts/2025-01-16-exterior-algebra-notation-1/">Multi-indices</a>*
-2. *(This post)*
 
 <br/>
 
@@ -103,7 +102,7 @@ $$
 
 This is the "Laplace Expansion" for the determinant in terms of the column $$A_i$$, with $$C_i^j$$ as the "cofactor" of $$A_i^j$$. 
 
-If we use $$[\ldots ]$$ to antisymmetrize indices we can make this very succinct, but with some questionable indexing:
+If we use $$[\ldots ]$$ to antisymmetrize indices we can make this very succinct, but with a questionable-looking index structure:
 
 $$
 A_i^j A^K_{\star i} \epsilon_{jK} \to A_i^j A_{[\star j]\star i} 
@@ -113,9 +112,11 @@ The "Laplace expansion in rows" would be $$A_i^j A^{\star j[\star i]}$$, by anal
 
 Normally one sees some extra minus-signs in the cofactor $$C_i^j$$, because the normal expression is given in terms of matrix minors. These are equivalent to:
 
-$$A^{\wedge (N-1)} (\mathbf{e}_{1} \wedge \ldots \wedge \mathbf{e}_{i-1} \wedge \mathbf{e}_{i+1}\wedge \ldots \wedge \mathbf{e}_{N})$$
+$$
+A^{\wedge (N-1)} (\mathbf{e}_{1} \wedge \ldots \wedge \mathbf{e}_{i-1} \wedge \mathbf{e}_{i+1}\wedge \ldots \wedge \mathbf{e}_{N})
+$$
 
-This differs from the $$\star$$-index in that the vector $$\mathbf{e}_i$$ has been removed "in place" rather than first being transposed to the front of ths list. We can represent this with another special multi-index $$\enclose{horizontalstrike}{i}$$, which I'll call "strike-$$i$$". The two differ by a sign, since it takes $$i-1$$ transposition to move $$i$$ from the front of the list to its normal position:
+This differs from the $$\star$$-index in that the vector $$\mathbf{e}_i$$ has been removed "in place" rather than first being transposed to the front of ths list. We can represent this with another special multi-index $$\enclose{horizontalstrike}{i}$$, which we can read as "strike-$$i$$" or "omit-$$i$$". The two differ by a sign, since it takes $$i-1$$ transposition to move $$i$$ from the front of the list to its normal position:
 
 $$
 (-1)^{i-1} \mathbf{e}_i \wedge \mathbf{e}_{\enclose{horizontalstrike} i} = \Omega  =\mathbf{e}_i \wedge \mathbf{e}_{\star i} 

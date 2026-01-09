@@ -1,17 +1,15 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Drawing Dimensions I"
-subtitle: "Linear Algebra"
+title: "Dimensions in Linear Algebra"
 date: "2024-09-02"
 math: true
 bskyPostCid: "3lxgmdw7dgs2h"
+series:
+  name: "Dimensions"
+  part: 1
 ---
 
 
-*Part of a series on Dimension Diagrams*:
-1. *(This post)*.
-2. *<a href="/posts/2024-09-02-dimensions-physics/">Physics</a>*
-3. *<a href="/posts/2025-08-30-data-dimensions/">Data Engineering</a>*
 
 #### Table of Contents
 
@@ -38,7 +36,9 @@ Maybe you even decide to forget how many dimensions are in $$\mathbf{a}_{3{.}{.}
 
 But there are various ways to perform this reduction—how do you pick? An obvious choice is to map that component $$\mathbf{a}_{3{.}{.}N}$$ to its length $$\mathbf{a}_{3{.}{.}N} \to \vert \mathbf{a}_{3{.}{.}N}\vert$$. Since $$ {\vert\mathbf{a}_{3{.}{.}N} \vert}^2 = a_3^2 + \ldots + a_N^2$$, this preserves the length of the full vector:
 
-$$\vert \mathbf{a} \vert= \sqrt{a_1^2 + a_2^2 + a_{3{.}{.}N}^2}$$
+$$
+\vert \mathbf{a} \vert= \sqrt{a_1^2 + a_2^2 + a_{3{.}{.}N}^2}
+$$
 
 But that isn't the only option; you could, for example, project to a single one of the $$(N-2)$$ dimensions, such as $$\mathbf{a}_{3{.}{.}N} \to a_3$$.
 
@@ -235,7 +235,9 @@ Now, when we mapped $$\mathbf{a}_{3\ldots N}$$ down to one dimension $$a_3$$, th
 
 Or, consider rotating around dimension 2 (rotating dimension 1 into 3), before and after the unfolding. Before, $$\mathbf{e}_1$$ mapped to $$\mathbf{e}_3$$. After, does it map to any particular vector? To all vectors in $$3{.}{.}N$$? To an equivalence class of vectors? All of these will work, but I think the most sensible and least opinionated target is to map to the volume element on the unfolded space:
 
-$$a_3 \to a_3 \mathbf{e_3} \wedge \mathbf{e_4} \wedge \ldots \wedge \mathbf{e_N}$$
+$$
+a_3 \to a_3 \mathbf{e_3} \wedge \mathbf{e_4} \wedge \ldots \wedge \mathbf{e_N}
+$$
 
 This looks like like the reverse of what we just did with the matrix $$\mathbf{A}$$, so we can run that backwards to see where to go from here. We arrived at $$\det{A}$$ by forgetting the dimensions of the matrix; therefore, anywhere it it appears, we can restore the matrix's full dimensions pulling eigenvalues out of the $$\det$$:
 

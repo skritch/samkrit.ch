@@ -1,10 +1,12 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: Statistical Mechanics II
-subtitle: The Partition Function
+title: "The Partition Function"
 date: 2024-09-30
 math: true
 bskyPostCid: "3lxgmf2onwk2h"
+series:
+  name: "Statistical Mechanics"
+  part: 2
 ---
 
 #### Table of Contents
@@ -47,11 +49,18 @@ $$
 p(x_A, x_B) = p(x_A)p(x_B) \sim \mathrm{Uniform}(\Omega_A \cdot \Omega_B)
 $$
 
+Systems which are not independent will have some conditional structure to their multiplicities under the microcanonical hypothesis, but will still be uniformly distributed within that slice of the space:
+
+$$
+p(x_A, x_B) = p(x_A)p(x_B \mid x_A) \sim \mathrm{Uniform}(\Omega_A(x_A) \cdot (\Omega_B \mid x_A))
+$$
+
+
 <br/>
 
 ## The heat reservoir via generating functions
 
-Let's now look at the standard "heat reservoir" derivation of the partition function. We imagine a system $$A$$ which can excahnge energy freely with a much larger reservoir $$B$$. We label the states of each by their energies $$E_A, E_B$$, and each has a multiplicity function which depends only on its energy: $$\Omega_A(E_A), \Omega_B(E_B)$$. I will be departing a bit from the standard textbook argument by making liberal use of the language of "generating functions" ("g.f."s from now on.) So we will represent the states of $$A$$ and $$B$$ separately as two generating functions:
+Let's now look at the standard "heat reservoir" derivation of the partition function. We imagine a system $$A$$ which can exchange energy freely with a much larger reservoir $$B$$. We label the states of each by their energies $$E_A, E_B$$, and each has a multiplicity function which depends only on its energy: $$\Omega_A(E_A), \Omega_B(E_B)$$. I will be departing a bit from the standard textbook argument by making liberal use of "generating functions" ("g.f."s from now on). So we will represent the states of $$A$$ and $$B$$ separately as two generating functions:
 
 $$
 \begin{align}
@@ -59,23 +68,28 @@ g_A(y) = \sum_E \Omega_A(E) y^E && g_B(z) = \sum_E \Omega_B(E) z^E
 \end{align}
 $$
 
-where $$y$$ and $$z$$ are placeholder variables which track the "energy cost" of each state, which is a standard g.f. method. These should be thought of as "transformations" of the underlying series $$\Omega_A, \Omega_B$$.
+where $$y$$ and $$z$$ are placeholder variables which track the "energy cost" of each state, which is a standard g.f. method. These should be thought of as "transformations" of the underlying series $$\Omega_A$$ and $$\Omega_B$$.
 
 We'll want to have a few facts about g.f.s on hand:
-* The g.f.s above are written as sums over energies $$E_A, E_B$$, but they would come to the same thing if we summed over individual states $$x_A$$: $$\sum_x y^E(x) = \sum_E \Omega(E) y^E$$,  since $$\Omega_A(E) = \vert \{ x_A \mid E(x_A) = E\} \vert$$
+* The g.f.s above are written as sums over energies $$E_A, E_B$$, but they would come to the same thing if we summed over individual states $$x_A$$: $$\sum_x y^E(x) = \sum_E \Omega(E) y^E$$, since $$\Omega_A(E) = \vert \{ x_A \mid E(x_A) = E\} \vert$$
 * The sum $$\sum_E$$ can be taken over the actual spectrum of system $$A$$, since the coefficient of any term not in the spectrum would just be zero.
 * We can use a g.f. to count the total states over all $$E$$ by evaluating at $$y=1$$: $$g_A(1) = \sum \Omega_A(E) = \Omega_A$$. This just reduces the g.f. to a sum of $$\Omega$$ across all states.
 * We can convert a g.f. to a "probability generating function" ("p.g.f") by normalizing it: $$p_A(y) = \frac{g_A(y)}{g_A(1)}$$. 
-* We can also plug in other values for $$y$$ to assign a "cost" to each unit of $$E$$. This is best illustrated with the binomial series $${(x+y)}^N = \sum {N \choose k} x^k y^{N-k}$$ as seen in the following examples
+* We can also plug in other values for $$y$$ to assign a "cost" to each unit of $$E$$. This is best illustrated with the binomial series $${(x+y)}^N = \sum {N \choose k} x^k y^{N-k}$$ as seen in the following examples:
   * Plugging in $$x=y=1$$ counts the total number of states, which is $${(1+1)}^N = 2^N$$ 
   * Plugging in $$x = y = \frac{1}{2}$$ give a $$\mathrm{Binomial}(\frac{1}{2})$$ distribution, representing the probability of getting $$k$$ heads in $$N$$ coin flips: $$p(k) = {N \choose k} \frac{1}{2}^N$$. 
   * Plugging in any other $$x = p$$, $$y = 1-p$$ will give a different $$\mathrm{Binomial}(p)$$ distribution. This works because $$({p + (1-p)})^N = 1^N = 1$$. Any assignment of values that make the g.f. equal to 1 can be interpreted as a p.g.f.
-  * Plugging in $$x = y$$ marks the two variables as indistinguishable, reducing the series to $$x^N$$.
+  * Plugging in $$x = y$$ marks the two variables as indistinguishable, reducing the series to $$(2x)^N$$.
   * Other expressions like $$y=2x^2$$ can usually be given some interpretion in terms of of weights, costs, indistinguishability, etc.
 
 Now, if our system and reservoir do *not* interact, we can track their energies separately in a two-variable joint g.f., which is just the product
 
-$$g_{\text{independent } A \times B}(y, z) = g_A(y)\times g_B(z) = \left(\sum_{E_A} \Omega_A(E_A) y^{E_A} \right)\left(\sum_{E_B} \Omega_B(E_B) z^{E_B} \right)$$
+$$
+\begin{align}
+g_{A \times B}(y, z) &= g_A(y)\times g_B(z)  \\
+  &= \left(\sum_{E_A} \Omega_A(E_A) y^{E_A} \right)\left(\sum_{E_B} \Omega_B(E_B) z^{E_B} \right)
+\end{align}
+$$
 
 Clearly the series would factor; each term for a given power of $$y$$ contains a full copy of the series in $$z$$ and vice versa. Likewise any fully-factorizable g.f. polynomial must represent a product of independent states—this is just the same statement about marginal probabilities from before.
 
@@ -83,7 +97,7 @@ If our system and reservoir *can* interact, by exchanging energy, then we need t
 
 $$
 \begin{align}
-g_{A \times B}(y) = g_A(y)\times g_B(y) 
+g_{A \times B}(y)
   &= \left(\sum_{E_A} \Omega_A(E_A) y^{E_A} \right)\left(\sum_{E_B} \Omega_B(E_B) y^{E_B} \right)\\
   &= \sum_{E_A} \sum_{E_B} \Omega_A(E_A) \Omega_B(E_B) y^{E_A + E_B}\\
   &= \sum_{E_\text{total}} \sum_{E_A} \Omega_A(E_A) \Omega_B(E_\text{total} - E_A) y^{E_\text{total}}\\
@@ -108,7 +122,9 @@ So this convolution is just a way of "reindexing" the joint series by the combin
 
 ## Linearizing the reservoir
 
-Now that we have our joint g.f., we'll add the assumption that the reservoir $$B$$ is so much larger than system $$A$$ that, while its multiplicity $$\Omega_B$$ _will_ vary as energy is exchanged (otherwise they'd be independent), its state will not change appreciably. Thus the *rate* of the variation will be approximately constant, and we can replace the function $$\Omega_B$$ with a linear approximation. But we'll actually linearize $$S_B$$ rather than $$\Omega_B$$, which I'll only try to justify with a hand-wave-y argument for now: entropies compose additively, $$S_{A\times B} = S_A + S_B$$, so they represent "extensive" physical quantities and are the "sorts of thing we take derivatives of", while multiplicites compose multiplicatively. More on this later.
+Now that we have our joint g.f., we'll add the assumption that the reservoir $$B$$ is so much larger than system $$A$$, such that, its state will not change appreciably as energy is exchanged (though the multiplicity $$\Omega_B$$ _will_ vary). Thus the *rate* of the variation of $$\Omega_B$$ will be approximately constant, and we can replace the function $$\Omega_B$$ with a linear approximation. 
+
+We'll actually linearize $$S_B$$ rather than $$\Omega_B$$. I'll only try to justify this with a hand-wave-y argument for now: entropies compose additively, as in $$S_{A\times B} = S_A + S_B$$, so they represent "extensive" physical quantities and are therefore "the sorts of thing we take derivatives of". Multiplicities compose multiplicatively, and are rightly handled with logarithmic derivatives. More on this later.
 
 The typical version of this argument linearizes around $$E_\text{total}$$, interpreting the reservoir as containing "nearly all of the energy". This interpretation isn't necessary, though—all we need is that the reservoir's slope $$S_B'$$ is approximately constant. So I'll linearize around an arbitrary energy $$E^*$$ instead: 
 
@@ -182,21 +198,27 @@ We can visualize the joint distribution of the $$E_A$$-dependent systems, $$A \t
 
 ![boltzmann visualized by marginals](../../images/partition/2d-boltzmann-cupola.png)
 
-The rectangles widths grow according to $$\Omega_A$$ while their heights shrink according to to $$e^{-\beta E_A}$$. The partition function $$Z$$ is the combined area of the all of the rectangles.[^1]
+The rectangles widths grow according to $$\Omega_A$$ while their heights shrink according to to $$e^{-\beta E_A}$$. 
+
+Evidently, the partition function $$Z$$ is the combined area of the all of the rectangles, being the sum of a products of factors $$\Omega_A(E_A)$$ and $$e^{-\beta E_A}$$ [^1]
 
 [^1]: Here I'm plotting $\Omega$ on the axes, not $E$; the $E_i$ values are labeling the bins. If the $E$ distribution were bounded, this would be like plotting against the quantile of $E$ rather than $E$ itself, or against the "position on $E$'s c.d.f.". Basically this is an unnormalized [copula](https://en.wikipedia.org/wiki/Copula_(statistics)) plot, a concept I only learned about when I was trying to figure out what this thing I was drawing was.
 
-Their joint multiplicity $$\Omega(E) = \Omega_A(E) e^{-\beta E}$$ represents the _areas_, which grow and then shrink again:
+The joint multiplicities $$\Omega(E) = \Omega_A(E) e^{-\beta E}$$ are _areas_, which grow and then shrink again:
 
 ![Boltzmann areas](../../images/partition/boltzmann-areas-graph.png)
 
-The "third" system $$B_{\not{A}}$$ can be visualized as an independent dimension, called $C$ below:
+The "third" system $$B_{\not{A}} = C$$ can be visualized as a third dimension which does *not* vary with $$E_A$$:
 
 ![boltzmann visulialized with constant 3rd dimension](../../images/partition/3d-boltzmann-cupola.png)
 
+This third dimension does not participate in any of our 
+
 We can also read a physical interpretation of $$Z(\beta)$$ off the joint generating function 
 
-$$g_{A \times B} = \sum_{E_\text{total}} Z(\beta) e^{S_B(E_\text{total}/k)}  y^{E_\text{total}}$$
+$$
+g_{A \times B} = \sum_{E_\text{total}} Z(\beta) e^{S_B(E_\text{total}/k)}  y^{E_\text{total}}
+$$
 
 For each $$E_\text{total}$$, this has the form of a product of two systems $$Z \times \Omega_{B_{\not {A}}}$$. We conclude:
 
@@ -297,7 +319,7 @@ $$
 p_\text{Boltzmann}(m) = \frac{ {N \choose m} e^{-\beta(m\epsilon)}}{\sum_m{N \choose m}e^{-\beta(m\epsilon)}}
 $$
 
-For some temperature $$kT$$, the state with $$\frac{m}{N} = \frac{kT}{\epsilon}$$ of the bits will be the largest term this series. How dominant is it? If $$kT = \frac{N\epsilon}{2}$$, and $$N=1000$$, the peak at $$m=500$$ has 2.5% of the total probability, and the range $$m \in [490, 500]$$, only 2% of the range of $$m$$, supports about 50% of the total probability. That's pretty sharp, but this is nothing compared to typical thermal systems, which usually have $$N \sim O(10^{23})$$. One can show with a Stirling approximation that the width of this peak grows as $$O(\sqrt{N})$$; thermal systems are very sharply peaked indeed.
+For some temperature $$kT$$, the state with $$\frac{m}{N} = \frac{kT}{\epsilon}$$ of the bits will be the largest term this series. How dominant is it? If $$kT = \frac{N\epsilon}{2}$$, and $$N=1000$$, the peak at $$m=500$$ has 2.5% of the total probability, and the range $$m \in [490, 510]$$, only 2% of the range of $$m$$, supports about 50% of the total probability. That's pretty sharp, but this is nothing compared to typical thermal systems, which usually have $$N \sim O(10^{23})$$. One can show with a Stirling approximation that the width of this peak grows as $$O(\sqrt{N})$$; thermal systems are very sharply peaked indeed.
 
 The sharpness of these peaks justifies the "thermodynamic limit": for large $$N$$ we assume that the mode ($$E^*$$, postulate 1) and mean ($$U$$, postulate 2) are equal, $$E^* = U$$, and often approximate the entire distribution (postulate 3) as *only* its peak value, or as a sharp Gaussian around the peak value, the variances of which turn out correspond to second-order thermodynamic properties like "specific heat" and "compressibility".
 
@@ -335,13 +357,13 @@ This relationship expresses $$F(T)$$ as a Legendre transform of the entropy $$S(
 
 ![Boltzmann area growth rate](../../images/partition/maximal%20E%20rectangles.png)
 
-Strictly speaking, the above equation is not how the Legendre transform is usually written. The standard form would be $$\frac{F(T)}{T} = \min_{E} \frac{1}{T}E - S(E)$$, Legendre-transforming $$S(E)$$ w.r.t. a slope which we name $$\frac{1}{T}$$. This definition can be written more naturally in terms of $$\beta = \frac{1}{kT}$$ with a "dimensionless free energy" $$\mathcal{F} = \beta F$$ and "dimensionless entropy" $$\mathcal{S} = S/k$$, then we have: 
+Strictly speaking, the above equation is not how the Legendre transform is usually written. The standard form would be $$\frac{F(T)}{T} = \min_{E} \frac{1}{T}E - S(E)$$, which may be read as a Legendre transform of $$S(E)$$ w.r.t. a slope named $$\frac{1}{T}$$. This definition can be written more naturally in terms of $$\beta = \frac{1}{kT}$$ with a "dimensionless free energy" $$\mathcal{F} = \beta F$$ and "dimensionless entropy" $$\mathcal{S} = S/k$$, giving: 
 
 $$
 \mathcal{F} = \min_E \beta E - \mathcal{S}(E)
 $$
 
-You can also see this as a Legendre transform of $$E(S) \to F(T)$$ through the parameter $$T = \frac{d E}{d S}$$, if you had started with the $$S(E)$$ inverted as $$E(S)$$. These different formulations are all equivalent, only amounting to different rearrangements of the underlying differential $$dF = dE - TdS + SdT$$. 
+Alternatively, you could start with the $$S(E)$$ inverted as $$E(S)$$ and Legendre transform $$E(S) \to F(T)$$ by way of the the parameter $$T = \frac{d E}{d S}$$. These only amount to different ways of rearranging the underlying differential $$dF = dE - TdS + SdT$$. 
 
 Note that we have still asserted nothing about equilibrium or probabilities! Our expression simply represents the value of the series $$\Omega_A(E)e^{-\beta E}$$ as its maximum:
 

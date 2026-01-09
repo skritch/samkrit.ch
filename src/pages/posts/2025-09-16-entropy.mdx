@@ -1,12 +1,14 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Entropy I"
-subtitle: Motivating Shannon
+title: "Motivating the Shannon Entropy"
 date: 2025-09-16
 math: true
 bokeh: true
 toc: true
 bskyPostCid:
+series:
+  name: "Entropy"
+  part: 1
 
 ---
 import EntropyBar from "../../components/diagrams/entropy/EntropyBar";
@@ -16,11 +18,6 @@ import BokehPlot from "../../components/diagrams/BokehPlot";
 The word "entropy" is surrounded in a strange mystique. This is confusing. Let us illuminate it.
 
 
-*This is part of a series on entropy.*
-1. *(This post)*
-1. *<a href="/posts/2025-09-27-entropy2/">Entropy II: The Entropy Function</a>*
-
-<br/>
 
 #### Table of Contents
 
@@ -106,7 +103,7 @@ $$
 
 So the $\frac{5}{16}$ block contributes just a little more than the $\frac{1}{4}$ block did: even though $\log_2{\frac{16} {5}} \approx 1.678 < 2$, the fraction $\frac{5}{16} > \frac{1}{4}$ more than made up for it.
 
-What we've just found is that the contribution of a single block comprising a fraction $p = \frac{k}{N}$ of the whole is
+What we've just found is that the contribution of a single block comprising a fraction $p = \frac{n}{N}$ of the whole is
 
 $$
 p \log_2 \frac{1}{p}
@@ -150,11 +147,11 @@ This problem--"how to optimally encode a sequence of samples from a distribution
 
 <br/>
 
-## 2. Log-Likelihood per Sample
+## 2. Log-Probability per Sample
 
 Now a second scenario.
 
-Suppose some process in reality emits data according to a probability distribution $p_i$ over $N$ outcomes, $i \in \{1, \ldots, N\}$. A sample example is a 6-sided dice, for which the probabilities are uniform:
+Suppose some process in reality emits data according to a probability distribution $p_i$ over $N$ outcomes, $i \in \{1, \ldots, N\}$. It will suffice to consider a 6-sided dice, for which the probabilities are:
 
 $$
 p_i = \left\{\frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6}, \frac{1}{6} \right\}
@@ -174,32 +171,39 @@ $$
 k_i \approx p_i K
 $$
 
-Suppose we take a vey large number of samples $K$, such that we can safely assume the counts of samples in each bin $k_i$ are approximately equal to these averages. Then the "likelihood" of any particular sequence $\mathbf{x}$ with exactly the typical distribution of outcomes 
+Suppose we take a very large number of samples $K$, such that we can safely assume the counts of samples in each bin $k_i$ are approximately equal to these averages. Then the probability of any particular sequence $\mathbf{x}$ with exactly the typical distribution of outcomes 
 
-$$(k_1, \ldots, k_N) = (p_1 K, \ldots, p_n K)$$
+$$
+(k_1, \ldots, k_N) = (p_1 K, \ldots, p_n K)
+$$
 
 will be the product of the $k_i$ factors of each of the $p_i$
 
 $$
 \begin{align}
-\text{Pr}( \mathbf{x} \mid \text{each } i \text{appears exactly }  k_i  \text{ times}) &= {(p_1)}^{k_1} {(p_2)}^{k_2} \cdots {(p_N)}^{k_N} \\
+\text{Pr}( \mathbf{x}^*) &= {(p_1)}^{k_1} {(p_2)}^{k_2} \cdots {(p_N)}^{k_N} \\
   &= {(p_1)}^{p_1 K} {(p_2)}^{p_2 K} \cdots{(p_N)}^{p_N K} \\
-  &\coloneqq \mathcal{L}[\mathbf{x} \mid k_i]
 \end{align}
 $$
 
-The notation above $\mathbf{x} \mid k_i$ should be understand as representing the likelihood of seeing any *single* one of sequences with counts $k_i$, rather than the probability of seeing those counts $k_i$ in any order. For that we'd have to multiply by the number of such sequences, a multinomial coefficient ${K \choose ( k_i )} = \frac{K!}{{k_1}!{k_2}!\cdots {k_N}!}$.
+Again this is the probability of seeing any *single* sequence $\mathbf{x}^*$ with counts $k_i$, rather than the probability of seeing those counts $k_i$ in any order. For that we'd have to multiply by the number of such sequences, which is a multinomial coefficient ${K \choose ( k_i )} = \frac{K!}{{k_1}!{k_2}!\cdots {k_N}!}$.
 
-If the distribution $p_i$ were uniform with $p_i = \frac{1}{N}$ for all $i$, this likelihood would simply be equal to ${\left(\frac{1}{N}\right)}^K$; every sequence would be equally likely to occur. For each new sample you tack on, the likelihood of that specific sequence would decrease by a factor of $N$, but this rate would never change. Larger values of $N$ would have a greater "cost" in likelihood per sample—for a given length, a larger base set can produce more sequences, and therefore could encode more data or count to a larger number.
+For a uniform distribution, with $p_i = \frac{1}{N}$ for all $i$, this probability will simply be exactly ${\left(\frac{1}{N}\right)}^K$ for any sequence; every sequence would be equally likely to occur. For each new sample, the probability of that specific sequence would decrease by a factor of $N$, but this rate would never change:
 
-For any other distribution the rate of increase of the likelihood would vary, but in the long run it would center on some average rate. Furthermore we could weaken our assumption that our samples occur in exact proportion to $k_i \propto p_i$; this would also alter the likelihood-per-sample, but again we could expect to see the result centered around some average rate.
+$$
+\ldots \longrightarrow \frac{1}{N^K} \longrightarrow \frac{1}{N^{K+1}} \longrightarrow \frac{1}{N^{K+2}} \longrightarrow \ldots
+$$
 
-The above expression for the likelihood is unwieldy because it decreases by a fraction every time we add a new sample. To get something directly interpretable as a "rate of increase", we should a) invert it, b) take a logarithm, and c) divide out $K$:
+Larger values of $N$ would have a greater "cost" in probability per sample: for a given length, a larger base set can produce more sequences, and therefore could encode more data or count to a larger number.
+
+For any other distribution the rate of increase of the probability would vary, but in the long run it would center on some average rate. Furthermore we could weaken our assumption that our samples occur in exact proportion to $k_i \propto p_i$; this would also alter the probability-per-sample, but again we could expect to see the result centered around some average rate.
+
+The above expression for the probability is unwieldy because it decreases by a fraction every time we add a new sample. To get something directly interpretable as a "rate of increase", we should a) invert it, b) take a logarithm, and c) divide out $K$:
 
 
 $$
 \begin{align}
-\frac{1}{K}\log{ \frac{1}{\mathcal{L}[\mathbf{x} \mid k_i] } } &= \frac{1}{K} \log {\frac{1}{{(p_1)}^{p_1 K}  \cdots {(p_N)}^{p_N K} }}\\
+\frac{1}{K}\log{ \frac{1}{\mathcal{L}[\mathbf{x}^*] } } &= \frac{1}{K} \log {\frac{1}{{(p_1)}^{p_1 K}  \cdots {(p_N)}^{p_N K} }}\\
 &= \frac{1}{K} \left[ \log{ \frac{1}{{(p_1)}^{p_1 K}}} + \ldots + \log{\frac{1}{{(p_N)}^{p_N K}}} \right]\\
 &= \frac{1}{K} \left[ (p_1 K)\log{{\frac{1}{p_1}}} + \ldots + (p_N K)\log{\frac{1}{p_N}}\right]\\
 &= \sum_i p_i \log{\frac{1}{p_i}} \\
@@ -208,9 +212,9 @@ $$
 $$
 
 
-And voilà: we have found the same "Shannon entropy" formula as in the first example. The interpretation this time is as the "average log-inverse-likelihood per sample"—meaning what?
+And voilà: we have found the same "Shannon entropy" formula as in the first example. The interpretation this time is as the "average log-inverse-probability per sample"—meaning what?
 
-We got here by considering the likelihood $\mathcal{L}[\mathbf{x} \mid k_i]$ of a typical sequence of samples $\mathbf{x}$ from a distribution of known $p_i$ over $N$ bins. This rate of likelihood-per-sample represents the *best you can do* predicting samples from this process with any distribution—if we tried to predict this data with any *other* distribution $q_i$, we would invariably judge it to have a lower likelihood, in the long run and on average, than it would according the true generating distribution $p_i$.[^cross]
+We got here by considering the probability $P[\mathbf{x}^*]$ of a typical sequence of samples $\mathbf{x}^*$ from a distribution of known $p_i$ over $N$ bins. This rate of probability-per-sample represents the *best you can do* predicting samples from this process with any distribution—if we tried to predict this data with any *other* distribution $q_i$, we would invariably judge it to have a lower probability, in the long run and on average, than it would according the true generating distribution $p_i$.[^cross]
 
 [^cross]: Predicting this sequence with some other distribution $q_i$ would alter the probability inside the logarithms (which are used to "model" the sequence) but would not change the probabilities outside, which arose from the actual process which produced each value $k_i \approx p_i K$ times. The resulting expression would be $$H[p_i, q_i] = \sum_i p_i \log{\frac{1}{q_i} }$$, which is called the "cross entropy"—a term which, to me, is unsuggestive of its meaning. 
 
@@ -222,22 +226,22 @@ So the "entropy" here seems to describe the inherent difficulty of predicting th
 
 A third and final derivation.
 
-Consider again some process with $N$ uniformly distributed with $p_i = \frac{1}{N}$. We expect a sequence of such $K$ samples to have each $i$ represented $k_i = \frac{K}{N}$ times.  The probability of seeing any particular vector of counts $\mathbf{k} = (k_1, \ldots, k_N)$ will be proportional to a multinomial:
+Consider again some process with $N$ uniformly distributed outcomes, so $p_i = \frac{1}{N}$. In a sequence of $K$ samples we expect each $i$ to appear about $k_i = \frac{K}{N}$ times. The probability of seeing any *particular* vector of counts $\mathbf{k} = (k_1, \ldots, k_N)$ will be proportional to a multinomial:
 
 $$
 \text{Pr}(\mathbf{k}) \propto {K \choose \mathbf{k}} = \frac{K!}{{k_1}!\cdots {k_N}!}
 $$
 
-Given one such vector $\mathbf{k}$, you could then estimate the original probabilities of the different $k_i$ as $p_i \approx \frac{k_i}{K}$. We expect that all $k_i \approx \frac{K}{N}$, and indeed, the multinomial is largest when the $k_i$ are all equal.
+The expected outcome is that all $k_i \approx \frac{K}{N}$, and indeed, the multinomial is largest when the $k_i$ are all equal.
 
-Now apply *any selection process* to the set of possible outcomes $\mathbf{k}$, such that only certain distributions of the $k_i$ survive. This could mean masking certain outputs, discarding outputs which fail to adhere to some constraint, or it could mean we use some additional evidence which narrows the candidate list.
+Now apply *any selection process* to the set of possible outcomes $\mathbf{k}$, such that only certain distributions of the $k_i$ survive. This could mean masking certain outputs, discarding outputs which fail to adhere to some constraint, or, it could mean we use some additional evidence which narrows the candidate list.
 
 It will help to have a few examples in mind:
-- "the player folds all hands worse than $99$" (Texas Hold'em, where $N = 52$ cards in the deck, $K = 2$ cards in a hand)
-- "the word contains an "H" in the first position but does not have any of "OUSE". ([Wordle](https://www.nytimes.com/games/wordle/index.html), $N \approx 1000$ candidate words, $K = 1$)
-- "the measured volume is $1 \text{ Liter}$" (Ignoring distinguishability considerations, $N$ is the number of possible states per particle and is $O(10^{29})$ according to [ChatGPT](https://chatgpt.com/c/68f7efe4-b274-8330-8512-96bbd0d3ea10), while $K \sim O(10^{25})$ particles)
-- "if can't metabolize lactose it dies" ($N \approx 4000$ distinct genes which can mutate for *E. coli* or something, $K$ however many cells you want to study)
-- "keep only distributions with mean $\mu = 5$ and variance $\sigma^2 = 10$" ($N$ is the discretization of the space, $K$ can be whatever you want, you might consider the limit $K \to \infty$)
+- "the player folds all hands worse than $99$" (Texas Hold'em, where $N$ is the distinct 2-card poker hands and hands, $K$ is the number of ways of making each equivalent poker hand.)
+- "the target word has an "H" in it none of the other letters of "OUSE". ([Wordle](https://www.nytimes.com/games/wordle/index.html), $N \approx 1000$ candidate words, $K = 1$)
+- "the measured volume is $1 \text{ Liter}$" (if we assume every particle is in a distinct state, $N$ is the number of possible states per particle and is $O(10^{29})$ while $K \sim O(10^{25})$ particles)
+- "if can't metabolize lactose it dies" ($N \approx 4000$ in *E. coli* or something, $K$ however many cells you want to study)
+- "consider only distributions with mean $\mu = 5$ and variance $\sigma^2 = 4$" ($N$ is the discretization of the space, $K$ can be whatever you want, you might consider the limit $K \to \infty$)
 
 What vectors $\mathbf{k}$ should we expect to see now?
 
@@ -268,7 +272,7 @@ $$
   &= \underbrace{K \log K}_{(\sum_i k_i)\log K} - K + \underbrace{\sum_i k_i}_{ K} - \sum_i k_i \log k_i \\
   &= \sum_i k_i \left( \log K - \log k_i \right) \\
   &= K \sum_i \frac{k_i}{K} \log \frac{K}{k_i} \\
-  &= K \times H\left[ \frac{k_i}{K} \right]
+  &= K \cdot H\left[ \frac{k_i}{K} \right]
 \end{align}
 $$
 
@@ -279,10 +283,10 @@ The interpretation is this: out of all distributions compatible with the selecti
 In fact, we can plug this expression for the entropy back in to the original probabilities:
 
 $$
-\text{Pr}(\mathbf{k}) \propto \exp{\left( K \times H\left[\frac{k_i}{K}\right]\right)}
+\text{Pr}(\mathbf{k}) \propto \exp{\left( K \cdot H\left[\frac{k_i}{K}\right]\right)}
 $$
 
-We find that each outcome of the original uniform distribution (in the large-$K$ limit) appears in exact proportion to the above function of its entropy. We can therefore see $e^{K\times H}$ as measuring the "volume of sample space"—but this is not sample space of $k_i$ itself; instead it is the sample space of a *uniform* distribution over all $N$ values of $i$.
+We find that each outcome of the original uniform distribution (in the large-$K$ limit) appears in exact proportion to the above function of its entropy. We can therefore see $e^{K\cdot H}$ as measuring the "volume of sample space"—but this is not sample space of $k_i$ itself; instead it is the sample space of a *uniform* distribution over all $N$ values of $i$.
 
 I find this clarifying so I'll restate it in terms of $p_i$: the Shannon Entropy $H[p_i]$ determines the relative probability that a very large sample from a *uniform* distribution over the $i$ would produce a distribution of outcomes proportional to $p_i$.
 
@@ -291,7 +295,7 @@ High-entropy distributions are common; the uniform distribution is the highest o
 This is really no different from our earlier "average likelihood per sample" formulation, since the above can be rearranged into
 
 $$
-H[p_i] \sim \frac{1}{K} \log \text{Pr}(k_i = p_i K)
+H[p_i] \approx \frac{1}{K} \log \text{Pr}(k_i = p_i K)
 $$
 
 though this relation is neither an equality (since we've discarded the denominators and approximated the multinomials), nor is it a "proportional to" (since we took a logarithm), instead we might say $H$ "goes as" the above the expression.

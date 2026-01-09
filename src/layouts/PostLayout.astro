@@ -3,6 +3,9 @@ import type { MarkdownLayoutProps } from 'astro';
 import { siteConfig } from '../data/site.ts'
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BlueskyComments from '../components/comments/Comments.tsx';
+import SeriesNav from '../components/SeriesNav.tsx';
+import { parseLocalDate } from '../utils/date.ts';
+import { getSeriesData } from '../utils/series.ts';
 
 // https://docs.astro.build/en/basics/layouts/#markdown-layout-props
 type Props = MarkdownLayoutProps<{
@@ -14,25 +17,39 @@ type Props = MarkdownLayoutProps<{
   math?: boolean;
   bokeh?: boolean;
   bskyPostCid: string;
-  
+  series?: {
+    name: string;
+    part: number;
+  };
 }>;
 
 const { frontmatter } = Astro.props;
-const date = frontmatter.date ? new Date(frontmatter.date).toLocaleDateString() : undefined
+const date = frontmatter.date ? parseLocalDate(frontmatter.date).toLocaleDateString() : undefined;
+
+// Extract slug from URL for series lookup
+const urlParts = Astro.url.pathname.split('/');
+const slug = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2];
+const seriesData = frontmatter.series ? await getSeriesData(frontmatter.series.name, slug) : null;
 ---
 
 <BaseLayout title={frontmatter.title}, url={frontmatter.url} math={frontmatter.math} bokeh={frontmatter.bokeh}>
   
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">{frontmatter.title}</h1>
-    {frontmatter.subtitle && 
+    {frontmatter.subtitle &&
       <h3 class="post-subtitle" itemprop="name headline">{frontmatter.subtitle}</h3>
     }
-    {date && 
+    {date &&
       <p class="post-meta" itemprop="datePublished">{date}</p>
     }
     <hr/>
   </header>
+
+  {seriesData && (
+    <SeriesNav seriesData={seriesData} client:load />
+    <br />
+  )}
+
   <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
     <div class="post-content"  itemprop="articleBody">
       <slot /> <!-- your content is injected here -->

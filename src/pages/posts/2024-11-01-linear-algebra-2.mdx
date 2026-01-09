@@ -1,17 +1,15 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Elementary Linear Algebra II"
-subtitle: "Multiplying Vectors"
+title: "Multiplying Vectors"
 date: "2024-11-02"
 math: true
 toc: true
 bskyPostCid: "3lxgmob43bs2h"
+series:
+  name: "Elementary Linear Algebra"
+  part: 2
 ---
 
-*Part of a series on elementary linear algebra*:
-1. *<a href="/posts/2024-11-01-linear-algebra-1/">Vectors</a>*
-2. *(This post)*
-3. *<a href="/posts/2024-11-01-linear-algebra-3/">Division</a>*
 
 ## Table of Contents
 
@@ -104,7 +102,7 @@ But the only way for this to be linear is if the value *does not vary* along the
 
 ![](../../images/linalg1/linear_product2.png)
 
-... well, apparently this *is* a function we could define. But it doesn't look like a particularly useful one—except for the values $$ab$$ we started with, and $$-ab$$ for the opposite orientations, the other values don't admit any obvious interpretation.
+... well, apparently this *is* a function we could define. But it doesn't look like a particularly useful one—except for the values $$ab$$ we started with, and $$-ab$$ for the opposite orientations, the other values don't admit any obvious interpretation. And we've privileged $b\mathbf{a}_\perp$ over $-b\mathbf{a}_\perp$, another vector perpendicular to $\mathbf{a}$. Shouldn't multiplication by this give the expected $ab$ as well?
 
 Let's step back. Maybe those two conditions on the products of parallel and perpendicular vectors don't need to be cases of the *same* operation. We can instead define *two* multiplication operations, each in terms of projections:
 

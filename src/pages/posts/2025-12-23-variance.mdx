@@ -1,0 +1,251 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "Variance and Vector Norms"
+date: 2025-12-23
+math: true
+bokeh: true
+toc: true
+bskyPostCid:
+
+---
+
+
+#### Table of Contents
+
+
+## Covariance is an Inner Product
+
+Observe the rules of standard deviations and variances:
+$$
+\begin{align*}
+\sigma_X &= \sqrt {\text{Var}[X]}\\
+\text{Var}[aX] &= a^2 \text{Var}[X] \\
+\text{Var}[X \pm Y] &= \text{Var}[X] + \text{Var}[Y] \pm 2\text{Cov}[X,Y] \\
+\text{Var}[aX + bY] &= a^2 \text{Var}[X] + b^2 \text{Var}[Y] + 2ab \text{Cov}[X,Y] \\
+\end{align*}
+$$
+
+Compare with the vector inner product:
+$$
+\begin{align*}
+\Vert \mathbf{x} \Vert &= \sqrt{\langle \mathbf{x}, \mathbf{x} \rangle}\\
+\Vert a\mathbf{x}\Vert^2 &=  a^2 \Vert \mathbf{x}\Vert^2\\
+\Vert \mathbf{x} \pm \mathbf{y}\Vert^2 &= \Vert \mathbf{x} \Vert^2 + \Vert \mathbf{y}\Vert^2 \pm 2\langle \mathbf{x}, \mathbf{y}\rangle\\
+\Vert a\mathbf{x} \pm b\mathbf{y}\Vert^2 &= a^2\Vert \mathbf{x} \Vert^2 + b^2\Vert \mathbf{y}\Vert^2 \pm 2ab\langle \mathbf{x}, \mathbf{y}\rangle\\
+\end{align*}
+$$
+
+Evidently $\text{Var}[X]$ acts just like a squared norm $\langle \mathbf{x}, \mathbf{x} \rangle$, and a covariance $\text{Cov}[X, Y]$ acts just like an inner product. 
+
+This one notices right away, probably on one's first encounter with standard deviations. But we lack the equipment to explain how this might be so. It is filed away as a curiosity. 
+
+Let us ground this "vectorial intuition" for probability distributions, then. In what sense is a probability distribution a vector? 
+
+I will be a little technical, so as to untangle what might otherwise get confused. (I was myself confused.)
+
+Suppose we have an underlying sample space $\Omega$. The set of events may well be non-numeric: the faces of die, playing cards, or the outcomes of a sporting event or election. Or they might be inherently numeric: the temperature on a given day, the number of deaths or births, etc. In either case we somehow come by a probability measure $P$ over this space: perhaps we invoke the "principle of indifference" for the die, or we forecast a distribution of outcomes for a soccer match. $P$ will have some "distribution" over $\Omega$. But note that, at this point, we can not define a "mean" or "variance" of $P$; the events themselves may not have any inherent numeric value (though they may if $\Omega$ is a set of numbers).
+
+Now we create a random variable, which assigns a number to each event: $X: \Omega \to S \subseteq \mathbb{R}$. The original distribution $P$ now pushes forward to a measure $\mu_X$ on $\mathbb{R}$. We now have a "probability distribution" over numbers, the values taken by the random variable, such as a discrete uniform distribution on $\{1,2,3,4,5,6\}$ for a dice roll, or a normal distribution around some mean temperature $f(T) \sim \mathcal{N}(\mu, \sigma^2)$. 
+
+With this distribution (defined by the p.d.f. $f(x)$ or measure $\mu_X(x) = f(x)dx$) we can now define expectations on $\mathbb{R}$, such as the variance of the random variable $X$, or some other r.v. defined as a function of $X$:
+$$
+\begin{align*}
+\text{Var}[X] &= \text{E}[(X- \text{E}[X])^2] = \int (x - \text{E}[X])^2 f(x) dx\\
+\text{Var}[\sqrt{X - 5}] &= \int (\sqrt{x-5} - \text{E}[\sqrt{x-5}])^2 f(x) dx
+\end{align*}
+$$
+Or the covariance of two random variables:
+$$
+\begin{align*}
+\text{Cov}[X, Y] &= \text{E}[(X - \text{E}[X])(Y - \text{E}[Y])] \\
+&= \int (x - \text{E}[X])(y(x) - \text{E}[y(x)]) f(x) dx
+\end{align*}
+$$
+(Here $Y$ is a given as a function of the $X$ variable for simplicity.)
+
+Now: it is the *random variable* (like $X$) which we will view as a vector. It is *not* the underlying probability measure or distribution (like $P$, $\mu_X$, $f(x)dx$, or $\mathcal{N}(\mu, \sigma^2)$). I found this point confusing.
+
+The requirement for a random variable to be a vector is that its second moment be finite: $E[X^2] \lt \infty$. This is exactly the condition of being "square integrable", $\int x^2 f(x) dx \le \infty$, for the function $g(x) = x$. This makes $g$ a member of an $L^2$ inner product space on $\mathbb{R}$ with respect to the measure $\mu_X$, with the mixed moment as the inner product:
+$$
+\langle g, h \rangle =  E[g(X)h(X)] = \int g(x)h(x) d\mu_X(x) = \int g(x)h(x) f(x)dx 
+$$
+Or we can regard $g, h$ as members of $L^2$ space on $\Omega$ itself, now with measure $P$ and a coordinate $\omega$:
+$$
+\langle g, h\rangle = \int g(X(\omega)) h(X(\omega)) dP(\omega)
+$$
+Or for two random variables $X, Y$ defined directly on the underlying space:
+$$
+\langle X, Y\rangle = \int X(\omega) Y(\omega) dP(\omega)
+$$
+At this point we have found the vector space in which a random variable is a vector. It is a Hilbert space of functions-over-something; exactly like the Hilbert space of functions with Fourier expansions, or of quantum mechanics.
+
+But this is not the whole picture, because the $L^2$ inner product $\langle g, h\rangle$ referred to above is *not* the covariance $\text{Cov}[g(X), h(X)]$. And $\text{E}[X^2] = \int x^2 f(x)dx$ is the $L^2$ norm of $X$ but is not the variance, which would be $\text{E}[X^2] - (\text{E}[X])^2$. 
+
+To get the covariance we have to compare, not the r.v.s themselves, but their rejections off the subspace of constant functions. The "constant functions" $x \mapsto c$ are all multiples of the unit constant function $c = c1$, which corresponds to the vector $\mathbf{e}_1(x) = 1$. (It's a unit vector because its norm is 1, since our measure $P$ is a probability measure and integrates to $1$, $\int f(x)dx = 1$.) Then the expectation/mean $\text{E}[X]$ is just the inner product with this unit vector:
+$$
+\langle X, \mathbf{e}_1 \rangle = \int (1\cdot x) f(x) dx = X_{\parallel 1} = \text{E}[X]
+$$
+Therefore the difference $X - \text{E}[X]$ removes the component of $X$ along one particular unit vector:
+$$
+X_{\perp 1} = X - \text{E}[X] \longleftrightarrow \mathbf{x}_{\perp 1} = \mathbf{x} - \langle \mathbf{x}, \mathbf{e}_1\rangle \mathbf{e}_1
+$$
+The variance of $X$ is then the norm of $X$'s component on the subspace $\perp \mathbf{e}_1$, which I'll shorthand as $\perp 1$:
+$$
+\begin{align*}
+\text{Var}[X]  &= \text{E}[(X - \text{E}[X])^2]\\
+&= \langle X_{\perp 1}, X_{\perp 1}\rangle
+\end{align*}
+$$
+
+The standard deviation is a norm:
+$$
+\sigma_X = \sqrt{\text{Var}[X]} = \sqrt{\langle X_{\perp 1}, X_{\perp 1}\rangle}
+$$
+
+And the covariance is the inner product:
+$$
+\begin{align*}
+\text{Cov}[X, Y] &= \text{E}[(X - \text{E}[X])(Y - \text{E}[Y])] \\
+&= \langle X_{\perp 1}, Y_{\perp 1} \rangle
+\end{align*}
+$$
+So: the covariance of two random variables is indeed an inner product on a vector space. 
+
+That's the punchline. In hindsight it's nearly trivial, but when one treats probability distributions as vectors it is usually in the context of vectors of samples $\mathbf{X} = (X_1, X_2, \ldots)$, and I had a hard time connecting the probability-theory part of my brain to the functional-analysis part to see that $\text{E}[X]$ was an inner product with the vector representing constant functions.
+<br/>
+
+## Sample Variance
+
+Now I want to investigate a couple questions which came up for me.
+
+First, what about sampling distributions? Here the situation is: we observe some  values  from the random variable . These are the genuine values of  restricted to the  points; it is the choice of the points which is "random". So we have:
+$$
+\begin{align}
+W &= (\omega_1, \omega_2, \ldots, \omega_N)\\
+x &= (x_1, x_2, \ldots, x_N)\\
+  & =(X(\omega_1), X(\omega_2), \ldots, X(\omega_N))
+\end{align}
+$$
+From these samples we would like to characterize the underlying random variable $X$, by e.g. its mean and variance.
+
+These $N$ points define a a new random variable $X_{W}$ on a new sample space which is just the set $W$, with a discrete uniform with weight $P_W(\omega_i) = \frac{1}{N}$. (We'll assume all samples are distinct.)
+
+Distributions on the discrete space $W$ are just vectors in $\mathbb{R}^N$, so can define a new $L^2(W)$ space with the uniform measure $P_W$. Variance and covariance on this sample space can then be defined as inner products exactly as we did before (with the sample mean $\bar{x} = \text{E}_W[x]$):
+$$
+\begin{align*}
+\langle x, y\rangle_W = \text{Cov}_W[x, y] = \frac{1}{N}\sum_i{(x_i - \bar{x})(y_i - \bar{y})}\\
+\langle x, x \rangle_W = \text{Var}_W[x, y] = \frac{1}{N} \sum_i(x_i - \bar{x})^2
+\end{align*}
+$$
+Just as in the case of $X$, we are removing the component of $x$ along the constant functions on $\{\omega_i\}$ and then computing an inner product on the remaining $(N-1)$-dimensional subspace.
+The factor $\frac{1}{N}$ enters as the discrete measure $P_W$ on the set $W$.
+
+But the latter expression is *not* the "sample variance". Here we come to the matter of the $\frac{1}{N - 1}$ factor in the sample variance, [Bessel's Correction](https://en.wikipedia.org/wiki/Standard_deviation#Corrected_sample_standard_deviation). The "unbiased estimator" of the true variance $\sigma^2$ of $X$ is:
+$$
+s^2 = \frac{1}{N-1} \sum(x - \bar{x})^2
+$$
+It is straightforward to *prove* that $N-1$ is necessary to correctly estimate $\sigma^2$. We draw three vectors in the vector space $L^2(W)$ over the sample space representing the data, the sample mean, and the true mean:
+$$
+\begin{align*}
+x &= (x_1, x_2, \ldots)\\
+\bar{x} &=\bar{x}\mathbf{f}_1 = (\bar{x}, \bar{x}, \ldots)\\
+\mu &= \mu\mathbf{f}_1 = (\mu, \mu, \ldots)\\
+\end{align*}
+$$
+
+Here $\mathbf{f}_1$ is the constant vector $(1,1,\ldots)$ on the sampling space $W$.
+
+The differences of these vectors form a triangle:
+$$
+\begin{align*}
+x - \bar{x} &= (x_1 - \bar{x}, x_2 - \bar{x}, \ldots )\\
+ \bar{x} - \mu &= (\bar{x} - \mu, \bar{x} - \mu, \ldots )\\
+x - \mu &= (x_1 - \mu, x_2 - \mu, \ldots )
+\end{align*}
+$$
+
+And it must be a right triangle: the third vector $x - \mu$ is the hypotenuse of the right triangle formed by the first two, since $\bar{x}$ is just the projection of $x$ onto $\mathbf{f}_1$, making $x - \bar{x}$ perpendicular to $\mathbf{f}_1$ and therefore to $\bar{x} - \mu$. Therefore the norms of these vectors obey a Pythagorean theorem:
+$$
+\Vert x - \mu\Vert_W^2 = \Vert x - \bar{x} \Vert_W^2  + \Vert \bar{x} - \mu \Vert_W^2 
+$$
+Meanwhile the expectations of these norms in the original space $\Omega$ may be determined from the properties of the variance:
+$$
+\begin{align*}
+\text{E}[\Vert X - \mu\Vert^2] &= N\cdot \left(\frac{1}{N}\sum_i^N (x_i - \mu)^2\right) \\
+  &= N\cdot  \text{Var}{X}\\
+&= N\sigma^2 \\
+\text{E}[\Vert \bar{X} - \mu\Vert^2] &= \sum_i^N \left(\bar{x} - \mu\right)^2 
+  = N \left(\bar{x} - \mu\right)^2 \\
+&= N^2 \cdot \left(\frac{1}{N}\left(\bar{x} - \mu\right)^2\right) = N^2 \text{Var}{\frac{X_1 + X_2 + \ldots}{N}} \\
+&= N^2 \frac{\text{Var}[X]}{N^2}\\
+&= \sigma^2\\
+\text{E}[\Vert X - \bar{X} \Vert^2] &= \text{E}[\Vert x - \mu\Vert^2] - \text{E}[\Vert \bar{x} - \mu\Vert^2]\\
+ &= (N-1 )\sigma^2
+\end{align*}
+$$
+
+The last of these is the expression in the sample variance: $\Vert x - \bar{x} \Vert^2 = (N-1)\sigma^2$ in expectation. Hence it is $s^2 = \frac{\Vert x - \bar{x} \Vert^2}{N-1}$ which estimates $\sigma^2$.[^2]
+
+[^2]: See [this youtube video](https://www.youtube.com/watch?v=8e9aDMXRRlc) for a visualization of this derivation.
+
+But let us try to see why this might be true in terms of the inner product view from above.
+ 
+To compute $\text{Var}[X]$ in $\Omega$ requires we 1) project off $\mathbf{e}_{1}$, then 2) take a squared-norm. 
+
+To estimate $\text{Var}[X]$ from a sample $W$, we 1) restrict $X$ to $W$, 2) project off $\mathbf{f}_{1}$, 3) then take a squared-norm. This would have an identical *if* the operation "restrict-then-project" removed the same component as "reject" alone, but it doesn't—we subtract $\bar{x}\mathbf{f}_1$, not $\mu\mathbf{f}_1$.
+
+If we happened to know the true mean $\mu$, we could estimate the variance by $\frac{1}{N}\sum (x_i - \mu)^2$, which would *not* be biased. This would be 1) projecting off $\mathbf{e}_1$, 2) *then* restricting $X-\langle X, \mathbf{e}_1\rangle \mathbf{e}_1$ to $W$, then 3) computing a squared-norm. 
+
+The difference is the "commutator" of project-then-restrict as opposed to to restrict-then-project. Well, this is just $\bar{x} - \mu$, and its squared-norm is equal in expectation to $\sigma^2$. We fix this by changing $N\sigma^2$ to $(N-1)\sigma^2$.
+
+Is this illuminating? A little. I find it a bit clarifying to note that a sample variance is trying to approximate an inner product (potentially on an infinite space) by an inner product on a different space.
+
+<br/>
+
+## Exterior Products?
+
+It is evident from the discussion above that the covariance *[matrix](https://en.wikipedia.org/wiki/Covariance_matrix)* of a random *vector* $\mathbf{X} = (X_1, X_2, \ldots, X_N)$ is just the [Gram matrix](https://en.wikipedia.org/wiki/Gram_matrix) of its components after projecting off the constant components $\mathbf{e}_1$. That is:
+
+$$
+\text{Cov}[\mathbf{X}] = G(\mathbf{X}) = \begin{pmatrix}
+\langle X_{1 \perp 1}, X_{1 \perp 1} \rangle & \langle X_{1 \perp 1}, X_{2 \perp 1} \rangle & \ldots\\
+\langle X_{2 \perp 1}, X_{1 \perp 1} \rangle & \langle X_{2 \perp 1}, X_{2 \perp 1} \rangle &\\
+\vdots & & \ddots
+\end{pmatrix}
+$$
+One can also define a $\text{Cov}[\mathbf{X}, \mathbf{Y}]$ matrix between two random vectors as a Gram matrix with components $\langle X_{i \perp 1}, Y_{j \perp 1}\rangle$.
+
+A Gram matrix then has a "Gram determinant", which usually comes up as a way of determinant of the components of $\mathbf{X}$ are linearly independent. But for this purpose it's overkill: an $N$-way wedge product would suffice. The Gram determinant, in fact, is the squared-norm of the exterior product of $N$ vectors:
+$$
+|G(\mathbf{X})| = \Vert X_1 \wedge X_2 \wedge \ldots \wedge X_N\Vert^2
+$$
+And the determinant of a two-vector Gram matrix is the inner product on the $N$th exterior product space:
+$$
+|G(\mathbf{X}, \mathbf{Y})| = \langle X_1 \wedge X_2 \wedge \ldots \wedge X_N ~,~ Y_1 \wedge Y_2 \wedge \ldots \wedge Y_N\rangle
+$$
+This raises the question: given that random variables are vectors in $L^2(\Omega)$, what is the meaning of a wedge product of random variables?
+
+The wedge product $X \wedge Y$ of random variables would—I believe—look like
+$$
+(X \wedge Y)(\omega_1, \omega_2) = X(\omega_1)Y(\omega_2) - X(\omega_2)Y(\omega_1)
+$$
+since it needs to act on *two* separate copies of $\Omega$. The norm on this wedge power is:
+$$
+\begin{align*}
+\Vert X \wedge Y \Vert^2 &= \det\begin{pmatrix} \langle X, X\rangle  & \langle X, Y\rangle  \\ \langle Y, X\rangle & \langle Y, Y\rangle \end{pmatrix}\\
+&= \langle X, X\rangle \langle Y, Y\rangle - \langle X, Y\rangle\langle Y, X\rangle \\
+ &= \text{E}[X^2]\text{E}[Y^2] - (\text{E}[XY])^2
+\end{align*}
+$$
+
+If we restrict to $\perp \mathbf{e}_1$ first, the matrix becomes the covariance matrix of the vector $(X, Y)$ and its norm is
+$$
+\Vert X_{\perp 1} \wedge Y_{\perp 1} \Vert^2 = \text{Var}[X]\text{Var}[Y] - (\text{Cov}[XY])^2
+$$
+which is a perfectly useful measure of linear independence, related to Pearson's $\rho$. But this is just the covariance matrix again.
+
+... and here I find nowhere to go. I asked the AIs for help and they too turned up nothing. And exterior algebra gets complicated if $\Omega$ is taken to be infinite-dimensional. Evidently, it is not that useful to take exterior powers of random-variables, perhaps because they have no particular geometric interpretation. So I'll file it away.
+
+<br/>
+<hr/>
+<br/>
